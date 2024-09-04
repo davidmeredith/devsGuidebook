@@ -23,6 +23,13 @@ nmap <C-i> :go-forward
 ""map J :m '>+1<CR>gv=gv
 ""map K :m '<-2<CR>gv=gv
 
+"" Have j and k navigate visual lines rather than logical ones 
+"" Remap for dealing with word wrap (neovim)
+"" (v:count is the count given for the last Normal mode command) 
+""vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+""vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+nmap j gj
+nmap k gk
 
 " Surround
 "Select some text in visual mode, then press s and then the desired surround character. e.g. s" to surround the selected text with double quotes.

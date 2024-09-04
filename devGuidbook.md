@@ -96,7 +96,7 @@ Recognise that code is navigated and read far more than it is written, and that 
 _“Programs must be written for people to read, and only incidentally for machines to execute.__"_
 Harold Abelson, the author of Structure and Interpretation of Computer Programs
 
-Good quality code should read well, with details abstracted so that higher-level code reads almost like a form of ‘self-documenting’ story which is expressive of its intent. Implementation details should be hidden behind well named abstractions – a concept that is appropriate at a variety of scales, from variables at the small scale to names, functions, classes, interfaces, traits, facades, and packages/modules all the way up to application tiers (front-end, business logic, data tier), micro-services, services, to monoliths.
+Good quality code should read well, with details abstracted so that higher-level code reads almost like a form of ‘self-documenting’ story which is expressive of its intent. Implementation details should be hidden behind well named abstractions – a concept that is appropriate at a variety of scales, from variables at the small scale to names, functions, classes, interfaces, traits, facades, and packages/modules all the way up to application tiers and 'bounded contexts' (front-end, business logic, data tier), micro-services, services, to monoliths.
 
 ### Target Audience
 
@@ -308,9 +308,9 @@ b)     **To prevent regressions.** It really does build confidence in your c
 
 c)     **To encourage good design** - it _really_ does actually - there’s lots of supporting research that shows this. When you write tests, you put yourself in the calling-code perspective, so you really do think about design such as loose coupling, separation of concerns, modularity, simplicity of API, and so on. If your code is hard to test, it’s likely too strongly coupled, and here Dependency Injection can help you.  Test Driven Development (TDD) is the ultimate testing practice, where you write tests first using an imaginary API, and then you fill in the details.
 
-### Keep Classes & Functions Small
+### Keep Classes & Functions Small(ish)
 
-General rule – not much bigger than your screen’s viewport. I don't subscribe to certain author's view that functions should be no longer than four or five lines myself - I find it too difficult to 'absorb' the code when functions are this small.   However, a viewport/page is fine, and if you still need convincing, know that compilers can apply far more effective in-lining optimisations with smaller classes and functions.
+General rule – not much bigger than your screen’s viewport. I don't subscribe to certain author's view that functions should be no longer than four or five lines myself - I find it too difficult to hop around the code when functions are this small.   However, a viewport size / page is fine, and if you still need convincing, know that compilers can apply far more effective in-lining optimisations with smaller classes and functions.
 
 ### Limit the Number of Function Arguments
 
@@ -320,9 +320,13 @@ Consider using immutable Data Transfer Objects (aka DTOs / Data Objects / Record
 
 Separation of concerns at the function level.
 
-### Classes Should be Cohesive
+### Classes / Code Should be Cohesive
 
-Classes should be cohesive – high cohesion means the methods and variables of the class are co-dependent and often change together. This can be paraphrased as ‘changes to the code here should not affect code over there.’ Here’s the authoritative view from the famous [Kent Beck from Nov (2022) and his ‘Tidy First’ approach to software development:](https://twitter.com/KentBeck/status/1587825849755049984)
+Classes should be cohesive – high cohesion means the methods and variables of the class are co-dependent and often change together. This can be paraphrased as "Changes to the code over here should not affect code over there" and/or "Things that change together stay together. " Examples of patterns that support cohesion include the State Pattern and Strategy patterns from the GoF . 
+- For example, in the State pattern, consider widespread code spread across many files that use exhaustive 'switch' or 'when' statements with a centrally declared enum set, selecting different behaviours based on the state. If you add or remove a state enum option, you will need to update the exhaustive switch/when statements spread across your code-base, not a problem for small projects but for large code bases it can require significant refactoring. The state pattern moves the distributed behaviour close together. As an example, the central enum set could be replaced with a set of state objects where each state object collates and implements the state-dependent behaviour previously selected by the when/switch statements. 
+- The Strategy pattern also collates behaviour, but uses a more strictly defined structure to do this.    
+
+Here’s the authoritative view from the famous [Kent Beck from Nov (2022) and his ‘Tidy First’ approach to software development:](https://twitter.com/KentBeck/status/1587825849755049984)
 
 ![](attachments/Pasted%20image%2020240611092926.png)
 
