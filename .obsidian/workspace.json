@@ -11,9 +11,11 @@
             "id": "ceb722ef348fe739",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "Pasted image 20240905163511.png"
+                "file": "devGuidebook.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
@@ -83,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Pasted image 20240905163511.png",
+                "file": "devGuidebook.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -100,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Pasted image 20240905163511.png",
+                "file": "devGuidebook.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -123,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Pasted image 20240905163511.png"
+                "file": "devGuidebook.md"
               }
             }
           }
@@ -146,10 +148,10 @@
   },
   "active": "ceb722ef348fe739",
   "lastOpenFiles": [
-    "devGuidbook.md",
-    "devGuidebook.md",
     "README.md",
     "Pasted image 20240905163511.png",
+    "devGuidbook.md",
+    "devGuidebook.md",
     "consistency-report.md",
     "attachments/Pasted image 20240906135416.png",
     "attachments/Pasted image 20240906135400.png",
