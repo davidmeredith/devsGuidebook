@@ -8,7 +8,7 @@ dv.view('toc')
 ## Table of contents
 
 1. [Table of contents](#Table-of-contents)
-2. [Why Software Dev Guidebook?](#Why-Software-Dev-Guidebook?)
+2. [Why Software Dev Guidebook](#Why-Software-Dev-Guidebook)
     1. [Target Audience](#Target-Audience)
     2. [If it's not in Git it doesn't exist](#If-it's-not-in-Git-it-doesn't-exist)
         1. [Feature Branching vs Trunk Based development](#Feature-Branching-vs-Trunk-Based-development)
@@ -91,7 +91,7 @@ dv.view('toc')
     12. [Cup Cake Roadmaps](#Cup-Cake-Roadmaps)
 5. [Appendix - Recommended Texts](#Appendix---Recommended-Texts)
 
-## Why Software Dev Guidebook?
+## Why Software Dev Guidebook
 
 To help everyone in the Centre build great software, we’ve put together a collection of development guidelines to help you build scalable, maintainable, reliable, performant, and usable code. Like all guidelines, these aren’t strict rules, and knowing when and where to apply these guidelines largely comes down to practice and experience.  This is not an exhaustive list. For more in-depth analysis, please see the list of recommended texts in the appendix. We’re not going to repeat all that good advice here, that’s what the books are for, but we’ve tried to distil a range of key recommendations.
 
