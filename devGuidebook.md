@@ -1,4 +1,7 @@
-Written by Dave Meredith, originally for the STFC Hartree Centre. 
+# Daves Dev Guidebook
+
+Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre but now I maintain an updated version here. Head straight to the [devGuidebook.md](devGuidebook.md). Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change, strong opinions should be loosely held ‼️  Happy reading. DaveM
+
 Last Updated Oct 24.  Enjoy. 
 
 ```dataviewjs
@@ -21,7 +24,7 @@ dv.view('toc')
     9. [If it Does not have Documentation it is Not Usable](#If-it-Does-not-have-Documentation-it-is-Not-Usable)
     10. [Learning mindset](#Learning-mindset)
     11. [Customer Bill of Rights (modified from Uncle Bob Martin - Clean Agile)](#Customer-Bill-of-Rights-(modified-from-Uncle-Bob-Martin---Clean-Agile))
-    12. [Developer Bill of Rights (modified from Uncle Bob Martin - Clean Agile)](#Developer-Bill-of-Rights-(modified-from-Uncle-Bob-Martin---Clean-Agile))
+    12. [Developer Bill of Rights (modified from Uncle Bob Martin - Clean Agile)](#Developer-Bill-of-Rights-modified-after-Uncle-Bob-Martin---Clean-Agile)
     13. [Tooling](#Tooling)
         1. [Do not be Smart - Use the Right Tools for the Job and for your customer](#Do-not-be-Smart---Use-the-Right-Tools-for-the-Job-and-for-your-customer)
         2. [To Garbage Collect or Not To GC](#To-Garbage-Collect-or-Not-To-GC)
@@ -88,7 +91,7 @@ dv.view('toc')
     11. [Iteration and Incrementalism](#Iteration-and-Incrementalism)
     12. [Cup Cake Roadmaps](#Cup-Cake-Roadmaps)
 5. [Appendix - Recommended Texts](#Appendix---Recommended-Texts)
-## Table of contents
+
 ## Why Software Dev Guidebook
 
 To help everyone in the Centre build great software, we’ve put together a collection of development guidelines to help you build scalable, maintainable, reliable, performant, and usable code. Like all guidelines, these aren’t strict rules, and knowing when and where to apply these guidelines largely comes down to practice and experience.  This is not an exhaustive list. For more in-depth analysis, please see the list of recommended texts in the appendix. We’re not going to repeat all that good advice here, that’s what the books are for, but we’ve tried to distil a range of key recommendations.
@@ -198,7 +201,7 @@ Means that once the software is merged into master branch, it automatically gets
 - Tinker - its really important to do hobby projects and dev stuff you enjoy.
 
 
-### Customer Bill of Rights (modified from Uncle Bob Martin - Clean Agile)
+### Customer Bill of Rights (modified from Uncle Bob Martin - Clean Agile
 
 Customers have the right to:
 - An overall plan and to understand what can approximately be accomplished and at an estimated cost.
@@ -208,7 +211,7 @@ Customers have the right to:
 - Be informed of schedule and estimate changes, in time to choose how to reduce the scope to a meet a required date.
 - Cancel at any time and be left with useful outputs reflecting their investment to date.
 
-### Developer Bill of Rights (modified from Uncle Bob Martin - Clean Agile)
+### Developer Bill of Rights (modified from Uncle Bob Martin - Clean Agile
 
 - Developers have the right to:
 - Know what is needed with clear declarations of priority.
@@ -220,7 +223,7 @@ Customers have the right to:
 
 ### Tooling
 
-#### Do not be Smart - Use the Right Tools for the Job and for your customer    
+#### Do not be Smart - Use the Right Tools for the Job and for your customer 
 
 As a centre, we should be using the right tools for the job, we all have our preferences, but there’s no need to be stubbornly loyal about a particular language or OS. As software professionals, we should recognise the right tools for the job and for our clients.  
 
@@ -233,7 +236,7 @@ Have the customer in mind. For example, Haskell and other Lisps are great (I’v
 
 ![](attachments/Pasted%20image%2020240611091943.png)
 
-#### Kanban, Jira & Confluence
+#### Kanban - Jira and Confluence
 
 Keep all project documents and the Decision Point Review templates in a single repo such as Confluence so the client has full visibility. Its best if the client creates the (free) Jira instance and invites us as admins on their Kanban/Jira/Confluence. This way, the client has ownership of the project after the project completes. Make sure you export and download a copy of the Jira archive file so we can restore it within our own Jira instances if needed in future or for follow on projects.
 
@@ -356,7 +359,7 @@ See the next two slides below. If this does not make sense, please refer the tex
 
 ![](attachments/Pasted%20image%2020240611093638.png)
 
-### Dependency Injection and Inversion of Control (IoC)
+### Dependency Injection and Inversion of Control - IoC
 
 Basically, this means that your application code doesn’t itself create instances of classes/objects (dependencies), instead these objects are created separately and are then passed into your application code through a class constructors or setter methods. This ‘wiring together’ of dependencies can be done manually using the Factory Pattern or using an Inversion of Control container (I’m a fan of [Spring.io](https://stfc365.sharepoint.com/sites/HartreeRSEPublic/Shared%20Documents/General/spring.io)). For example, if Class A depends on class B, the IoC container will manage the lifecycle of class B for you (i.e., creation/destruction) and will inject class B into class A when needed. For required dependencies, meaning that class A can’t be initially created without a valid instance of class B, use ‘Constructor Injection’.  For optional dependencies, use setter injection.   The lifetime of a class is usually either singleton-scoped a.k.a., ‘application scoped’, where a single instance is created and managed (which means it must be thread-safe), or ‘prototype-scoped,’ where a new instance is always created & injected. There are several other special lifetimes such as ‘session-scope’ depending on your requirement.
 
@@ -370,7 +373,7 @@ For the Car class, unless we decide to break encapsulation and make engine publi
 
 For interest:  Did you know that IoC containers are changing a lot recently. In the past, they’ve largely been built using a technique known as ‘reflection’, but they are now being extended so you can choose between reflection-based dependency injection, which is far more dynamic and flexible for Just-in-Time (JIT) and dynamic binding, and static injection, which plays far nicer for scenarios that require Ahead of Time (AOT) compilation.  This is a big topic, but as ever, there are trade-offs between the different approaches which ultimately depend on your use-case.
 
-### Avoid Inheritance Tax - Prefer Object Composition, Interfaces, Traits, Mixins to achieve Ad-hoc Polymorphism
+### Avoid Inheritance Tax - Prefer Object Composition with Interface and Traits to achieve Ad-hoc Polymorphism
 
 - Deeply nested inheritance hierarchies with sub-classes that extend super classes have their place, for example when developing libraries and frameworks. For application developers however, they are often considered a bit of an anti-pattern these days. This is because inheritance strongly couples you to the structure of the classes in the parent hierarchy, which sometimes forces you to implement abstract methods that you don’t actually need. In these scenarios, you may need to throw some form of unsupported exception or error.  IF you have access to the source code, you can extract those parent methods into a new parent in the inheritance hierarchy and inherit from the appropriate level – i.e., from the direct parent if you do want those methods, or from a higher-level ancestor if you don’t need the newly extracted methods (effectively skipping the newly extracted parent layer). However, this means all existing sub-classes may need to be refactored to inherit from the appropriate parent or ancestor class – this can be a very expensive refactor and can get complex with deeply nested hierarchies. In short: Inheritance asks you to bundle all common elements into a parent class - but this means that exceptions to the common can require expensive refactoring.
 
@@ -460,15 +463,15 @@ Builders are especially useful if the dependencies of your class have complex in
 
 Your first instinct should be to make a method/member/variable private first, then increase visibility as required, not the other way around.
 
-### DRY – Do not Repeat Yourself
+### DRY Do not Repeat Yourself
 
 Duplicating chunks of code is odorous - don’t do it.
 
-### YAGNI – You Are not Going to Need It
+### YAGNI You Are not Going to Need It
 
 Following Agile processes (i.e., ‘Feedback Driven Development’) should trap and prevent unnecessary code.
 
-### Comment in-line As You Go
+### Comment in line As You Go
 
 You don’t retrospectively comment your code, you just don’t. Using sensible names should prevent long-winded doc strings.  Use xDoc tools e.g., PyDoc, JavaDoc, xDoc etc. Document the _intent_ of the function/class, not the implementation details.
 
@@ -552,11 +555,11 @@ Errors as values vs exceptions is a hotly debated topic in programming communiti
 - Languages may also support more advanced error handling strategies. For example, the Kotlin Arrow2 library simplifies the use of OOP and Functional error handling within the same code base (Functional vs OOP? - choose both). For example, lower level code can apply `try/catch/finally` blocks for localised exception handling and recovery if needed, while higher level calling code can provide a wrapping `error context` that can be used at the boundary; Rather than throwing exceptions at the boundary (between different layers of code), exceptions can be *raised* into the higher level error context. Raising rather than (re)throwing then allows the raising functions to be composed within functional compositional call chains - raising does not break referential transparency. In the top layer of your code, such as in a top-level service facade or global error handler in a webapp, you would then need to handle the exceptions raised within the error context, such as performing a transaction roll back or performing a retry.  For a great presentation with examples, see this great talk from Simon Vergauwen from [Kotlin Conf 2023](https://youtu.be/JcFEI8_af3g?si=vH5OG86JTQWFrGnw) 
 
 
-### Error Handling - Exceptions should not be used for flow control, use errors-as-values instead, exceptional != conditional
+### Error Handling - Exceptions should not be used for flow control as exceptional does not mean conditional
 
 Passing around a deeply nested stack trace within conditional and control logic is very expensive, don't do it. Instead, model your (known) business errors as values (no need to pass around exceptions), and leave exceptions for coding errors and exceptional situations. If you want control flow logic that says "if success do this..., but if an error occurs then do this..." then use the result pattern.
 
-### Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected situations, exceptional != conditional
+### Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected situations as exceptional does not mean conditional
 
 For example, an invalid object posted to your API is not exceptional, this should be handled as a potential business error. In the situation where some code throws an exception such as a parse error, catch it locally, extract the useful information, and return an error-value. In general, the result-as-value pattern is appropriate where the problem is the fault of the caller and not a programming mistake e.g., invalid input / form data.
 
@@ -587,7 +590,7 @@ This largely depends on the language you are using:
 
 - Algebraic Data Types (ADTs) are generally either ‘Sum Types’ or ‘Product Types’ and are excellent for representing multiple special cases, including multiple error states.
 
-### Error Handling in Functional Programming – Error Monads such as Either & Validated
+### Error Handling in Functional Programming – Error Monads such as Either and Validated
 
 In functional languages monads are widely used to chain a sequence of function calls into a clean ‘happy path’. This is also known as ‘functional composition’ or 'effect orientated' programming. A core tenant of functional approaches is to produce more declarative and expressive code over classical imperative approaches which usually interleave error handling with the happy path. In functional approaches, you define ‘what to do’ with functions, not ‘how to do it’ as with imperative approaches.
 
@@ -597,7 +600,7 @@ A `Validated` monad aggregates errors or exceptions within a functional call cha
 
 Regarding exceptions in functional composition: If your language uses ‘Checked Exceptions’ (e.g., Java or when using other JVM languages that call out to underlying Java libs), you can’t throw checked exceptions during functional composition as they force you to handle the error and break the call chain with try/catch or throws statements. In this scenario, wrap the exception in the monadic context and return a LeftError. Note that throwing _unchecked_ exceptions is ok in a functional call chain as they don’t pollute the happy path with try/catch or throws, but you likely still want to wrap the error in the monadic context to return an error-as-value, e.g. if that error is not a programming error or is an exceptional circumstance.
 
-### Data Orientated Programming with Algebraic Data Types (ADTs)
+### Data Orientated Programming with Algebraic Data Types - ADTs
 
 The Special Case Pattern is one example for modelling your domain types in such a way that the absence of value is explicitly modelled in your domain making illegal program states and crashes more unlikely. However, you can go a lot further using Algebraic Data Types (ADTs). ADTs include both ‘Product Types’ for modelling aggregation such as a C’s or Golang's ‘struct’, and ‘Sum Types’ for modelling choice, also known as ‘Union Types’ or ‘Tagged Unions’.
 
@@ -609,7 +612,7 @@ This simple combination of aggregation and choice is deceptively powerful and sh
 
 In modern languages, ADTs combine with ‘de-structuring’ and ‘pattern matching’ to facilitate powerful ‘exhaustive’ pattern matching constructs with when & switch statements. Exhaustive matching means the compiler will generate a compilation error if not all sum types are explicitly handled.
 
-### Concurrency & Parallelism
+### Concurrency and Parallelism
 
 A big topic, it can’t all be covered here, it ranges from single host shared memory parallelism, to multi-node clustering (e.g., HPC), to distributed multi-host cluster networks (e.g., remote Actors / FaaS). Concurrency is not parallelism. Concurrency is a software concern – context switching on a ‘carrier thread’ using continuations or virtual-threads gives the illusion that multiple things are happening at once, while true parallelism is both a software and hardware concern – you need hardware to support parallelism which can range from multiple cores on one CPU, multiple CPUs, nodes, local and remote actors, remote VMs, cloud functions such as Lambda and more. Here are some general recommendations:
 
@@ -664,7 +667,7 @@ A big topic, it can’t all be covered here, it ranges from single host shared m
 
 
 
-## Agile Process Guide a.k.a Feedback Driven Development
+## Agile Process Guide aka Feedback Driven Development
 
 For the Hartree Centre, we propose an Agile methodology as it largely suits the type of projects we do. Agile is an overused term, so for Hartree’s purposes, a good definition is ‘Feedback Driven Development’.  Iteration and customer feedback really ARE essential if we are to successfully address real customer needs. Know that industry data shows that even for the best software companies in the world, two thirds of their ideas produce zero or negative value so continuous feedback is essential to mitigate the risks: Online Controlled Experiments at Large Scale: [http://ai.stanford.edu/~ronnyk/2013%20controlledExperimentsAtScale.pdf](http://ai.stanford.edu/~ronnyk/2013%20controlledExperimentsAtScale.pdf)
 
@@ -682,7 +685,7 @@ Hartree also has a [scoping doc](https://stfc365.sharepoint.com/:f:/r/sites/TheH
 
 Epics are like Work Packages. Typically, they require multiple tasks and span multiple sprints.
 
-### Define user stories either with the INVEST Framework, Who-What-Why or the Connextra Card Template – all are good and you don’t need to be too rigid
+### Define user stories with the INVEST Framework or Who-What-Why or the Connextra Card Template – all are good and you do not need to be too rigid
 
 -  _“As userType [X], I need a way to do [what?] so that I can [what’s the benefit]”._
 
@@ -708,7 +711,7 @@ Create a list of tasks and use ‘planning poker’ / finger-waving to estimate 
 
 ### Requirements Document and System Architecture Document
 
-### 1-to-2-week Sprints  
+### 1 to 2-week Sprints  
 
 Break up the Backlog into sprints to deliver your cup-cake roadmap. Provide effort estimations for tasks using ‘planning poker’. More than two weeks generally gives enough time for software to deviate without requiring significant refactoring and course-correction, so we don’t recommend more than 2 weeks.
 
@@ -720,7 +723,7 @@ Test the critical path and be pragmatic about coverage - 80% coverage often not 
 
 At the end of the sprint, demo your progress to the client. This is important. Agile can be paraphrased as ‘Feedback Driven Development’.  It is essential to get that customer feedback early and continuously.
 
-### Acceptance, Sign Off and Cucumbers 
+### Acceptance with Sign Off and Cucumbers 
 
 - If possible, get the client to sign-off work every month (PMO have a ‘Decision Point Review’ template).
 - Use the Cucumber approach for acceptance testing i.e., ‘Given, When, Then’.  For example: ‘Given [a particular context/scenario], When [something happens], Then [this is the result]’.
@@ -732,14 +735,14 @@ At the end of the sprint, demo your progress to the client. This is important. A
 
 ![](attachments/Pasted%20image%2020240611100815.png)
 
-### Cup Cake Roadmaps
+### Cup Cake Road Maps
 
 - Plan a cup-cake dev roadmap. A cup-cake won’t feed everyone, but it can have core ingredients - it’s a whole-product that a user can taste sooner rather than later.
 - If the cup-cake tastes good, proceed with the vanilla sponge, hopefully ending with the multi-tier wedding cake that can feed everyone. Iterate your development roadmap and keep soliciting user feedback.
 
 Thanks for reading, comments/feedback most welcome. Have fun !
 
-## Appendix - Recommended Texts 
+## Appendix Recommended Texts 
 
 ![](attachments/Pasted%20image%2020240611100930.png)
 
