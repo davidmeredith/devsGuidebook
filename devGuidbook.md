@@ -1,5 +1,5 @@
 Written by Dave Meredith, originally for the STFC Hartree Centre, October 2022. 
-Last Updated Oct 22.  Enjoy. 
+Last Updated Oct 24.  Enjoy. 
 
 ```dataviewjs
 dv.view('toc')
@@ -322,14 +322,14 @@ Separation of concerns at the function level.
 
 ### Classes / Code Should be Cohesive
 
-Classes should be cohesive – high cohesion means the methods and variables of the class are co-dependent and often change together. This can be paraphrased as "Changes to the code over here should not affect code over there" and/or "Things that change together stay together. " Examples of patterns that support cohesion include the State Pattern and Strategy patterns from the GoF . 
-- For example, in the State pattern, consider widespread code spread across many files that use exhaustive 'switch' or 'when' statements with a centrally declared enum set, selecting different behaviours based on the state. If you add or remove a state enum option, you will need to update the exhaustive switch/when statements spread across your code-base, not a problem for small projects but for large code bases it can require significant refactoring. The state pattern moves the distributed behaviour close together. As an example, the central enum set could be replaced with a set of state objects where each state object collates and implements the state-dependent behaviour previously selected by the when/switch statements. 
-- The Strategy pattern also collates behaviour, but uses a more strictly defined structure to do this.    
+Classes should be cohesive – high cohesion means the methods and variables of the class are co-dependent and often change together. This can be paraphrased as "Changes to the code over here should not affect code over there" and/or "Code that changes together stays together. " 
 
 Here’s the authoritative view from the famous [Kent Beck from Nov (2022) and his ‘Tidy First’ approach to software development:](https://twitter.com/KentBeck/status/1587825849755049984)
 
 ![](attachments/Pasted%20image%2020240611092926.png)
 
+Examples of patterns that support cohesion include the State Pattern. 
+- In the State pattern, consider code that is widespread across many files that has exhaustive 'switch' or 'when' statements that reference a centrally declared enum set. The exhaustive switch/when statements execute different behaviours based on the current enum state value. If you add or remove a state enum option, you will need to update the exhaustive switch/when statements spread across your code-base. This is not a problem for small projects, but for large code bases it can require significant refactoring. The state pattern co-locates the state enum values with the dependent behaviour i.e., "things that change together, stay together." As an example, the central enum set could be replaced with a corresponding set of state objects, where each state object collects and implements the relevant state-dependent behaviour itself. There are several ways to implement this depending on you language of choice.  
 ### Classes should have only one reason to change / do one thing and do it well
 
 - Separation of concerns at the class level.
@@ -396,8 +396,55 @@ Nuff said.
 
 There might be a tried & tested design pattern for the problem you’re tackling. Some patterns are probably overkill, but some genuinely useful patterns include Factory, DTO, Observer, Strategy, Singleton, Repository, Stateless Façade, Visitor. Have a look at the recommended texts in the appendix. GoF is kinda old school these days.
 
+
 ![](attachments/Pasted%20image%2020240611094028.png)
 
+
+#### The Strategy Pattern Example
+This pattern abstracts logic behind a common abstraction such as a SAM interface (Single Abstract Method interface) so that an implementation can be **chosen at runtime**. This makes the code more flexible and reusable. In the Kotlin example below taken from [Dave Leeds](https://www.youtube.com/watch?v=-Ak44LFwlwI&t=64s), we use validation as an example, where any of the validators can be passed at runtime to the FormField class. 
+![[Pasted image 20240905161915.png]]
+Here are two more Kotlin examples that are more idiomatic which reduce boilerplate, again from Dave Leeds: 
+![[Pasted image 20240905162859.png]]
+An even more concise example:
+![[Pasted image 20240905163103.png]]
+Note you can use an extension function to easily create an optional version:
+![[Pasted image 20240906135416.png]]
+
+At the call site: 
+![[Pasted image 20240906135400.png]]
+#### The Visitor Pattern
+
+The visitor pattern is used to separate business logic from objects on which they operate. Typically, objects define an accept method then call method(s) on the accepted visitor. The calling object is typically passed to the visitor as an argument so the visitor can access the object's public state, as in the pseudo code: `accept(Visitor v) { v.visitDoLogic(this); }`.   New logic can easily be added to the visitor's `visitDoLogic(callerObj)` without having to update the calling objects which illustrates an example of the open closed principle in SOLID.   This pattern uses a double-dispatch logic: first an object's `accept(Visitor)` method is invoked, then the visitor's `visitDoLogic(obj)` method second. 
+
+The visitor pattern is typically invoked for large cascading / nested object trees; an `accept` method can pass the visitor instance to all its member objects that also define an accept method, for example: 
+
+```c#
+public class Addition : Expression {
+  public Addidtion(Expression left, Expression right){
+    Left = left;
+    Right = right;
+  }
+  public override void Accept(Visitor v) {
+    Left.accept(v);
+    Right.accept(v);
+    v.vist(this);
+  }
+ // get values etc elided 
+}
+
+// invoking code would create a Visitor implementation and invoke the double dispatch logic by calling `Addition.Accept(visitor);`
+```
+
+Languages implement the visitor differently. For strongly typed polymorphic languages that support method overloading (Java, C#, Kotlin), interfaces can be used simplify the double dispatch logic as `accept` and `visit` methods can be overloaded using different argument types.  Languages that do not support polymorphic overrides e.g., Go and Python, typically need to define different visit-method names e.g.
+
+```Go
+type Visitor interface {
+	visitWheel(wheel Wheel) string
+	visitEngine(engine Engine) string
+	visitBody(body Body) string
+	visitCar(car Car) string
+}
+```
 
 ### Consider using the Builder Pattern for More Complex Object Creation Scenarios
 
@@ -460,19 +507,55 @@ Calculations or ‘pure functions’ have no side effects and are ‘idempotent�
 
 See prior bullet. Functions should either do something such as create side effects (operations) or provide an answer to something such as returning a result from a stateless calculation. Try to separate functions that have side-effects from pure functions (aka calculations) using a naming convention. Try not to do both in a single function.  In some languages you can be explicit– e.g., in Kotlin, a common convention is to reserve single expression functions only for calculations – you can quickly/easily see this in the first line of the expression function signature – no need to understand the function body for side effects. Nevertheless, unless you are using a pure functional language, this is still only a convention.
 
-### Error Handling - 4 Types of Error / Exception Scenario
+### Error Handling - 4 Types of Problems
 
-1.     Unrecoverable problems: Is the error recoverable? If not, then let it crash e.g., you can’t recover from an OutOfMemory problem or a FileNotFound exception if that file is the app’s config / properties file.
+1.     Unrecoverable problems: Is the error recoverable? If not, then let the program crash. For example, a FileNotFound exception/error/panic should crash if that file is the application's mandatory config file - you can't continue without it.
 
-2.     Recoverable problems: For example, if a remote service is temporarily unavailable, you could retry a few times before showing an error to the user.
+2.     Recoverable problems: For example, if a remote service is temporarily unavailable, you could introduce a retry before showing an error to the user.
 
-3.     Errors that need to propagate to the user:  A FileNotFound exception might be recoverable in a different situation. For example, if you are building a file-explorer GUI, you don’t want your program to crash if a file gets deleted by another process. In this scenario you’d want’ to catch the exception and convey a sensible message to the user. 
+3.     Errors that need to propagate to the user:  An error-as-value would be suitable if you are building a file-explorer GUI - you don’t want your program to crash if a file gets deleted by another process. In this scenario use a value-error or catch the exception and convey a sensible message to the user.
 
-4.     Programming mistakes:  These should be fatal – let it crash, you’ll be motivated to fix the problem quickly. These are typically runtime exceptions, here you should re-throw, catch and log, then crash.
+4.     Programming mistakes:  Let the program crash, you’ll be motivated to fix the problem quickly. These are typically runtime errors/exceptions/panics.
+
+### Error Handling - Exceptions vs Errors-as-Values ? 
+
+Errors as values vs exceptions is a hotly debated topic in programming communities:
+
+***Proponents of errors-as-values:*** 
+- Fans of errors-as-values argue that function return types that wrap either a success OR failure value is the more reliable approach to error handling because you are explicitly forced to handle errors immediately, typically using a conditionals to test for error or success. This ensures error handling is not an afterthought. 
+- Supporters also argue that there is less uncertainty compared to throwing exceptions because it can be challenging to determine all the exception types that can be thrown by a deep call stack. Also recognise because unhandled unchecked exceptions do not create compilation errors, the compiler can't help you discover all of the different types of unchecked exception that could be thrown, unless you dig and read all the docs that is.
+- Another issue of a specific type of exception known as a 'checked' exception is that they prevent functional composition. This is because the compiler forces you to handle checked exceptions wherever they can be thrown, but they are not considered as part of a function's return signature and type system. Instead, exceptions invoke orthogonal flows that 'break out' of your regular functional flow. Checked exceptions therefore breaks 'referential transparency' (see discussion below on Error Monads such as `Either` & `Validated`). Checked exceptions are generally not recommended these days, except for certain special use-cases where they still have their supporters.
+
+***Proponents of exceptions:*** 
+- Fans of exceptions argue that by forcing you to interleave error checking at function call sites throughout your code obscures the code's happy path and readability.  
+- Exception fans also argue that exceptions centralise your error handling code which gives a clean separation of concerns. 
+- For low-level code, exceptions are largely considered an effective strategy for surfacing underlying issues such as low level operating system issues which may be mistakenly obscured by the errors-as-values pattern (although the same could be said by mindlessly catching all exceptions). 
+- When used correctly and with discipline, exceptions can also be more performant than pervasive and interleaved error-value checking. This is because languages like C++ and Java have 'zero cost exception handling.' I think this is a misleading term, what it actually means is zero cost to the happy path code provided no exceptions are thrown. Assuming no exceptions are thrown, quite simply, there is less for your code to do as there are no interleaved conditional error checks. While any performance hit from interleaved result checking is likely to be marginal for the majority of use-cases, it may become more pronounced in deeply nested code or tight compute loops. However, this can be mitigated with good code structuring by moving error checks out of and before any performance critical-sections.   
+
+- Whether to use exceptions has profound implications on your API design and performance, be aware of the issues highlighted above. Some modern languages, e.g. Mojo, go as far as trying to address any choice for you by compiling exception handling code under-the-hood to use errors-as-values. I think the aim is to allow you cleanly separate the happy path from exception handling code (clean separate of concerns) while allowing you to retain the performance of error-as-values should an exception be thrown. At the time of writing, it is too early to tell if this is a successful strategy, but if anyone can do it, Chris Lattner can.
+
+- Of course, choice between exceptions or errors-as-values depends on the language and environment - you don't get exceptions support on every architecture and platform. The result pattern is much more flexible especially on embedded systems. 
+
+***Can I use both:*** 
+- Yes, depending on your language of choice and what is considered idiomatic. Some modern languages support both approaches. For example, to support interoperability with Java, the Kotlin language supports unchecked exceptions as well as its own `Result` type which is intended for low-level code rather than for modelling business errors. For modelling business errors, they recommend using sealed class hierarchies that introduce exhaustive pattern matching to handle errors (see discussion on data oriented programming). 
+
+- At the time of writing, a dedicated union type for capturing a result OR one or more errors is on the Kotlin roadmap. 
+
+***Hybrid Approach:*** 
+- Languages may also support more advanced error handling strategies. For example, the Kotlin Arrow2 library simplifies the use of OOP and Functional error handling within the same code base (Functional vs OOP? - choose both). For example, lower level code can apply `try/catch/finally` blocks for localised exception handling and recovery if needed, while higher level calling code can provide a wrapping `error context` that can be used at the boundary; Rather than throwing exceptions at the boundary (between different layers of code), exceptions can be *raised* into the higher level error context. Raising rather than (re)throwing then allows the raising functions to be composed within functional compositional call chains - raising does not break referential transparency. In the top layer of your code, such as in a top-level service facade or global error handler in a webapp, you would then need to handle the exceptions raised within the error context, such as performing a transaction roll back or performing a retry.  For a great presentation with examples, see this great talk from Simon Vergauwen from Kotlin Conf 2023 https://youtu.be/JcFEI8_af3g?si=vH5OG86JTQWFrGnw 
+
+
+### Error Handling - Exceptions should not be used for flow control, use errors-as-values instead (exceptional != conditional)
+
+Passing around a deeply nested stack trace within conditional and control logic is very expensive, don't do it. Instead, model your (known) business errors as values (no need to pass around exceptions), and leave exceptions for coding errors and exceptional situations. If you want control flow logic that says "if success do this..., but if an error occurs then do this..." then use the result pattern.
+
+### Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected situations (exceptional != conditional)
+
+For example, an invalid object posted to your API is not exceptional, this should be handled as a potential business error. In the situation where some code throws an exception such as a parse error, catch it locally, extract the useful information, and return an error-value. In general, the result-as-value pattern is appropriate where the problem is the fault of the caller and not a programming mistake e.g., invalid input / form data.
 
 ### Error Handling - Provide Relevant Exceptions for the abstraction layer
 
-If your language has exceptions (not all do e.g., Rust does not), define Exceptions in terms of a caller’s needs and wrap 3rd party library APIs including their exceptions. Often, only a few custom exception classes are needed for a particular area of code.
+If you use exceptions (not all languages have exceptions e.g., Rust, Go), define Exceptions in terms of a caller’s needs and wrap 3rd party library APIs including their exceptions. Often, only a few custom exception classes are needed for a particular area of code.
 
 ### Error Handling - Bubble Exceptions Upwards or Trap at Source?
 
@@ -485,31 +568,31 @@ This largely depends on the language you are using:
 
 - Side Note: polluting your code with defensive checks is often considered dirty, but sometimes you just have to it if no other approach is available.
 
-- Side Note: many argue null is an acceptable way to represent the absence of value, it’s just a fact and is too fundamental at many layers.  They argue the real billion-dollar mistake is not null itself, but in the failure of the language to do type-safe handling of null.
+- Side Note: many argue null is an acceptable way to represent the absence of value, it’s just a fact and is too fundamental in many layers.  They argue the real billion-dollar mistake is not null itself, but in the failure of the language to do type-safe handling of null.
 
 - Some languages e.g., Kotlin, Rust & Python have ‘safe nullability’ baked into their type-systems e.g., None to mean no value and optional ‘?’ on variables (‘var?’) to indicate this variable might be null.
 
 - Functional languages commonly use ‘Either’ monads to wrap errors and the absence of value. With this pattern, the programmer is forced to handle the occurrence of no value, it can’t be ignored, mistakenly or otherwise, as with defensive programming. See below.
 
-- Various modern languages use Algebraic Data Types (an extension of the ‘Special Case’ pattern) and ‘monad(ish)’ return types that wrap either a successful result or an error/null (Go, Rust, Kotlin, modern Java):
+- Various modern languages use Algebraic Data Types (an extension of the ‘Special Case’ pattern) and return types that wrap either a successful result or an error/null (Go, Rust, Kotlin, modern Java):
 
 ·       [https://martinfowler.com/eaaCatalog/specialCase.html](https://martinfowler.com/eaaCatalog/specialCase.html)
 
 - Algebraic Data Types (ADTs) are generally either ‘Sum Types’ or ‘Product Types’ and are excellent for representing multiple special cases, including multiple error states.
 
-### Error Handling in Functional – Error Monads such as ‘Either’ & ‘Validated’
+### Error Handling in Functional Programming – Error Monads such as ‘Either’ & ‘Validated’
 
-In functional languages monads are widely used to chain a sequence of function calls into a clean ‘happy path’. This is also known as ‘functional composition’. A core tenant of functional approaches is to produce more declarative and expressive code over classical imperative approaches which usually interleave error handling with the happy path. In functional approaches, you define ‘what to do’ with library functions (or your own functions when necessary), not ‘how to do it’ as with imperative approaches.
+In functional languages monads are widely used to chain a sequence of function calls into a clean ‘happy path’. This is also known as ‘functional composition’ or 'effect orientated' programming. A core tenant of functional approaches is to produce more declarative and expressive code over classical imperative approaches which usually interleave error handling with the happy path. In functional approaches, you define ‘what to do’ with functions, not ‘how to do it’ as with imperative approaches.
 
-An Either Monad wraps either a result type or an error type, but not both, typically (‘Either<LeftError, RightSuccess>’). Note that Rust is opposite, unfortunately, where left is success and right is error – not sure why. An instance of a monad is passed between functions in a call chain. Wrapping errors within the ‘monadic context’ allows the functional call chain to be composed without polluting and breaking the chain with exceptions and error handling code.  If a function returns LeftError wrapped in the Either, subsequent functions in the chain will short-circuit and will simply return the erroneous Either. This continues until the end of the call chain is reached. 
+An `Either` monad wraps either a result type or an error type, but not both, typically (`Either<LeftError, RightSuccess>`). Note that Rust is opposite, where left is success and right is error. An instance of a monad is passed between functions in a call chain. Wrapping errors within the ‘monadic context’ allows the functional call chain to be composed without polluting and breaking the chain with exceptions and error handling code.  If a function returns a LeftError wrapped in the Either, subsequent functions in the chain will short-circuit and will simply return the erroneous Either. This continues until the end of the call chain is reached. 
 
-A Validated Monad aggregates errors or exceptions within a functional call chain. The purpose is to capture all the errors rather than short-circuiting on the first. A simple example would be capturing all the errors on a form, rather than returning early on the first erroneous form entry. 
+A `Validated` monad aggregates errors or exceptions within a functional call chain. The purpose is to capture all the errors rather than short-circuiting on the first. A simple example would be capturing all the errors on a form, rather than returning early on the first erroneous form entry. 
 
-Regarding exceptions in functional composition: If your language uses ‘Checked Exceptions’ (e.g., Java or when using other JVM languages that call out to underlying Java libs) you can’t throw checked exceptions during functional composition as they force you to handle the error and break the call chain with try/catch or throws statements. In this scenario, wrap the exception in the monadic context and return a LeftError. Note that throwing _unchecked_ exceptions is ok in a functional call chain as they don’t pollute the happy path with try/catch or throws, but you likely still want to wrap the error in the monadic context if that error is not a programming error.
+Regarding exceptions in functional composition: If your language uses ‘Checked Exceptions’ (e.g., Java or when using other JVM languages that call out to underlying Java libs), you can’t throw checked exceptions during functional composition as they force you to handle the error and break the call chain with try/catch or throws statements. In this scenario, wrap the exception in the monadic context and return a LeftError. Note that throwing _unchecked_ exceptions is ok in a functional call chain as they don’t pollute the happy path with try/catch or throws, but you likely still want to wrap the error in the monadic context to return an error-as-value, e.g. if that error is not a programming error or is an exceptional circumstance.
 
 ### Data Orientated Programming with Algebraic Data Types (ADTs)
 
-The Special Case Pattern is one example for modelling your domain types in such a way that the absence of value is explicitly modelled in your domain making illegal program states and crashes more unlikely. However, you can go a lot further using Algebraic Data Types (ADTs). ADTs include both ‘Product Types’ for modelling aggregation such as a C’s basic ‘struct’, and ‘Sum Types’ for modelling choice, also known as ‘Union Types’ or ‘Tagged Unions’.
+The Special Case Pattern is one example for modelling your domain types in such a way that the absence of value is explicitly modelled in your domain making illegal program states and crashes more unlikely. However, you can go a lot further using Algebraic Data Types (ADTs). ADTs include both ‘Product Types’ for modelling aggregation such as a C’s or Golang's ‘struct’, and ‘Sum Types’ for modelling choice, also known as ‘Union Types’ or ‘Tagged Unions’.
 
 This simple combination of aggregation and choice is deceptively powerful and shows up in many programming languages to model domains, return types and function arguments:
 

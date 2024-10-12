@@ -18,16 +18,6 @@
                 "source": false
               }
             }
-          },
-          {
-            "id": "1a65f9fb1b65cd97",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.6.7"
-              }
-            }
           }
         ]
       }
@@ -79,7 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "c1c8e1962adcc80f",
@@ -158,18 +148,18 @@
   },
   "active": "8e5b994b498754ae",
   "lastOpenFiles": [
-    "Pasted image 20240611100040.png",
     "devGuidbook.md",
+    "Pasted image 20240906135416.png",
+    "Pasted image 20240906135400.png",
+    "Pasted image 20240905163511.png",
+    "Pasted image 20240905163103.png",
+    "Pasted image 20240905162859.png",
+    "Pasted image 20240905161915.png",
+    "Pasted image 20240611100040.png",
     "toc.js",
     "attachments/Pasted image 20240611100944.png",
     "attachments/Pasted image 20240611100930.png",
     "attachments/Pasted image 20240611100815.png",
-    "attachments/Pasted image 20240611100610.png",
-    "attachments/Pasted image 20240611100053.png",
-    "attachments/Pasted image 20240611095042.png",
-    "attachments/Pasted image 20240611094242.png",
-    "attachments/Pasted image 20240611094151.png",
-    "attachments/Pasted image 20240611094028.png",
     "attachments"
   ]
 }
