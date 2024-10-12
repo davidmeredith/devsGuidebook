@@ -5,92 +5,90 @@ Last Updated Oct 24.  Enjoy.
 dv.view('toc')
 ```
 
-## Table of contents
-
 1. [Table of contents](#Table-of-contents)
 2. [Why Software Dev Guidebook](#Why-Software-Dev-Guidebook)
     1. [Target Audience](#Target-Audience)
-    2. [If it's not in Git it doesn't exist](#If-it's-not-in-Git-it-doesn't-exist)
+    2. [If it is not in Git it does not exist](#If-it-is-not-in-Git-it-does-not-exist)
         1. [Feature Branching vs Trunk Based development](#Feature-Branching-vs-Trunk-Based-development)
         2. [Integrating Upstream Changes](#Integrating-Upstream-Changes)
         3. [Rebase vs Merge](#Rebase-vs-Merge)
     3. [Adopt Semantic Versioning for tags and releases](#Adopt-Semantic-Versioning-for-tags-and-releases)
-    4. [Review each other's code and be supportive](#Review-each-other's-code-and-be-supportive)
-    5. [If the critical path has not been reviewed… it shouldn't go onto master branch](#If-the-critical-path-has-not-been-reviewed%E2%80%A6-it-shouldn't-go-onto-master-branch)
-    6. [Continuous Integration - If it doesn't have tests… it doesn't work](#Continuous-Integration---If-it-doesn't-have-tests%E2%80%A6-it-doesn't-work)
+    4. [Review each others code and be supportive](#Review-each-others-code-and-be-supportive)
+    5. [If the critical path has not been reviewed it should not go onto master branch](#If-the-critical-path-has-not-been-reviewed-it-should-not-go-onto-master-branch)
+    6. [Continuous Integration - If it does not have tests it does not work](#Continuous-Integration---If-it-does-not-have-tests-it-does-not-work)
     7. [Continuous Delivery](#Continuous-Delivery)
     8. [Continuous Deployment](#Continuous-Deployment)
-    9. [If it Doesn't have Documentation… It's Not Usable](#If-it-Doesn't-have-Documentation%E2%80%A6-It's-Not-Usable)
+    9. [If it Does not have Documentation it is Not Usable](#If-it-Does-not-have-Documentation-it-is-Not-Usable)
     10. [Learning mindset](#Learning-mindset)
-    11. [Customers’ Bill of Rights (modified from Uncle Bob Martin’s ‘Clean Agile’)](#Customers%E2%80%99-Bill-of-Rights-(modified-from-Uncle-Bob-Martin%E2%80%99s-%E2%80%98Clean-Agile%E2%80%99))
-    12. [Developers’ Bill of Rights (modified from Uncle Bob Martin’s ‘Clean Agile’)](#Developers%E2%80%99-Bill-of-Rights-(modified-from-Uncle-Bob-Martin%E2%80%99s-%E2%80%98Clean-Agile%E2%80%99))
+    11. [Customer Bill of Rights (modified from Uncle Bob Martin - Clean Agile)](#Customer-Bill-of-Rights-(modified-from-Uncle-Bob-Martin---Clean-Agile))
+    12. [Developer Bill of Rights (modified from Uncle Bob Martin - Clean Agile)](#Developer-Bill-of-Rights-(modified-from-Uncle-Bob-Martin---Clean-Agile))
     13. [Tooling](#Tooling)
-        1. [Don’t be Smart - Use the Right Tools for the Job and for your customer](#Don%E2%80%99t-be-Smart---Use-the-Right-Tools-for-the-Job-and-for-your-customer)
-        2. [To Garbage Collect (GC) or Not To GC](#To-Garbage-Collect-(GC)-or-Not-To-GC)
+        1. [Do not be Smart - Use the Right Tools for the Job and for your customer](#Do-not-be-Smart---Use-the-Right-Tools-for-the-Job-and-for-your-customer)
+        2. [To Garbage Collect or Not To GC](#To-Garbage-Collect-or-Not-To-GC)
         3. [Kanban, Jira & Confluence](#Kanban,-Jira-&-Confluence)
-        4. [Gitlab / Version Control](#Gitlab-/-Version-Control)
+        4. [Gitlab and Version Control](#Gitlab-and-Version-Control)
         5. [Container Repository](#Container-Repository)
         6. [Build Tools](#Build-Tools)
-        7. [Static Code Analysis / Linting / CheckStyle / FindBugs / SonarCube / IDE checks](#Static-Code-Analysis-/-Linting-/-CheckStyle-/-FindBugs-/-SonarCube-/-IDE-checks)
+        7. [Static Code Analysis](#Static-Code-Analysis)
         8. [Containerisation for Portability](#Containerisation-for-Portability)
-        9. [Workflows & Containerisation](#Workflows-&-Containerisation)
-3. [Development Guide / Best Practices](#Development-Guide-/-Best-Practices)
-    1. [Quality is the best shortcut (Fowler’s Design Stamina Hypothesis)](#Quality-is-the-best-shortcut-(Fowler%E2%80%99s-Design-Stamina-Hypothesis))
-    2. [Naming with Meaningful & Descriptive Names](#Naming-with-Meaningful-&-Descriptive-Names)
+        9. [Workflows and Containerisation](#Workflows-and-Containerisation)
+3. [Development Guide Best Practices](#Development-Guide-Best-Practices)
+    1. [Quality is the best shortcut - Fowler Design Stamina Hypothesis](#Quality-is-the-best-shortcut---Fowler-Design-Stamina-Hypothesis)
+    2. [Naming with Meaningful and Descriptive Names](#Naming-with-Meaningful-and-Descriptive-Names)
     3. [Testing has Three Main Purposes](#Testing-has-Three-Main-Purposes)
-    4. [Keep Classes & Functions Small(ish)](#Keep-Classes-&-Functions-Small(ish))
+    4. [Keep Classes and Functions Smallish](#Keep-Classes-and-Functions-Smallish)
     5. [Limit the Number of Function Arguments](#Limit-the-Number-of-Function-Arguments)
-    6. [Functions should do one thing, and do it well](#Functions-should-do-one-thing,-and-do-it-well)
-    7. [Classes / Code Should be Cohesive](#Classes-/-Code-Should-be-Cohesive)
-    8. [Classes should have only one reason to change / do one thing and do it well](#Classes-should-have-only-one-reason-to-change-/-do-one-thing-and-do-it-well)
-    9. [If using OOP, know SOLID](#If-using-OOP,-know-SOLID)
+    6. [Functions should do one thing and do it well](#Functions-should-do-one-thing-and-do-it-well)
+    7. [Classes and Code Should be Cohesive](#Classes-and-Code-Should-be-Cohesive)
+    8. [Classes should have only one reason to change and do one thing and do it well](#Classes-should-have-only-one-reason-to-change-and-do-one-thing-and-do-it-well)
+    9. [If using OOP know SOLID](#If-using-OOP-know-SOLID)
     10. [Dependency Inversion Principle](#Dependency-Inversion-Principle)
-    11. [Dependency Injection (DI) & Inversion of Control (IoC)](#Dependency-Injection-(DI)-&-Inversion-of-Control-(IoC))
-    12. [Avoid Inheritance Tax - Prefer Object Composition, Interfaces, Traits, Mixins to achieve ‘Ad-hoc Polymorphism’](#Avoid-Inheritance-Tax---Prefer-Object-Composition,-Interfaces,-Traits,-Mixins-to-achieve-%E2%80%98Ad-hoc-Polymorphism%E2%80%99)
+    11. [Dependency Injection and Inversion of Control (IoC)](#Dependency-Injection-and-Inversion-of-Control-(IoC))
+    12. [Avoid Inheritance Tax - Prefer Object Composition, Interfaces, Traits, Mixins to achieve Ad-hoc Polymorphism](#Avoid-Inheritance-Tax---Prefer-Object-Composition,-Interfaces,-Traits,-Mixins-to-achieve-Ad-hoc-Polymorphism)
     13. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
     14. [Know Some Design Patterns](#Know-Some-Design-Patterns)
         1. [The Strategy Pattern Example](#The-Strategy-Pattern-Example)
         2. [The Visitor Pattern](#The-Visitor-Pattern)
     15. [Consider using the Builder Pattern for More Complex Object Creation Scenarios](#Consider-using-the-Builder-Pattern-for-More-Complex-Object-Creation-Scenarios)
     16. [Information Hiding](#Information-Hiding)
-    17. [DRY – Don’t Repeat Yourself](#DRY-%E2%80%93-Don%E2%80%99t-Repeat-Yourself)
-    18. [YAGNI – You Aren’t Going to Need It](#YAGNI-%E2%80%93-You-Aren%E2%80%99t-Going-to-Need-It)
-    19. [Comment ‘in-line’ As You Go](#Comment-%E2%80%98in-line%E2%80%99-As-You-Go)
+    17. [DRY – Do not Repeat Yourself](#DRY-%E2%80%93-Do-not-Repeat-Yourself)
+    18. [YAGNI – You Are not Going to Need It](#YAGNI-%E2%80%93-You-Are-not-Going-to-Need-It)
+    19. [Comment in-line As You Go](#Comment-in-line-As-You-Go)
     20. [The Boy Scout Rule](#The-Boy-Scout-Rule)
-    21. [Law of Demiter & Train Wrecks](#Law-of-Demiter-&-Train-Wrecks)
-    22. [Functional vs OOP? Choose Two](#Functional-vs-OOP?-Choose-Two)
-    23. [Don’t pollute Functional Code with Mutable State](#Don%E2%80%99t-pollute-Functional-Code-with-Mutable-State)
+    21. [Law of Demiter and Train Wrecks](#Law-of-Demiter-and-Train-Wrecks)
+    22. [Functional vs OOP - Choose Two](#Functional-vs-OOP---Choose-Two)
+    23. [Do not pollute Functional Code with Mutable State](#Do-not-pollute-Functional-Code-with-Mutable-State)
     24. [Make Immutability your Default](#Make-Immutability-your-Default)
     25. [Interior Mutability](#Interior-Mutability)
     26. [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
     27. [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
     28. [Error Handling - 4 Types of Problems](#Error-Handling---4-Types-of-Problems)
-    29. [Error Handling - Exceptions vs Errors-as-Values ?](#Error-Handling---Exceptions-vs-Errors-as-Values-?)
-    30. [Error Handling - Exceptions should not be used for flow control, use errors-as-values instead (exceptional != conditional)](#Error-Handling---Exceptions-should-not-be-used-for-flow-control,-use-errors-as-values-instead-(exceptional-!=-conditional))
-    31. [Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected situations (exceptional != conditional)](#Error-Handling---Only-use-exceptions-for-exceptional-situations-such-as-coding-errors-and-unexpected-situations-(exceptional-!=-conditional))
+    29. [Error Handling - Exceptions vs Errors-as-Values](#Error-Handling---Exceptions-vs-Errors-as-Values)
+    30. [Error Handling - Exceptions should not be used for flow control, use errors-as-values instead, exceptional != conditional](#Error-Handling---Exceptions-should-not-be-used-for-flow-control,-use-errors-as-values-instead,-exceptional-!=-conditional)
+    31. [Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected situations, exceptional != conditional](#Error-Handling---Only-use-exceptions-for-exceptional-situations-such-as-coding-errors-and-unexpected-situations,-exceptional-!=-conditional)
     32. [Error Handling - Provide Relevant Exceptions for the abstraction layer](#Error-Handling---Provide-Relevant-Exceptions-for-the-abstraction-layer)
-    33. [Error Handling - Bubble Exceptions Upwards or Trap at Source?](#Error-Handling---Bubble-Exceptions-Upwards-or-Trap-at-Source?)
+    33. [Error Handling - Bubble Exceptions Upwards or Trap at Source](#Error-Handling---Bubble-Exceptions-Upwards-or-Trap-at-Source)
     34. [Error Handling – Model the Absence of Value Explicitly](#Error-Handling-%E2%80%93-Model-the-Absence-of-Value-Explicitly)
-    35. [Error Handling in Functional Programming – Error Monads such as ‘Either’ & ‘Validated’](#Error-Handling-in-Functional-Programming-%E2%80%93-Error-Monads-such-as-%E2%80%98Either%E2%80%99-&-%E2%80%98Validated%E2%80%99)
+    35. [Error Handling in Functional Programming – Error Monads such as Either & Validated](#Error-Handling-in-Functional-Programming-%E2%80%93-Error-Monads-such-as-Either-&-Validated)
     36. [Data Orientated Programming with Algebraic Data Types (ADTs)](#Data-Orientated-Programming-with-Algebraic-Data-Types-(ADTs))
     37. [Concurrency & Parallelism](#Concurrency-&-Parallelism)
         1. [Know the difference between IO bound tasks and CPU bound tasks and their common solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-common-solution-patterns)
     38. [Security Development Practices](#Security-Development-Practices)
-4. [Agile Process Guide a.k.a ‘Feedback Driven Development’](#Agile-Process-Guide-a.k.a-%E2%80%98Feedback-Driven-Development%E2%80%99)
-    1. [Design Thinking Workshops & Scoping Document](#Design-Thinking-Workshops-&-Scoping-Document)
-    2. [Epics / Work Package Span Multiple Sprints](#Epics-/-Work-Package-Span-Multiple-Sprints)
-    3. [Define user stories either with the INVEST Framework, Who/What/Why or the Connextra Card Template – all are good, you don’t need to be too rigid](#Define-user-stories-either-with-the-INVEST-Framework,-Who/What/Why-or-the-Connextra-Card-Template-%E2%80%93-all-are-good,-you-don%E2%80%99t-need-to-be-too-rigid)
-    4. [Arrange core user stories into a Journey Map with a narrative flow or backbone of ‘Big Activities’ moving from left to right](#Arrange-core-user-stories-into-a-Journey-Map-with-a-narrative-flow-or-backbone-of-%E2%80%98Big-Activities%E2%80%99-moving-from-left-to-right)
+4. [Agile Process Guide a.k.a Feedback Driven Development](#Agile-Process-Guide-a.k.a-Feedback-Driven-Development)
+    1. [Design Thinking Workshops and Scoping Document](#Design-Thinking-Workshops-and-Scoping-Document)
+    2. [Epics and Work Package Span Multiple Sprints](#Epics-and-Work-Package-Span-Multiple-Sprints)
+    3. [Define user stories either with the INVEST Framework, Who-What-Why or the Connextra Card Template – all are good and you don’t need to be too rigid](#Define-user-stories-either-with-the-INVEST-Framework,-Who-What-Why-or-the-Connextra-Card-Template-%E2%80%93-all-are-good-and-you-don%E2%80%99t-need-to-be-too-rigid)
+    4. [Arrange core user stories into a Journey Map with a narrative flow or backbone of Big Activities moving from left to right](#Arrange-core-user-stories-into-a-Journey-Map-with-a-narrative-flow-or-backbone-of-Big-Activities-moving-from-left-to-right)
     5. [Task Backlog](#Task-Backlog)
-    6. [Requirements Document & System Architecture Document](#Requirements-Document-&-System-Architecture-Document)
+    6. [Requirements Document and System Architecture Document](#Requirements-Document-and-System-Architecture-Document)
     7. [1-to-2-week Sprints](#1-to-2-week-Sprints)
     8. [Inline Testing](#Inline-Testing)
-    9. [Demo & Playbacks](#Demo-&-Playbacks)
-    10. [Acceptance, Sign Off & Cucumbers](#Acceptance,-Sign-Off-&-Cucumbers)
-    11. [Iteration & Incrementalism](#Iteration-&-Incrementalism)
+    9. [Demo and Playbacks](#Demo-and-Playbacks)
+    10. [Acceptance, Sign Off and Cucumbers](#Acceptance,-Sign-Off-and-Cucumbers)
+    11. [Iteration and Incrementalism](#Iteration-and-Incrementalism)
     12. [Cup Cake Roadmaps](#Cup-Cake-Roadmaps)
 5. [Appendix - Recommended Texts](#Appendix---Recommended-Texts)
-
+## Table of contents
 ## Why Software Dev Guidebook
 
 To help everyone in the Centre build great software, we’ve put together a collection of development guidelines to help you build scalable, maintainable, reliable, performant, and usable code. Like all guidelines, these aren’t strict rules, and knowing when and where to apply these guidelines largely comes down to practice and experience.  This is not an exhaustive list. For more in-depth analysis, please see the list of recommended texts in the appendix. We’re not going to repeat all that good advice here, that’s what the books are for, but we’ve tried to distil a range of key recommendations.
@@ -111,7 +109,7 @@ If you predominantly use Python/R via Jupyter Notebooks for example, much of thi
 Similarly, if you’re using low-level C/C++ or Fortran, many of the guidelines might simply be unavailable to you. Please bear this in mind, these are not rules, interpret them judiciously for your scenario, and as ever, the real answer is always “it depends”. We’ll keep evolving this document and welcome any comments.
 
 
-### If it's not in Git it doesn't exist
+### If it is not in Git it does not exist
 - Use a GitLab/Github service - [https://gitlab.stfc.ac.uk/](https://gitlab.stfc.ac.uk/)
 - Learn git concepts, not commands
 - Branch early, commit little and often with ‘logically sensible commits’ multiple times a day.
@@ -153,15 +151,15 @@ Whether to rebase or merge is generally down to preference:
 
 - SemVer - [https://semver.org/](https://semver.org/)
 
-### Review each other's code and be supportive
+### Review each others code and be supportive
 
 - Foster a friendly and supportive environment and politely shout-out vulnerabilities and apparent issues, don’t be shy. As a reviewer you’ll learn something. Code reviews and pair-programming really does improve code quality and exposure to different projects/codes/practices.
 
-### If the critical path has not been reviewed… it shouldn't go onto master branch
+### If the critical path has not been reviewed it should not go onto master branch
 
 - Basic code quality relies on having at least two pairs of eyes on code, to catch errors, suggest improvements, build shared knowledge, and improve code style.  Get into the habit of developing on branches or forks and using pull / merge requests to facilitate code review before merging.
 
-### Continuous Integration - If it doesn't have tests… it doesn't work
+### Continuous Integration - If it does not have tests it does not work
 
 - To be able to say something 'works' we judge it against some (implicit) criteria.  Writing tests makes our success criteria explicit.  Automation (Continuous Integration) prevents regressions.  Eventually, this leads towards test-driven development (TDD) where we think clearly about specifying what 'working' looks like up-front by writing code from a caller’s perspective.
 - Test as you go along to a level that’s feasible and pragmatic. Extensive testing with production-level coverage (70 to 80%) is not always achievable or useful.  Given project budgets and timescales, focus on testing the application’s critical path as a minimum.
@@ -170,6 +168,7 @@ Whether to rebase or merge is generally down to preference:
 - Do not just rely on unit tests - system and integration tests are also needed. Unit tests alone will instil a false sense of security.
 - Integration and System tests can take longer to complete.
 - For more details on best practices for testing, including the different types of testing from Unit, Integration to System tests, see: [https://epubs.stfc.ac.uk/work/50305274](https://epubs.stfc.ac.uk/work/50305274)
+
 ### Continuous Delivery
 
 Means that the software should always be in a releasable-ready condition.  This is a recommendation for your master and dev branches. If you’re run over by a bus (ROBAB), and someone must come along and pick up your code and they must fight with it from the outset, there’s a strong chance it will become shelfware.  If you need to have prolonged branches for experimentation that aren’t release-ready, create a feature branch such as ‘feature:homersSandbox’ to isolate your experiments. [https://epubs.stfc.ac.uk/work/47984368](https://epubs.stfc.ac.uk/work/47984368)
@@ -178,7 +177,7 @@ Means that the software should always be in a releasable-ready condition.  This
 
 Means that once the software is merged into master branch, it automatically gets pushed into production. The idea is to make the large and risky ‘big feature release’ a legacy practice.  By continuously deploying to production with small and frequent updates, if something goes wrong, its quick and easy to rollback.  This might be a stretch for Hartree because its more relevant for long-lived production software & products, not so appropriate for proof of concepts.
 
-### If it Doesn't have Documentation… It's Not Usable
+### If it Does not have Documentation it is Not Usable
 
 - Publish docs: Jira (task/sprints), Confluent (docs), GitLab, (code, merge requests, CI/CD), Bid register (PMO tracking tools)
 - Use xDoc style code comments such as JavaDoc, PyDoc
@@ -199,7 +198,7 @@ Means that once the software is merged into master branch, it automatically gets
 - Tinker - its really important to do hobby projects and dev stuff you enjoy.
 
 
-### Customers’ Bill of Rights (modified from Uncle Bob Martin’s ‘Clean Agile’)
+### Customer Bill of Rights (modified from Uncle Bob Martin - Clean Agile)
 
 Customers have the right to:
 - An overall plan and to understand what can approximately be accomplished and at an estimated cost.
@@ -209,7 +208,7 @@ Customers have the right to:
 - Be informed of schedule and estimate changes, in time to choose how to reduce the scope to a meet a required date.
 - Cancel at any time and be left with useful outputs reflecting their investment to date.
 
-### Developers’ Bill of Rights (modified from Uncle Bob Martin’s ‘Clean Agile’)
+### Developer Bill of Rights (modified from Uncle Bob Martin - Clean Agile)
 
 - Developers have the right to:
 - Know what is needed with clear declarations of priority.
@@ -221,11 +220,11 @@ Customers have the right to:
 
 ### Tooling
 
-#### Don’t be Smart - Use the Right Tools for the Job and for your customer    
+#### Do not be Smart - Use the Right Tools for the Job and for your customer    
 
 As a centre, we should be using the right tools for the job, we all have our preferences, but there’s no need to be stubbornly loyal about a particular language or OS. As software professionals, we should recognise the right tools for the job and for our clients.  
 
-#### To Garbage Collect (GC) or Not To GC
+#### To Garbage Collect or Not To GC
 
 For HPC and when squeezing software into tight spaces such as in low-level systems programming (systems software isn’t HPC BTW), a Garbage Collected (GC) language probably isn’t the best choice. The GC adds lots of memory requirement. However, for full-stack, enterprise-applications / services, mobile, and general-purpose programming, it's probably best to use a memory safe language – “A human garbage collector is just wasted effort” (Eckle & Ward, Happy Path Programming). Similarly, there is a recognised shift in industry away from memory unsafe languages as it is widely known that the majority Common Vulnerability Exploits (CVEs) stem from unsafe memory language exploits, causing organisations such as [Google](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html) (for Android), [NSA and Microsoft to urge the use of memory-safe languages](https://www.theregister.com/2022/11/11/nsa_urges_orgs_to_use/).
 
@@ -240,7 +239,7 @@ Keep all project documents and the Decision Point Review templates in a single r
 
 ![](attachments/Pasted%20image%2020240611092007.png)
 
-#### Gitlab / Version Control
+#### Gitlab and Version Control
 
 For Hartree folks: Use the STFC Gitlab instance unless there is good reason not to: [https://gitlab.stfc.ac.uk/](https://gitlab.stfc.ac.uk/)
 
@@ -252,9 +251,9 @@ For Hartree folks: Use the STFC Harbor repository to upload and store containers
 
 It is the developer’s responsibility to use an appropriate build tool that manages the dependencies of your project. It should be possible to clean the project, download dependencies, re-build a project, run unit and integration tests, and build a deployable package all from the command line. It is also the responsibility of developer to create the necessary environment configuration files (with specific version of modules or libraries) in a consistent state so that someone else can pick up your project easily.
 
-#### Static Code Analysis / Linting / CheckStyle / FindBugs / SonarCube / IDE checks
+#### Static Code Analysis
 
-Static code analysis helps bring consistency to your code. Within a project, adopt the same style guides and agree the linters up front e.g., Black for Python, Google style guide for Java are good examples. There’s no ruling here, pick one that suits the team and be consistent.
+Static code analysis helps bring consistency to your code. Within a project, adopt the same style guides and agree the linters up front e.g., Black for Python, Google style guide for Java are good examples. There’s no ruling here, pick one that suits the team and be consistent. There are plenty of static code analysis tools out there such as CheckStyle, FindBugs, SonarCube, Black, Google linter, IDE checks.
 
 #### Containerisation for Portability
 
@@ -274,22 +273,22 @@ Here are some recommendations: 
 
 - See this great guide from the RSE team [for more info](https://softwareoutlook.ac.uk/best-practices-in-software-engineering/) on how to run HPC Singularity (now [Apptainer](https://apptainer.org/)) and Conda images with worked examples.
 
-#### Workflows & Containerisation
+#### Workflows and Containerisation
 
 Please refer to this separate document that characterises all the different types of workflows we use at Hartree, including Data Flow Engines that orchestrate containers using DAGs (Directed Acyclic Graphs): [http://purl.org/net/epubs/work/50844906](http://purl.org/net/epubs/work/50844906). Our ‘[Demystifying Data Engineering](https://www.hartree.stfc.ac.uk/events/demystifying-data-engineering/)’ Explain course provides more details into Data Flow runtimes and tooling.
 
 
-## Development Guide / Best Practices
+## Development Guide Best Practices
 
 This is not an exhaustive list of coding recommendations. For more in-depth explanations, please see the list of highly recommended texts. I’m not going to repeat all that excellent advice here, that’s what the books are for, but please find below a collection of development best practices that we should consider when developing our software. Like all guidelines, they aren’t strict rules, knowing when and where to judiciously apply largely comes down to experience. 
 
-### Quality is the best shortcut (Fowler’s Design Stamina Hypothesis)
+### Quality is the best shortcut - Fowler Design Stamina Hypothesis
 
 - Think carefully about compromising the quality of your code for delivery speed; high quality code quickly becomes easier and faster to develop and overtakes hastily hacked together code. This is evidence based, see Martin Fowler's [Design Stamina Hypothesis]([https://martinfowler.com/bliki/DesignStaminaHypothesis.html](https://martinfowler.com/bliki/DesignStaminaHypothesis.html)) which describes how the velocity of software development declines with time due to poor design. We’ve also experienced this before in actual projects – the hypothesis has played out in practice at Hartree.
 
 ![](attachments/Pasted%20image%2020240611092227.png)
 
-### Naming with Meaningful & Descriptive Names
+### Naming with Meaningful and Descriptive Names
 
  - “There are only two hard things in computer science, invalidation and naming things” (P.Karlton), see: [https://martinfowler.com/bliki/TwoHardThings.html](https://martinfowler.com/bliki/TwoHardThings.html)
  - Use intention revealing names for your classes, functions & variables. Don’t use single char var names (implicit loops etc are ok, but for global/module/class members, please use sensible names).  For example, ‘process_model’ is too generic, what does it mean? ‘execute_nlp_training_model’ is better, its more self-documenting.
@@ -312,7 +311,7 @@ b)     **To prevent regressions.** It really does build confidence in your c
 
 c)     **To encourage good design** - it _really_ does actually - there’s lots of supporting research that shows this. When you write tests, you put yourself in the calling-code perspective, so you really do think about design such as loose coupling, separation of concerns, modularity, simplicity of API, and so on. If your code is hard to test, it’s likely too strongly coupled, and here Dependency Injection can help you.  Test Driven Development (TDD) is the ultimate testing practice, where you write tests first using an imaginary API, and then you fill in the details.
 
-### Keep Classes & Functions Small(ish)
+### Keep Classes and Functions Smallish
 
 General rule – not much bigger than your screen’s viewport. I don't subscribe to certain author's view that functions should be no longer than four or five lines myself - I find it too difficult to hop around the code when functions are this small.   However, a viewport size / page is fine, and if you still need convincing, know that compilers can apply far more effective in-lining optimisations with smaller classes and functions.
 
@@ -320,11 +319,11 @@ General rule – not much bigger than your screen’s viewport. I don't subscrib
 
 Consider using immutable Data Transfer Objects (aka DTOs / Data Objects / Records) if your function has more than ~4 arguments.
 
-### Functions should do one thing, and do it well
+### Functions should do one thing and do it well
 
 Separation of concerns at the function level.
 
-### Classes / Code Should be Cohesive
+### Classes and Code Should be Cohesive
 
 Classes should be cohesive – high cohesion means the methods and variables of the class are co-dependent and often change together. This can be paraphrased as "Changes to the code over here should not affect code over there" and/or "Code that changes together stays together. " 
 
@@ -334,11 +333,12 @@ Here’s the authoritative view from the famous [Kent Beck from Nov (2022) and h
 
 Examples of patterns that support cohesion include the State Pattern. 
 - In the State pattern, consider code that is widespread across many files that has exhaustive 'switch' or 'when' statements that reference a centrally declared enum set. The exhaustive switch/when statements execute different behaviours based on the current enum state value. If you add or remove a state enum option, you will need to update the exhaustive switch/when statements spread across your code-base. This is not a problem for small projects, but for large code bases it can require significant refactoring. The state pattern co-locates the state enum values with the dependent behaviour i.e., "things that change together, stay together." As an example, the central enum set could be replaced with a corresponding set of state objects, where each state object collects and implements the relevant state-dependent behaviour itself. There are several ways to implement this depending on you language of choice.  
-### Classes should have only one reason to change / do one thing and do it well
+
+### Classes should have only one reason to change and do one thing and do it well
 
 - Separation of concerns at the class level.
 
-### If using OOP, know SOLID
+### If using OOP know SOLID
 
 OOP isn’t as fashionable as Functional these days, mostly because of the mantra 'prefer composition over inheritance'. However, I believe that most of the OOP principles are tried, tested and proven. You can’t argue against the principles of abstraction, information hiding and runtime polymorphism, these are good design principles even in Functional paradigms.  Arguably, what pure OOP does over-emphasise is deep & brittle inheritance hierarchies – you can favour composition instead in the right scenarios.
 
@@ -356,7 +356,7 @@ See the next two slides below. If this does not make sense, please refer the tex
 
 ![](attachments/Pasted%20image%2020240611093638.png)
 
-### Dependency Injection (DI) & Inversion of Control (IoC)
+### Dependency Injection and Inversion of Control (IoC)
 
 Basically, this means that your application code doesn’t itself create instances of classes/objects (dependencies), instead these objects are created separately and are then passed into your application code through a class constructors or setter methods. This ‘wiring together’ of dependencies can be done manually using the Factory Pattern or using an Inversion of Control container (I’m a fan of [Spring.io](https://stfc365.sharepoint.com/sites/HartreeRSEPublic/Shared%20Documents/General/spring.io)). For example, if Class A depends on class B, the IoC container will manage the lifecycle of class B for you (i.e., creation/destruction) and will inject class B into class A when needed. For required dependencies, meaning that class A can’t be initially created without a valid instance of class B, use ‘Constructor Injection’.  For optional dependencies, use setter injection.   The lifetime of a class is usually either singleton-scoped a.k.a., ‘application scoped’, where a single instance is created and managed (which means it must be thread-safe), or ‘prototype-scoped,’ where a new instance is always created & injected. There are several other special lifetimes such as ‘session-scope’ depending on your requirement.
 
@@ -370,7 +370,7 @@ For the Car class, unless we decide to break encapsulation and make engine publi
 
 For interest:  Did you know that IoC containers are changing a lot recently. In the past, they’ve largely been built using a technique known as ‘reflection’, but they are now being extended so you can choose between reflection-based dependency injection, which is far more dynamic and flexible for Just-in-Time (JIT) and dynamic binding, and static injection, which plays far nicer for scenarios that require Ahead of Time (AOT) compilation.  This is a big topic, but as ever, there are trade-offs between the different approaches which ultimately depend on your use-case.
 
-### Avoid Inheritance Tax - Prefer Object Composition, Interfaces, Traits, Mixins to achieve ‘Ad-hoc Polymorphism’
+### Avoid Inheritance Tax - Prefer Object Composition, Interfaces, Traits, Mixins to achieve Ad-hoc Polymorphism
 
 - Deeply nested inheritance hierarchies with sub-classes that extend super classes have their place, for example when developing libraries and frameworks. For application developers however, they are often considered a bit of an anti-pattern these days. This is because inheritance strongly couples you to the structure of the classes in the parent hierarchy, which sometimes forces you to implement abstract methods that you don’t actually need. In these scenarios, you may need to throw some form of unsupported exception or error.  IF you have access to the source code, you can extract those parent methods into a new parent in the inheritance hierarchy and inherit from the appropriate level – i.e., from the direct parent if you do want those methods, or from a higher-level ancestor if you don’t need the newly extracted methods (effectively skipping the newly extracted parent layer). However, this means all existing sub-classes may need to be refactored to inherit from the appropriate parent or ancestor class – this can be a very expensive refactor and can get complex with deeply nested hierarchies. In short: Inheritance asks you to bundle all common elements into a parent class - but this means that exceptions to the common can require expensive refactoring.
 
@@ -405,6 +405,7 @@ There might be a tried & tested design pattern for the problem you’re tackling
 
 
 #### The Strategy Pattern Example
+
 This pattern abstracts logic behind a common abstraction such as a SAM interface (Single Abstract Method interface) so that an implementation can be **chosen at runtime**. This makes the code more flexible and reusable. In the Kotlin example below taken from [Dave Leeds](https://www.youtube.com/watch?v=-Ak44LFwlwI&t=64s), we use validation as an example, where any of the validators can be passed at runtime to the FormField class. 
 ![[Pasted image 20240905161915.png]]
 Here are two more Kotlin examples that are more idiomatic which reduce boilerplate, again from Dave Leeds: 
@@ -416,6 +417,7 @@ Note you can use an extension function to easily create an optional version:
 
 At the call site: 
 ![[Pasted image 20240906135400.png]]
+
 #### The Visitor Pattern
 
 The visitor pattern is used to separate business logic from objects on which they operate. Typically, objects define an accept method then call method(s) on the accepted visitor. The calling object is typically passed to the visitor as an argument so the visitor can access the object's public state, as in the pseudo code: `accept(Visitor v) { v.visitDoLogic(this); }`.   New logic can easily be added to the visitor's `visitDoLogic(callerObj)` without having to update the calling objects which illustrates an example of the open closed principle in SOLID.   This pattern uses a double-dispatch logic: first an object's `accept(Visitor)` method is invoked, then the visitor's `visitDoLogic(obj)` method second. 
@@ -458,15 +460,15 @@ Builders are especially useful if the dependencies of your class have complex in
 
 Your first instinct should be to make a method/member/variable private first, then increase visibility as required, not the other way around.
 
-### DRY – Don’t Repeat Yourself
+### DRY – Do not Repeat Yourself
 
 Duplicating chunks of code is odorous - don’t do it.
 
-### YAGNI – You Aren’t Going to Need It
+### YAGNI – You Are not Going to Need It
 
 Following Agile processes (i.e., ‘Feedback Driven Development’) should trap and prevent unnecessary code.
 
-### Comment ‘in-line’ As You Go
+### Comment in-line As You Go
 
 You don’t retrospectively comment your code, you just don’t. Using sensible names should prevent long-winded doc strings.  Use xDoc tools e.g., PyDoc, JavaDoc, xDoc etc. Document the _intent_ of the function/class, not the implementation details.
 
@@ -474,19 +476,20 @@ You don’t retrospectively comment your code, you just don’t. Using sensible 
 
 Leave code in a better state than you found it & don’t comment bad code, re-write it with good descriptive names.
 
-### Law of Demiter & Train Wrecks
+### Law of Demiter and Train Wrecks
+
 A module should not know about the innards of the objects it manipulates (by ‘objects’, I don’t mean immutable DTOs / records / data objects, structs, I mean genuine objects that have behaviour that works on their state). [https://en.wikipedia.org/wiki/Law_of_Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter)
 
 ![](attachments/Pasted%20image%2020240611094151.png)
 From Uncle Bob’s ‘Clean Code’
 
-### Functional vs OOP? Choose Two
+### Functional vs OOP - Choose Two
 
 Despite recent trends where the functional paradigm is gaining popularity, adopting a pure functional language might be a stretch – IO, mutation and OOP are ubiquitous and are here to stay. For example, many sorting algorithms are simply faster and more memory efficient if you (safely) mutate ‘in-place’. However, if the language permits and supports functional concepts, taking a more functional approach is highly recommended. Within the same code base, the general recommendation is to keep the OPP and FN code-paths cleanly separated, aim for a core of pure functions, and push out ‘side effects’ to the out boundaries of your code (see the Dependency Rule / Bullseye) so they become intended ‘effects’ and not nasty interleaved ‘side effects’.
 
 Well worth a watch: [https://www.youtube.com/watch?v=HSk5fdKbd3o&t=543s](https://www.youtube.com/watch?v=HSk5fdKbd3o&t=543s)
 
-### Don’t pollute Functional Code with Mutable State
+### Do not pollute Functional Code with Mutable State
 
 importantly, keep functional call chains pure; you really don’t want to pollute your functional code with shared mutable state across threads. Consider the following example - one is broken, the other is ok, the difference is subtle.  So, while combing FN + OOP is powerful, be very careful.
 
@@ -521,7 +524,7 @@ See prior bullet. Functions should either do something such as create side effec
 
 4.     Programming mistakes:  Let the program crash, you’ll be motivated to fix the problem quickly. These are typically runtime errors/exceptions/panics.
 
-### Error Handling - Exceptions vs Errors-as-Values ? 
+### Error Handling - Exceptions vs Errors-as-Values
 
 Errors as values vs exceptions is a hotly debated topic in programming communities:
 
@@ -549,11 +552,11 @@ Errors as values vs exceptions is a hotly debated topic in programming communiti
 - Languages may also support more advanced error handling strategies. For example, the Kotlin Arrow2 library simplifies the use of OOP and Functional error handling within the same code base (Functional vs OOP? - choose both). For example, lower level code can apply `try/catch/finally` blocks for localised exception handling and recovery if needed, while higher level calling code can provide a wrapping `error context` that can be used at the boundary; Rather than throwing exceptions at the boundary (between different layers of code), exceptions can be *raised* into the higher level error context. Raising rather than (re)throwing then allows the raising functions to be composed within functional compositional call chains - raising does not break referential transparency. In the top layer of your code, such as in a top-level service facade or global error handler in a webapp, you would then need to handle the exceptions raised within the error context, such as performing a transaction roll back or performing a retry.  For a great presentation with examples, see this great talk from Simon Vergauwen from [Kotlin Conf 2023](https://youtu.be/JcFEI8_af3g?si=vH5OG86JTQWFrGnw) 
 
 
-### Error Handling - Exceptions should not be used for flow control, use errors-as-values instead (exceptional != conditional)
+### Error Handling - Exceptions should not be used for flow control, use errors-as-values instead, exceptional != conditional
 
 Passing around a deeply nested stack trace within conditional and control logic is very expensive, don't do it. Instead, model your (known) business errors as values (no need to pass around exceptions), and leave exceptions for coding errors and exceptional situations. If you want control flow logic that says "if success do this..., but if an error occurs then do this..." then use the result pattern.
 
-### Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected situations (exceptional != conditional)
+### Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected situations, exceptional != conditional
 
 For example, an invalid object posted to your API is not exceptional, this should be handled as a potential business error. In the situation where some code throws an exception such as a parse error, catch it locally, extract the useful information, and return an error-value. In general, the result-as-value pattern is appropriate where the problem is the fault of the caller and not a programming mistake e.g., invalid input / form data.
 
@@ -561,7 +564,7 @@ For example, an invalid object posted to your API is not exceptional, this shoul
 
 If you use exceptions (not all languages have exceptions e.g., Rust, Go), define Exceptions in terms of a caller’s needs and wrap 3rd party library APIs including their exceptions. Often, only a few custom exception classes are needed for a particular area of code.
 
-### Error Handling - Bubble Exceptions Upwards or Trap at Source?
+### Error Handling - Bubble Exceptions Upwards or Trap at Source
 
 Generally, pushing exception handling code up to the ‘outer layers’ of your code toward the boundaries is usually a good approach. It also helps cleanly separate the ‘happy path’ from interleaving error handling code.  However, this isn’t a hard rule, in some situations you may need to try/catch/finally at the source of the error to take important corrective actions such as closing an IO resource or rolling-back a DB transaction.
 
@@ -584,7 +587,7 @@ This largely depends on the language you are using:
 
 - Algebraic Data Types (ADTs) are generally either ‘Sum Types’ or ‘Product Types’ and are excellent for representing multiple special cases, including multiple error states.
 
-### Error Handling in Functional Programming – Error Monads such as ‘Either’ & ‘Validated’
+### Error Handling in Functional Programming – Error Monads such as Either & Validated
 
 In functional languages monads are widely used to chain a sequence of function calls into a clean ‘happy path’. This is also known as ‘functional composition’ or 'effect orientated' programming. A core tenant of functional approaches is to produce more declarative and expressive code over classical imperative approaches which usually interleave error handling with the happy path. In functional approaches, you define ‘what to do’ with functions, not ‘how to do it’ as with imperative approaches.
 
@@ -661,7 +664,7 @@ A big topic, it can’t all be covered here, it ranges from single host shared m
 
 
 
-## Agile Process Guide a.k.a ‘Feedback Driven Development’
+## Agile Process Guide a.k.a Feedback Driven Development
 
 For the Hartree Centre, we propose an Agile methodology as it largely suits the type of projects we do. Agile is an overused term, so for Hartree’s purposes, a good definition is ‘Feedback Driven Development’.  Iteration and customer feedback really ARE essential if we are to successfully address real customer needs. Know that industry data shows that even for the best software companies in the world, two thirds of their ideas produce zero or negative value so continuous feedback is essential to mitigate the risks: Online Controlled Experiments at Large Scale: [http://ai.stanford.edu/~ronnyk/2013%20controlledExperimentsAtScale.pdf](http://ai.stanford.edu/~ronnyk/2013%20controlledExperimentsAtScale.pdf)
 
@@ -669,17 +672,17 @@ According to the values of the original Agile manifesto (search the original ‘
 
 We recommend weekly or fortnightly iterations involving customer playbacks and demos. Anything longer than 2 weeks can require significant course correct if/when you go in the wrong direction - agile aims to catch problems early and to course correct.  According to Uncle Bob Martin, the emergence of agile was to “find out how screwed we were as early as possible, it wasn’t just about writing software quickly”.
 
-### Design Thinking Workshops & Scoping Document
+### Design Thinking Workshops and Scoping Document
 
 Design Thinking puts you in the shoes of the customer so that you can understand their pain points. This helps design solutions that really address customer needs. Hartree have a set of recipes for activities that you can use to conduct [DT workshops](https://stfc365.sharepoint.com/:f:/r/sites/TheHartreeCentreCommunityChannel/Shared%20Documents/Hartree%20Communications/Business%20Development/Design%20Thinking%20Workshops?csf=1&web=1&e=cpdeqS). The activities don’t have to be applied religiously and you can adapt as needed. The activities include As Is Scenario Journey Map, Empathy Maps, User Persona and Problem Statements, User Stories, Ideation, Prioritisation, Ideal To-Be Scenario Journey Map, Outcome Statements, Cupcake Roadmaps.
 
 Hartree also has a [scoping doc](https://stfc365.sharepoint.com/:f:/r/sites/TheHartreeCentreCommunityChannel/Shared%20Documents/Hartree%20Communications/Business%20Development/Design%20Thinking%20Workshops?csf=1&web=1&e=cpdeqS) that you can send the customer ahead of time to help focus minds.
 
-### Epics / Work Package Span Multiple Sprints
+### Epics and Work Package Span Multiple Sprints
 
 Epics are like Work Packages. Typically, they require multiple tasks and span multiple sprints.
 
-### Define user stories either with the INVEST Framework, Who/What/Why or the Connextra Card Template – all are good, you don’t need to be too rigid
+### Define user stories either with the INVEST Framework, Who-What-Why or the Connextra Card Template – all are good and you don’t need to be too rigid
 
 -  _“As userType [X], I need a way to do [what?] so that I can [what’s the benefit]”._
 
@@ -693,7 +696,7 @@ Epics are like Work Packages. Typically, they require multiple tasks and span mu
 	- Small - a story must not be larger than one or two developers can implement in a single iteration.
 	- Testable - when a developer says that its 90% ready, nobody really knows how close it is to being finished.
   
-### Arrange core user stories into a Journey Map with a narrative flow or backbone of ‘Big Activities’ moving from left to right
+### Arrange core user stories into a Journey Map with a narrative flow or backbone of Big Activities moving from left to right
 
 Beneath each big activity, define short verb phrases to describe what the user does to achieve each big activity.
 
@@ -703,7 +706,7 @@ Beneath each big activity, define short verb phrases to describe what the user d
 
 Create a list of tasks and use ‘planning poker’ / finger-waving to estimate effort – after a ‘3, 2, 1’ countdown, everyone at the same time provides an estimate of the difficulty of a task between 1 and 5 or holds up a card. This ensures honest estimates from everybody which is Important because different team members may have different experiences/specialities of the task area. See [https://www.evernote.com/l/AWQ6FGRtfrNI1az21FVp9aosQ9zu8b-4CXg](https://www.evernote.com/l/AWQ6FGRtfrNI1az21FVp9aosQ9zu8b-4CXg)
 
-### Requirements Document & System Architecture Document
+### Requirements Document and System Architecture Document
 
 ### 1-to-2-week Sprints  
 
@@ -713,16 +716,16 @@ Break up the Backlog into sprints to deliver your cup-cake roadmap. Provide effo
 
 Test the critical path and be pragmatic about coverage - 80% coverage often not feasible or even useful. Develop tests in-line with the mainline branch. TDD helps us think about the public interfaces / API to the code under development.
 
-### Demo & Playbacks
+### Demo and Playbacks
 
 At the end of the sprint, demo your progress to the client. This is important. Agile can be paraphrased as ‘Feedback Driven Development’.  It is essential to get that customer feedback early and continuously.
 
-### Acceptance, Sign Off & Cucumbers 
+### Acceptance, Sign Off and Cucumbers 
 
 - If possible, get the client to sign-off work every month (PMO have a ‘Decision Point Review’ template).
 - Use the Cucumber approach for acceptance testing i.e., ‘Given, When, Then’.  For example: ‘Given [a particular context/scenario], When [something happens], Then [this is the result]’.
 
-### Iteration & Incrementalism
+### Iteration and Incrementalism
 
 - Recognise that we need both iterative & incremental approaches to building complex systems. Incrementalism == modularity, which helps break down complexity.
 - Review the Backlog, revise and plan your next sprint, jump to 7.
