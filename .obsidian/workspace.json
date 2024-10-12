@@ -4,18 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "4ad01de20053c7b7",
+        "id": "f32bf21777fbf1f3",
         "type": "tabs",
         "children": [
           {
-            "id": "8e5b994b498754ae",
+            "id": "ceb722ef348fe739",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "image",
               "state": {
-                "file": "devGuidbook.md",
-                "mode": "source",
-                "source": false
+                "file": "Pasted image 20240905163511.png"
               }
             }
           }
@@ -85,7 +83,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "devGuidbook.md",
+                "file": "Pasted image 20240905163511.png",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +100,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "devGuidbook.md",
+                "file": "Pasted image 20240905163511.png",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +123,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "devGuidbook.md"
+                "file": "Pasted image 20240905163511.png"
               }
             }
           }
@@ -146,15 +144,18 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8e5b994b498754ae",
+  "active": "ceb722ef348fe739",
   "lastOpenFiles": [
     "devGuidbook.md",
-    "Pasted image 20240906135416.png",
-    "Pasted image 20240906135400.png",
+    "devGuidebook.md",
+    "README.md",
     "Pasted image 20240905163511.png",
-    "Pasted image 20240905163103.png",
-    "Pasted image 20240905162859.png",
-    "Pasted image 20240905161915.png",
+    "consistency-report.md",
+    "attachments/Pasted image 20240906135416.png",
+    "attachments/Pasted image 20240906135400.png",
+    "attachments/Pasted image 20240905163103.png",
+    "attachments/Pasted image 20240905162859.png",
+    "attachments/Pasted image 20240905161915.png",
     "Pasted image 20240611100040.png",
     "toc.js",
     "attachments/Pasted image 20240611100944.png",
