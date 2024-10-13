@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "381bb205a4602782",
+        "id": "c70cadae5074e275",
         "type": "tabs",
         "children": [
           {
-            "id": "1db8c5c5a8adbf9f",
+            "id": "15bb13f33ae7e3c6",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -146,10 +146,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "1db8c5c5a8adbf9f",
+  "active": "abaf4988a760968a",
   "lastOpenFiles": [
-    "g.md",
     "devGuidebook.md",
+    "g.md",
     "README.md",
     "Pasted image 20240905163511.png",
     "devGuidebook/Untitled.md",
