@@ -412,7 +412,8 @@ There might be a tried & tested design pattern for the problem you’re tackling
 #### The Strategy Pattern Example
 
 This pattern abstracts logic behind a common abstraction such as a SAM interface (Single Abstract Method interface) so that an implementation can be **chosen at runtime**. This makes the code more flexible and reusable. In the Kotlin example below taken from [Dave Leeds](https://www.youtube.com/watch?v=-Ak44LFwlwI&t=64s), we use validation as an example, where any of the validators can be passed at runtime to the FormField class. 
-![[Pasted image 20240905161915.png]]
+
+![[Pasted image 20241016180911.png]]
 Here are two more Kotlin examples that are more idiomatic which reduce boilerplate, again from Dave Leeds: 
 ![[Pasted image 20240905162859.png]]
 An even more concise example:

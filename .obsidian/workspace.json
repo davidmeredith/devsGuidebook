@@ -11,8 +11,12 @@
             "id": "f8f1957552ae74d4",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "devGuidebook.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -65,7 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 328.50390243530273
   },
   "right": {
     "id": "c1c8e1962adcc80f",
@@ -81,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "devGuidebook.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "devGuidebook.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +124,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "devGuidebook.md"
+              }
             }
           }
         ]
@@ -140,11 +148,12 @@
   },
   "active": "f8f1957552ae74d4",
   "lastOpenFiles": [
-    "devGuidebook.md~",
+    "Pasted image 20240905163511.png",
     "devGuidebook.md",
+    "attachments/Pasted image 20241016180911.png",
+    "devGuidebook.md~",
     "g.md",
     "README.md",
-    "Pasted image 20240905163511.png",
     "devGuidebook/Untitled.md",
     "attachments 1",
     "devGuidebook",
@@ -159,7 +168,6 @@
     "toc.js",
     "attachments/Pasted image 20240611100944.png",
     "attachments/Pasted image 20240611100930.png",
-    "attachments/Pasted image 20240611100815.png",
     "attachments"
   ]
 }
