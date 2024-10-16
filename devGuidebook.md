@@ -415,13 +415,19 @@ This pattern abstracts logic behind a common abstraction such as a SAM interface
 
 ![](attachments/Pasted%20image%2020241016180911.png)
 Here are two more Kotlin examples that are more idiomatic which reduce boilerplate, again from Dave Leeds: 
+
 ![](attachments/Pasted%20image%2020240905162859.png)
+
 An even more concise example:
+
 ![](attachments/Pasted%20image%2020240905163103.png)
+
 Note you can use an extension function to easily create an optional version:
+
 ![](attachments/Pasted%20image%2020240906135416.png)
 
 At the call site: 
+
 ![](attachments/Pasted%20image%2020240906135400.png)
 
 #### The Visitor Pattern

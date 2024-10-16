@@ -4,19 +4,15 @@
     "type": "split",
     "children": [
       {
-        "id": "fded1e13819a2f4c",
+        "id": "e2ce41ebae69ed5d",
         "type": "tabs",
         "children": [
           {
-            "id": "9beb46fb1c91fa97",
+            "id": "d531d1af44600ac0",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "devGuidebook.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           }
         ]
@@ -85,7 +81,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "devGuidebook.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +97,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "devGuidebook.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -124,9 +118,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "devGuidebook.md"
-              }
+              "state": {}
             }
           }
         ]
@@ -146,10 +138,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "abaf4988a760968a",
+  "active": "d531d1af44600ac0",
   "lastOpenFiles": [
-    "consistency-report.md",
     "devGuidebook.md",
+    "consistency-report.md",
     "Pasted image 20240905163511.png",
     "attachments/Pasted image 20241016180911.png",
     "devGuidebook.md~",
