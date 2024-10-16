@@ -413,16 +413,16 @@ There might be a tried & tested design pattern for the problem you’re tackling
 
 This pattern abstracts logic behind a common abstraction such as a SAM interface (Single Abstract Method interface) so that an implementation can be **chosen at runtime**. This makes the code more flexible and reusable. In the Kotlin example below taken from [Dave Leeds](https://www.youtube.com/watch?v=-Ak44LFwlwI&t=64s), we use validation as an example, where any of the validators can be passed at runtime to the FormField class. 
 
-![[Pasted image 20241016180911.png]]
+![](attachments/Pasted%20image%2020241016180911.png)
 Here are two more Kotlin examples that are more idiomatic which reduce boilerplate, again from Dave Leeds: 
-![[Pasted image 20240905162859.png]]
+![](attachments/Pasted%20image%2020240905162859.png)
 An even more concise example:
-![[Pasted image 20240905163103.png]]
+![](attachments/Pasted%20image%2020240905163103.png)
 Note you can use an extension function to easily create an optional version:
-![[Pasted image 20240906135416.png]]
+![](attachments/Pasted%20image%2020240906135416.png)
 
 At the call site: 
-![[Pasted image 20240906135400.png]]
+![](attachments/Pasted%20image%2020240906135400.png)
 
 #### The Visitor Pattern
 
