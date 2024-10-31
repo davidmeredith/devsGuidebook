@@ -1,12 +1,13 @@
 # Dave's Dev Guidebook
 
-Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre but now I maintain an updated version here. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held ‼️  Happy reading. DaveM
+Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre but now I maintain an updated version here. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. Happy reading. DaveM
 
-Last Updated Oct 24.  Enjoy. 
+Last Updated Oct 24.  Enjoy.
 
 ```dataviewjs
 dv.view('toc')
 ```
+
 --startContents
 1. [Why Software Dev Guidebook](#Why-Software-Dev-Guidebook)
     1. [Target Audience](#Target-Audience)
@@ -46,7 +47,10 @@ dv.view('toc')
     9. [If using OOP know SOLID](#If-using-OOP-know-SOLID)
     10. [Dependency Inversion Principle](#Dependency-Inversion-Principle)
     11. [Dependency Injection and Inversion of Control - IoC](#Dependency-Injection-and-Inversion-of-Control---IoC)
-    12. [Avoid Inheritance Tax - Prefer Object Composition with Interface and Traits to achieve Ad-hoc Polymorphism](#Avoid-Inheritance-Tax---Prefer-Object-Composition-with-Interface-and-Traits-to-achieve-Ad-hoc-Polymorphism)
+    12. [Avoid Paying too much Inheritance Tax - Consider Interfaces or Traits with Composition to achieve Ad-hoc Polymorphism](#Avoid-Paying-too-much-Inheritance-Tax---Consider-Interfaces-or-Traits-with-Composition-to-achieve-Ad-hoc-Polymorphism)
+        1. [Structural Polymorphism and Duck Typing](#Structural-Polymorphism-and-Duck-Typing)
+        2. [Extension Functions](#Extension-Functions)
+        3. [Inheritance should be explicitly designed-for](#Inheritance-should-be-explicitly-designed-for)
     13. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
     14. [Know Some Design Patterns](#Know-Some-Design-Patterns)
         1. [The Strategy Pattern Example](#The-Strategy-Pattern-Example)
@@ -92,8 +96,6 @@ dv.view('toc')
 4. [Appendix Recommended Texts](#Appendix-Recommended-Texts)
 --endContents
 
-
-
 ## Why Software Dev Guidebook
 
 To help everyone in the Centre build great software, we’ve put together a collection of development guidelines to help you build scalable, maintainable, reliable, performant, and usable code. Like all guidelines, these aren’t strict rules, and knowing when and where to apply these guidelines largely comes down to practice and experience.  This is not an exhaustive list. For more in-depth analysis, please see the list of recommended texts in the appendix. We’re not going to repeat all that good advice here, that’s what the books are for, but we’ve tried to distil a range of key recommendations.
@@ -113,12 +115,12 @@ If you predominantly use Python/R via Jupyter Notebooks for example, much of thi
 
 Similarly, if you’re using low-level C/C++ or Fortran, many of the guidelines might simply be unavailable to you. Please bear this in mind, these are not rules, interpret them judiciously for your scenario, and as ever, the real answer is always “it depends”. We’ll keep evolving this document and welcome any comments.
 
-
 ### If it is not in Git it does not exist
+
 - Use a GitLab/Github service - [https://gitlab.stfc.ac.uk/](https://gitlab.stfc.ac.uk/)
 - Learn git concepts, not commands
 - Branch early, commit little and often with ‘logically sensible commits’ multiple times a day.
-- Use a dev branch for your main development and a main branch for your production releasable code. 
+- Use a dev branch for your main development and a main branch for your production releasable code.
 - Use topic branches (aka feature branches) for your new developments.
 
 #### Feature Branching vs Trunk Based development
@@ -136,9 +138,9 @@ Tutorials: [https://github.com/davidmeredith/scdIntroToGit](https://github.com/d
 
 There are two strategies to incorporating upstream commits from other branches - merging and rebasing.  Upstream commits are new commits that exist on another branch which need to be incorporated into your current branch to keep the branch up to date:
 
- a) Periodically merge the changes in the target branch (dev) into your feature branch. This creates the ‘braided’ graph pattern show opposite (flow is from top to bottom). When you’re ready to merge dev into master, a new merge-commit is created on the tip of the master branch. 
+ a) Periodically merge the changes in the target branch (dev) into your feature branch. This creates the ‘braided’ graph pattern show opposite (flow is from top to bottom). When you’re ready to merge dev into master, a new merge-commit is created on the tip of the master branch.
  ![](attachments/Pasted%20image%2020240610204748.png)
- 
+
 b) As shown below, rebasing basically ‘breaks off the feature branch from its root (yellow), and re-attaches it to the tip of the target branch (grey)’. During the rebase, the commits that exist on the feature branch are internally used to create a set of diffs in temporary files which are used by git to create new updated versions of your feature commits. Git needs to do this in order to incorporate any upstream changes that may have occurred on the target branch.
 ![](attachments/Pasted%20image%2020240610204801.png)
 
@@ -169,7 +171,7 @@ Whether to rebase or merge is generally down to preference:
 - To be able to say something 'works' we judge it against some (implicit) criteria.  Writing tests makes our success criteria explicit.  Automation (Continuous Integration) prevents regressions.  Eventually, this leads towards test-driven development (TDD) where we think clearly about specifying what 'working' looks like up-front by writing code from a caller’s perspective.
 - Test as you go along to a level that’s feasible and pragmatic. Extensive testing with production-level coverage (70 to 80%) is not always achievable or useful.  Given project budgets and timescales, focus on testing the application’s critical path as a minimum.
 - Avoid gold-plating and focus on shipping code ASAP for customer review & feedback.
-- Your Unit tests should be fast to complete – order of seconds. 
+- Your Unit tests should be fast to complete – order of seconds.
 - Do not just rely on unit tests - system and integration tests are also needed. Unit tests alone will instil a false sense of security.
 - Integration and System tests can take longer to complete.
 - For more details on best practices for testing, including the different types of testing from Unit, Integration to System tests, see: [https://epubs.stfc.ac.uk/work/50305274](https://epubs.stfc.ac.uk/work/50305274)
@@ -190,7 +192,7 @@ Means that once the software is merged into master branch, it automatically gets
 - If it’s tricky to document the intended purpose, then your class/function is likely too long and needs breaking down into smaller units.
 - Always add a README.md.
 - Always document inline - we _rarely_ go back and document our code after its written, fact.  
-- End-users need to know how to use our software, so think about the right level of documentation for users. Consider separate user & developer docs. 
+- End-users need to know how to use our software, so think about the right level of documentation for users. Consider separate user & developer docs.
 - The C4 approach to technical diagrams is good. [https://c4model.com/](https://c4model.com/)
 - For more details on how to write good documentation for different users including ‘How To’ Guides, tools such as Markdown/AsciiDoctor, and reference guide formats, see: [https://epubs.stfc.ac.uk/work/47984356](https://epubs.stfc.ac.uk/work/47984356)
 
@@ -202,10 +204,10 @@ Means that once the software is merged into master branch, it automatically gets
 - Keep up the pursuit of software engineering craftsmanship, mastery and professionalism.
 - Tinker - its really important to do hobby projects and dev stuff you enjoy.
 
-
 ### Customer Bill of Rights - modified from Uncle Bob Martin Clean Agile
 
 Customers have the right to:
+
 - An overall plan and to understand what can approximately be accomplished and at an estimated cost.
 - Get the most possible value out of their projects.
 - See progress in the development of a system.
@@ -225,14 +227,13 @@ Customers have the right to:
 
 ### Tooling
 
-#### Do not be Smart - Use the Right Tools for the Job and for your customer 
+#### Do not be Smart - Use the Right Tools for the Job and for your customer
 
 As a centre, we should be using the right tools for the job, we all have our preferences, but there’s no need to be stubbornly loyal about a particular language or OS. As software professionals, we should recognise the right tools for the job and for our clients.  
 
 #### To Garbage Collect or Not To GC
 
 For HPC and when squeezing software into tight spaces such as in low-level systems programming (systems software isn’t HPC BTW), a Garbage Collected (GC) language probably isn’t the best choice. The GC adds lots of memory requirement. However, for full-stack, enterprise-applications / services, mobile, and general-purpose programming, it's probably best to use a memory safe language – “A human garbage collector is just wasted effort” (Eckle & Ward, Happy Path Programming). Similarly, there is a recognised shift in industry away from memory unsafe languages as it is widely known that the majority Common Vulnerability Exploits (CVEs) stem from unsafe memory language exploits, causing organisations such as [Google](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html) (for Android), [NSA and Microsoft to urge the use of memory-safe languages](https://www.theregister.com/2022/11/11/nsa_urges_orgs_to_use/).
-
 
 Have the customer in mind. For example, Haskell and other Lisps are great (I’ve played with Clojure), but don’t be smart and use this as an opportunity to explore your favourite pet-programmer project, it’s not going to be much use to the customer. It’s hard to hire Haskell programmers.
 
@@ -264,9 +265,9 @@ Static code analysis helps bring consistency to your code. Within a project, ado
 
 Containers have become the de-facto way to mitigate the common claim “well, it works on my machine”. OCI compliant containers (Open Container Initiative) are great for wrapping code with all their dependencies into shareable images that can be uploaded to image repositories such as STFC’s Harbor service ([https://harbor.stfc.ac.uk/](https://harbor.stfc.ac.uk/)).  Containers are a great way to share code with your clients, especially if they need to run your code on their runtime platform. Containers are ubiquitous and can run on the Desktop, in Kubernetes clusters, in cloud Functions such as AWS Lambda, on HPC such as [Apptainer/Singularity](https://apptainer.org/), and more.
 
-Here are some recommendations: 
+Here are some recommendations:
 
-- Only include runtime dependencies: Be mindful of what you’re including in your container - for production, you really don’t need to include compilers, package managers, and tools that are meant for use only at compile time (unless you’re containerising your dev environment of course). For example, [Google’s Distroless](https://github.com/GoogleContainerTools/distroless) containers and [Alpine Linux](https://alpinelinux.org/) are great for production use, providing cut down versions of Linux.  Containers such as these are great because they have less memory-footprint, and by reducing the amount of unnecessary stuff in them, they reduce the vulnerability attack surface, so they’re safer. [Here’s a great video](https://www.youtube.com/watch?v=6wYrAtngIVo) that shows how to build super slim production containers – ignore the fact that it is for Java, the concepts and tools discussed are generic and apply for many languages. 
+- Only include runtime dependencies: Be mindful of what you’re including in your container - for production, you really don’t need to include compilers, package managers, and tools that are meant for use only at compile time (unless you’re containerising your dev environment of course). For example, [Google’s Distroless](https://github.com/GoogleContainerTools/distroless) containers and [Alpine Linux](https://alpinelinux.org/) are great for production use, providing cut down versions of Linux.  Containers such as these are great because they have less memory-footprint, and by reducing the amount of unnecessary stuff in them, they reduce the vulnerability attack surface, so they’re safer. [Here’s a great video](https://www.youtube.com/watch?v=6wYrAtngIVo) that shows how to build super slim production containers – ignore the fact that it is for Java, the concepts and tools discussed are generic and apply for many languages.
 
 - Don’t statically link glibc – use the [musl](https://musl.libc.org/) library instead. Glibc is notoriously unfriendly for containerisation and was not designed to be so.
 
@@ -282,10 +283,9 @@ Here are some recommendations: 
 
 Please refer to this separate document that characterises all the different types of workflows we use at Hartree, including Data Flow Engines that orchestrate containers using DAGs (Directed Acyclic Graphs): [http://purl.org/net/epubs/work/50844906](http://purl.org/net/epubs/work/50844906). Our ‘[Demystifying Data Engineering](https://www.hartree.stfc.ac.uk/events/demystifying-data-engineering/)’ Explain course provides more details into Data Flow runtimes and tooling.
 
-
 ## Coding Recommendations and Best Practices
 
-This is not an exhaustive list of coding recommendations. For more in-depth explanations, please see the list of highly recommended texts in the appendix. I’m not going to repeat all that excellent advice here, that’s what the books are for, but please find below a collection of development best practices that we should consider when developing our software. Like all guidelines, they aren’t strict rules, knowing when and where to apply largely comes down to experience. 
+This is not an exhaustive list of coding recommendations. For more in-depth explanations, please see the list of highly recommended texts in the appendix. I’m not going to repeat all that excellent advice here, that’s what the books are for, but please find below a collection of development best practices that we should consider when developing our software. Like all guidelines, they aren’t strict rules, knowing when and where to apply largely comes down to experience.
 
 ### Quality is the best shortcut - Fowler Design Stamina Hypothesis
 
@@ -295,16 +295,12 @@ This is not an exhaustive list of coding recommendations. For more in-depth expl
 
 ### Naming with Meaningful and Descriptive Names
 
- - “There are only two hard things in computer science, invalidation and naming things” (P.Karlton), see: [https://martinfowler.com/bliki/TwoHardThings.html](https://martinfowler.com/bliki/TwoHardThings.html)
- - Use intention revealing names for your classes, functions & variables. Don’t use single char var names (implicit loops etc are ok, but for global/module/class members, please use sensible names).  For example, ‘process_model’ is too generic, what does it mean? ‘execute_nlp_training_model’ is better, its more self-documenting.
- - Class names should have noun phrases e.g., Customer, WikiPage, Account, AccountParser.
- - Don’t use a comment when you can use a well named function or variable:
+- “There are only two hard things in computer science, invalidation and naming things” (P.Karlton), see: [https://martinfowler.com/bliki/TwoHardThings.html](https://martinfowler.com/bliki/TwoHardThings.html)
+- Use intention revealing names for your classes, functions & variables. Don’t use single char var names (implicit loops etc are ok, but for global/module/class members, please use sensible names).  For example, ‘process_model’ is too generic, what does it mean? ‘execute_nlp_training_model’ is better, its more self-documenting.
+- Class names should have noun phrases e.g., Customer, WikiPage, Account, AccountParser.
+- Don’t use a comment when you can use a well named function or variable:
   
-
 ---
-
-
-
 
 ![](attachments/Pasted%20image%2020240611092516.png)
 
@@ -330,13 +326,14 @@ Separation of concerns at the function level.
 
 ### Classes and Code Should be Cohesive
 
-Classes should be cohesive – high cohesion means the methods and variables of the class are co-dependent and often change together. This can be paraphrased as "Changes to the code over here should not affect code over there" and/or "Code that changes together stays together. " 
+Classes should be cohesive – high cohesion means the methods and variables of the class are co-dependent and often change together. This can be paraphrased as "Changes to the code over here should not affect code over there" and/or "Code that changes together stays together. "
 
 Here’s the authoritative view from the famous [Kent Beck from Nov (2022) and his ‘Tidy First’ approach to software development:](https://twitter.com/KentBeck/status/1587825849755049984)
 
 ![](attachments/Pasted%20image%2020240611092926.png)
 
-Examples of patterns that support cohesion include the State Pattern. 
+Examples of patterns that support cohesion include the State Pattern.
+
 - In the State pattern, consider code that is widespread across many files that has exhaustive 'switch' or 'when' statements that reference a centrally declared enum set. The exhaustive switch/when statements execute different behaviours based on the current enum state value. If you add or remove a state enum option, you will need to update the exhaustive switch/when statements spread across your code-base. This is not a problem for small projects, but for large code bases it can require significant refactoring. The state pattern co-locates the state enum values with the dependent behaviour i.e., "things that change together, stay together." As an example, the central enum set could be replaced with a corresponding set of state objects, where each state object collects and implements the relevant state-dependent behaviour itself. There are several ways to implement this depending on you language of choice.  
 
 ### Classes should have only one reason to change and do one thing and do it well
@@ -375,27 +372,39 @@ For the Car class, unless we decide to break encapsulation and make engine publi
 
 For interest:  Did you know that IoC containers are changing a lot recently. In the past, they’ve largely been built using a technique known as ‘reflection’, but they are now being extended so you can choose between reflection-based dependency injection, which is far more dynamic and flexible for Just-in-Time (JIT) and dynamic binding, and static injection, which plays far nicer for scenarios that require Ahead of Time (AOT) compilation.  This is a big topic, but as ever, there are trade-offs between the different approaches which ultimately depend on your use-case.
 
-### Avoid Inheritance Tax - Prefer Object Composition with Interface and Traits to achieve Ad-hoc Polymorphism
+### Avoid Paying too much Inheritance Tax - Consider Interfaces or Traits with Composition to achieve Ad-hoc Polymorphism
 
-- Deeply nested inheritance hierarchies with sub-classes that extend super classes have their place, for example when developing libraries and frameworks. For application developers however, they are often considered a bit of an anti-pattern these days. This is because inheritance strongly couples you to the structure of the classes in the parent hierarchy, which sometimes forces you to implement abstract methods that you don’t actually need. In these scenarios, you may need to throw some form of unsupported exception or error.  IF you have access to the source code, you can extract those parent methods into a new parent in the inheritance hierarchy and inherit from the appropriate level – i.e., from the direct parent if you do want those methods, or from a higher-level ancestor if you don’t need the newly extracted methods (effectively skipping the newly extracted parent layer). However, this means all existing sub-classes may need to be refactored to inherit from the appropriate parent or ancestor class – this can be a very expensive refactor and can get complex with deeply nested hierarchies. In short: Inheritance asks you to bundle all common elements into a parent class - but this means that exceptions to the common can require expensive refactoring.
+- Deeply nested inheritance hierarchies where sub-classes extend super-classes can be brittle. This is because you are structurally tied to the classes in the parent hierarchy - if you don't need all of the behaviour provided through inheritance, it can be difficult to 'split-out' the behaviour that you do not need without widespread refactoring. If you don't have access to the parent hierarchy source code, this can force you to implement abstract methods which throw unsupported exceptions or errors. If you do have access to the source code of the parent hierarchy, you may need to extract the required methods into a new level in the inheritance hierarchy and inherit from that appropriate level e.g., from the direct parent if you do want those methods, or from a higher-level ancestor if you don’t need every method. As suggested, this can be an expensive refactor and therefore, deep inheritance is often considered a bit of an anti-pattern these days, especially for application developers. Having said that, inheritance definately has its place when developing libraries and frameworks, and especially for relationships that have a strong and natural "Is a" type of relationship e.g., 'typeA is a genuine and real sub-type of typeB that is useful to model in my use-case.'
 
-- To discourage inheritance, in modern languages, classes are ‘closed to extension by default’ - often you have to explicitly allow extension with special keywords such as the ‘open’ class prefix in Kotlin. This makes SOLID’s ‘Open for Extension, Closed for Modification’ best-practice explicit in the language.  Rather than pay the inheritance tax, use more flexible approaches such as Composition, Interfaces, Traits & Mixins.
+- Rather than pay too much inheritance tax, you should consider using more flexible approaches such as object Composition, Interfaces, Traits & Mixins (I say "don't pay too much inheritance tax" intentionally because inheritance does still have its place as discussed above).
 
-- **Composition / Delegation**: A complex term that in practice simply means that one class contains or is passed an instance of another to use its capabilities. Note that composition alone does not establish a polymorphic type without the addition of an interface or trait.
+- **Composition / Delegation**: A complex term that in practice simply means that one class contains or is passed an instance of another to use its capabilities. Importantly, note that composition alone does not establish a polymorphic type without the addition of an interface or trait.
 
-- **Interfaces / Traits**: A single class can implement multiple interfaces or traits to achieve ‘ad-hoc polymorphism’ and sub-types. This is a far more flexible approach for a type to be a subtype of something else. Depending on the specifics of the language, the interface/trait may provide abstract function declarations, functions with default implementations, and optional member variables. Note that for default implementations, the interface/trait can only depend on elements defined within the interface/trait itself.    
+- **Interfaces / Traits**: A single class can optionally implement multiple interfaces or traits to 'graft' additional logic onto a class/record/struct to achieve ad-hoc polymorphism. This is a far more flexible approach for a type to be a subtype of something else compared to inheritance. Depending on the specifics of the language, the interface/trait may provide abstract function declarations, functions with default implementations, and optional member variables. Note that for default implementations, the interface/trait can only depend on elements defined within the interface/trait itself.
 
-- Side Note: Object composition with optional ad-hoc polymorphism might be the only option available to you if you don’t own the source-code of the object you want to extend as the original object might be closed for extension. Therefore, the only way to extend such an object is to compose it within another object and hide its functionality behind optional interface(s).
+- Side Note: Object composition and ad-hoc polymorphism with interfaces/traits might be the only option available to you, especially if you don’t own the source-code of the object you want to extend. Therefore, the only way to extend such an object is to compose it within another object and hide its functionality behind interface(s).
 
-- Dynamic languages like Python have ‘Duck Typing’, this is similar to using interfaces but without having to define an explicit type contract using keywords such as ‘class Ducky implements interface Duck’. Instead, if the code has the relevant function with the required function signature, it will be invoked, otherwise a runtime error is generated (“if it walks and swims like a duck, it’s probably a duck”).  This is also known as ‘Structural Polymorphism’. The ease and speed of development that duck typing brings is great for scripting and smaller code bases, but as the size and complexity of the code increases, you may want to consider moving to a more strongly typed language that brings more compile-time checking (note, you can always introduce static typing such as Python’s optional type hints).
+- Certain languages don’t even support object extension, relying instead on ad-hoc polymorphism (e.g., Rust/Go). Rust and Scala have an elegant way of declaring traits for any type, even types where you don't have access to the original source code of those types, as shown in the Rust example below:
 
-- Certain languages don’t even support object extension, relying instead on ad-hoc polymorphism (e.g., Rust/Go).
+<img src="attachments/Pasted%20image%2020241027141335.png" style="width:400px;"/>
 
-- Languages may have additional ways to extend the functionality of an existing type. For example, C# and Kotlin support extension functions.
-
-- **Sealed-Interfaces**:  Some languages take interfaces a step further by allowing the developer to define ‘sealed interfaces’ which specifically list _which_ classes which are allowed to implement that sealed interface. Sealing is great for defining ‘exhaustive’ when & case patterns for Algebraic Data Types (see ADTs below).
+- **Sealed-Interfaces**:  Some languages take interfaces a step further by allowing the developer to define ‘sealed interfaces’ which specifically list _which_ classes which are allowed to implement that sealed interface. Sealing is great for defining exhaustive when and switch case patterns for Algebraic Data Types (see ADTs below).
 
 Each of these patterns are useful in different circumstances depending on whether your aim is to define polymorphic types, adding new functionality to existing objects, or sharing / re-use of method and state.
+
+#### Structural Polymorphism and Duck Typing
+
+- Dynamic languages like Python have ‘Duck Typing’, this is similar to using interfaces but without having to define an explicit type contract using keywords such as `class Ducky implements interface Duck`. Instead, if the code has the relevant function with the required function signature, it will be invoked, otherwise a runtime error is generated (“if it walks and swims like a duck, it’s probably a duck”).  This is also known as ‘Structural Polymorphism’. The ease and speed of development that duck typing brings is great for scripting and smaller code bases, but as the size and complexity of the code increases, you may want to consider moving to a more strongly typed language that brings more compile-time checking (note, you can always introduce static typing such as Python’s optional type hints).
+
+#### Extension Functions
+
+- Other languages have different ways to extend the functionality of an existing type. For example, C# and Kotlin support extension functions. Notice that in the example below, the `method` is defined on the trait named `GenericTrait` to establish a polymorphic type via an implementation with `TraitImpl`. If you could not access `TraitImpl` source code, you may need to either compose or extend the`TraitImpl` type with a new class e.g. `TraitImplComposed` before implementing the `GenericTrait` on that - much more fuss when compared to Rust/Scala/Go trait-style syntax that allows you to graft behaviour directly to existing types.
+
+![](attachments/Pasted%20image%2020241027144154.png)
+
+#### Inheritance should be explicitly designed-for
+
+In many languages, you can extend a class by default, unless you explicitly disallow it e.g., using the `final` keyword in Java. In more modern languages, the defaults are often reversed - classes are frequently closed to extension by default. This means you have to explicitly enable extension using keywords such as the `open` class prefix in Kotlin which says that this class is explicitly designed to be extended. This makes SOLID’s 'Open for Extension, Closed for Modification' best-practice explicit in the language.  
 
 ### It Should Not be Possible to Create an Object in an Invalid State
 
@@ -405,16 +414,14 @@ Nuff said.
 
 There might be a tried & tested design pattern for the problem you’re tackling. Some patterns are probably overkill, but some genuinely useful patterns include Factory, DTO, Observer, Strategy, Singleton, Repository, Stateless Façade, Visitor. Have a look at the recommended texts in the appendix. GoF is kinda old school these days.
 
-
 ![](attachments/Pasted%20image%2020240611094028.png)
-
 
 #### The Strategy Pattern Example
 
-This pattern abstracts logic behind a common abstraction such as a SAM interface (Single Abstract Method interface) so that an implementation can be **chosen at runtime**. This makes the code more flexible and reusable. In the Kotlin example below taken from [Dave Leeds](https://www.youtube.com/watch?v=-Ak44LFwlwI&t=64s), we use validation as an example, where any of the validators can be passed at runtime to the FormField class. 
+This pattern abstracts logic behind a common abstraction such as a SAM interface (Single Abstract Method interface) so that an implementation can be **chosen at runtime**. This makes the code more flexible and reusable. In the Kotlin example below taken from [Dave Leeds](https://www.youtube.com/watch?v=-Ak44LFwlwI&t=64s), we use validation as an example, where any of the validators can be passed at runtime to the FormField class.
 
 ![](attachments/Pasted%20image%2020241016180911.png)
-Here are two more Kotlin examples that are more idiomatic which reduce boilerplate, again from Dave Leeds: 
+Here are two more Kotlin examples that are more idiomatic which reduce boilerplate, again from Dave Leeds:
 
 ![](attachments/Pasted%20image%2020240905162859.png)
 
@@ -426,15 +433,15 @@ Note you can use an extension function to easily create an optional version:
 
 ![](attachments/Pasted%20image%2020240906135416.png)
 
-At the call site: 
+At the call site:
 
 ![](attachments/Pasted%20image%2020240906135400.png)
 
 #### The Visitor Pattern
 
-The visitor pattern is used to separate business logic from objects on which they operate. Typically, objects define an accept method then call method(s) on the accepted visitor. The calling object is typically passed to the visitor as an argument so the visitor can access the object's public state, as in the pseudo code: `accept(Visitor v) { v.visitDoLogic(this); }`.   New logic can easily be added to the visitor's `visitDoLogic(callerObj)` without having to update the calling objects which illustrates an example of the open closed principle in SOLID.   This pattern uses a double-dispatch logic: first an object's `accept(Visitor)` method is invoked, then the visitor's `visitDoLogic(obj)` method second. 
+The visitor pattern is used to separate business logic from objects on which they operate. Typically, objects define an accept method then call method(s) on the accepted visitor. The calling object is typically passed to the visitor as an argument so the visitor can access the object's public state, as in the pseudo code: `accept(Visitor v) { v.visitDoLogic(this); }`.   New logic can easily be added to the visitor's `visitDoLogic(callerObj)` without having to update the calling objects which illustrates an example of the open closed principle in SOLID.   This pattern uses a double-dispatch logic: first an object's `accept(Visitor)` method is invoked, then the visitor's `visitDoLogic(obj)` method second.
 
-The visitor pattern is typically invoked for large cascading / nested object trees; an `accept` method can pass the visitor instance to all its member objects that also define an accept method, for example: 
+The visitor pattern is typically invoked for large cascading / nested object trees; an `accept` method can pass the visitor instance to all its member objects that also define an accept method, for example:
 
 ```c#
 public class Addition : Expression {
@@ -457,10 +464,10 @@ Languages implement the visitor differently. For strongly typed polymorphic lang
 
 ```Go
 type Visitor interface {
-	visitWheel(wheel Wheel) string
-	visitEngine(engine Engine) string
-	visitBody(body Body) string
-	visitCar(car Car) string
+ visitWheel(wheel Wheel) string
+ visitEngine(engine Engine) string
+ visitBody(body Body) string
+ visitCar(car Car) string
 }
 ```
 
@@ -540,29 +547,34 @@ See prior bullet. Functions should either do something such as create side effec
 
 Errors as values vs exceptions is a hotly debated topic in programming communities:
 
-***Proponents of errors-as-values:*** 
-- Fans of errors-as-values argue that function return types that wrap either a success OR failure value is the more reliable approach to error handling because you are explicitly forced to handle errors immediately, typically using a conditionals to test for error or success. This ensures error handling is not an afterthought. 
-- Supporters also argue that there is less uncertainty compared to throwing exceptions because it can be challenging to determine all the exception types that can be thrown by a deep call stack. Also recognise because unhandled unchecked exceptions do not create compilation errors, the compiler can't help you discover all of the different types of unchecked exception that could be thrown, unless you dig and read all the docs that is.
+_**Proponents of errors-as-values:**_
+
+- Fans of errors-as-values argue that function return types that wrap either a success OR failure value is the more reliable approach to error handling because you are explicitly forced to handle errors immediately, typically using a conditional to test for error or success. This ensures error handling is not an afterthought.
+- Supporters also argue that there is less uncertainty compared to throwing exceptions because it can be challenging to determine all the exception types that can be thrown by a deep call stack. Also recognise because unhandled unchecked exceptions do not create compilation errors, the compiler can't help you discover all of the different types of unchecked exception that could be thrown, unless you dig and read all the docs.
 - Another issue of a specific type of exception known as a 'checked' exception is that they prevent functional composition. This is because the compiler forces you to handle checked exceptions wherever they can be thrown, but they are not considered as part of a function's return signature and type system. Instead, exceptions invoke orthogonal flows that 'break out' of your regular functional flow. Checked exceptions therefore breaks 'referential transparency' (see discussion below on Error Monads such as `Either` & `Validated`). Checked exceptions are generally not recommended these days, except for certain special use-cases where they still have their supporters.
 
-***Proponents of exceptions:*** 
+_**Proponents of exceptions:**_
+
 - Fans of exceptions argue that by forcing you to interleave error checking at function call sites throughout your code obscures the code's happy path and readability.  
-- Exception fans also argue that exceptions centralise your error handling code which gives a clean separation of concerns. 
-- For low-level code, exceptions are largely considered an effective strategy for surfacing underlying issues such as low level operating system issues which may be mistakenly obscured by the errors-as-values pattern (although the same could be said by mindlessly catching all exceptions). 
-- When used correctly and with discipline, exceptions can also be more performant than pervasive and interleaved error-value checking. This is because languages like C++ and Java have 'zero cost exception handling.' I think this is a misleading term, what it actually means is zero cost to the happy path code provided no exceptions are thrown. Assuming no exceptions are thrown, quite simply, there is less for your code to do as there are no interleaved conditional error checks. While any performance hit from interleaved result checking is likely to be marginal for the majority of use-cases, it may become more pronounced in deeply nested code or tight compute loops. However, this can be mitigated with good code structuring by moving error checks out of and before any performance critical-sections.   
+- Exception fans also argue that exceptions centralise your error handling code which gives a clean separation of concerns.
+- For low-level code, exceptions are largely considered an effective strategy for surfacing underlying issues such as low level operating system issues which may be mistakenly obscured by the errors-as-values pattern (although the same could be said by mindlessly catching all exceptions).
+- When used correctly and with discipline, exceptions can also be more performant than pervasive and interleaved error-value checking. This is because languages like C++ and Java have 'zero cost exception handling.' I think this is a misleading term, what it actually means is 'zero cost to the happy path code provided no exceptions are thrown.' Assuming no exceptions are thrown, quite simply, there is less for your code to do as there are no interleaved conditional error checks. While any performance hit from interleaved result checking is likely to be marginal for the majority of use-cases, it may become more pronounced in deeply nested code or tight compute loops. However, this can be mitigated with good code structuring by moving error checks out of and before any performance critical-sections.
 
-- Whether to use exceptions has profound implications on your API design and performance, be aware of the issues highlighted above. Some modern languages, e.g. Mojo, go as far as trying to address any choice for you by compiling exception handling code under-the-hood to use errors-as-values. I think the aim is to allow you cleanly separate the happy path from exception handling code (clean separate of concerns) while allowing you to retain the performance of error-as-values should an exception be thrown. At the time of writing, it is too early to tell if this is a successful strategy, but if anyone can do it, Chris Lattner can.
+A key difference between `try/catch` and `panic/recover` is the resulting control flow following their triggering. In a try/catch, unless you re-throw, code coming after the catch/finally block will still execute. This does not happen with panic/recover - a function that is aborted begins to unwind the stack, running deferred blocks/functions as it encounters them (in Go, this is the only place recover takes affect, although use of recover is not widespread in Go and panic is typically used to end the program). Thus, panic/recover is very different to try/catch stemming out of the fact that it is built around deferred logic as a recovery mechanism (e.g. Go & Zig).
 
-- Of course, choice between exceptions or errors-as-values depends on the language and environment - you don't get exceptions support on every architecture and platform. The result pattern is much more flexible especially on embedded systems. 
+Whether to use exceptions has profound implications on your API design and performance, be aware of the issues highlighted above. Some modern languages, e.g. Mojo, go as far as trying to address any choice for you by compiling exception handling code under-the-hood to use errors-as-values. I think the aim is to allow you cleanly separate the happy path from exception handling code (clean separate of concerns) while allowing you to retain the performance of error-as-values should an exception be thrown. At the time of writing, it is too early to tell if this is a successful strategy.
 
-***Can I use both:*** 
-- Yes, depending on your language of choice and what is considered idiomatic. Some modern languages support both approaches. For example, to support interoperability with Java, the Kotlin language supports unchecked exceptions as well as its own `Result` type which is intended for low-level code rather than for modelling business errors. For modelling business errors, they recommend using sealed class hierarchies that introduce exhaustive pattern matching to handle errors (see discussion on data oriented programming). 
+Of course, choice between exceptions or errors-as-values depends on the language and environment - you don't get exceptions support on every architecture and platform. The result pattern is much more flexible especially on embedded systems.
 
-- At the time of writing, a dedicated union type for capturing a result OR one or more errors is on the Kotlin roadmap. 
+_**Can I use both:**_
 
-***Hybrid Approach:*** 
-- Languages may also support more advanced error handling strategies. For example, the Kotlin Arrow2 library simplifies the use of OOP and Functional error handling within the same code base (Functional vs OOP? - choose both). For example, lower level code can apply `try/catch/finally` blocks for localised exception handling and recovery if needed, while higher level calling code can provide a wrapping `error context` that can be used at the boundary; Rather than throwing exceptions at the boundary (between different layers of code), exceptions can be *raised* into the higher level error context. Raising rather than (re)throwing then allows the raising functions to be composed within functional compositional call chains - raising does not break referential transparency. In the top layer of your code, such as in a top-level service facade or global error handler in a webapp, you would then need to handle the exceptions raised within the error context, such as performing a transaction roll back or performing a retry.  For a great presentation with examples, see this great talk from Simon Vergauwen from [Kotlin Conf 2023](https://youtu.be/JcFEI8_af3g?si=vH5OG86JTQWFrGnw) 
+- Yes, depending on your language of choice and what is considered idiomatic. Some modern languages support both approaches. For example, to support interoperability with Java, the Kotlin language supports unchecked exceptions as well as its own `Result` type which is intended for low-level code rather than for modelling business errors. For modelling business errors, they recommend using sealed class hierarchies that introduce exhaustive pattern matching to handle errors (see discussion on data oriented programming).
 
+- At the time of writing, a dedicated union type for capturing a result OR one or more errors is on the Kotlin roadmap.
+
+_**Hybrid Approach:**_
+
+- Languages may also support more advanced error handling strategies. For example, the Kotlin Arrow2 library simplifies the use of OOP and Functional error handling within the same code base (Functional vs OOP? - choose both). For example, lower level code or existing code can apply `try/catch/finally` blocks for localised exception handling and recovery if needed, while higher level calling code can provide a wrapping `error context` that can be used at the boundary; Rather than throwing exceptions at the boundary between different layers of code, exceptions can be _raised_ into the higher level error context. Raising rather than (re)throwing this allows the functions that raise to be composed within functional compositional call chains because raising does not break referential transparency. In the top layer of your code, such as in a top-level service facade or global error handler in a webapp, you would then need to handle the exceptions raised within the error context, such as performing a transaction roll back or performing a retry.  For a great presentation with examples, see this great talk from Simon Vergauwen from [Kotlin Conf 2023](https://youtu.be/JcFEI8_af3g?si=vH5OG86JTQWFrGnw) (note that context receivers as used in the talk will be replaced by context parameters in the future).
 
 ### Error Handling - Exceptions should not be used for flow control - exceptional does not mean conditional
 
@@ -583,6 +595,7 @@ Generally, pushing exception handling code up to the ‘outer layers’ of your 
 ### Error Handling – Model the absence of value explicitly
 
 This largely depends on the language you are using:
+
 - Nullable languages (C/C++/Java): Dereferencing a null pointer causes bad things to happen. This is known as ‘the billion-dollar mistake’ coined by Tony Hoare, in 1965.  In your code, be sure to make it clear when null is meant to represent the ‘absence of value’ (e.g., with @Nullable annotations for example). If you must, when using a 3rd party library for example, be ‘defensive’ such as checking for nulls using if statements where appropriate.
 
 - Side Note: polluting your code with defensive checks is often considered dirty, but sometimes you just have to it if no other approach is available.
@@ -603,9 +616,9 @@ This largely depends on the language you are using:
 
 In functional languages monads are widely used to chain a sequence of function calls into a clean ‘happy path’. This is also known as ‘functional composition’ or 'effect orientated' programming. A core tenant of functional approaches is to produce more declarative and expressive code over classical imperative approaches which usually interleave error handling with the happy path. In functional approaches, you define ‘what to do’ with functions, not ‘how to do it’ as with imperative approaches.
 
-An `Either` monad wraps either a result type or an error type, but not both, typically (`Either<LeftError, RightSuccess>`). Note that Rust is opposite, where left is success and right is error. An instance of a monad is passed between functions in a call chain. Wrapping errors within the ‘monadic context’ allows the functional call chain to be composed without polluting and breaking the chain with exceptions and error handling code.  If a function returns a LeftError wrapped in the Either, subsequent functions in the chain will short-circuit and will simply return the erroneous Either. This continues until the end of the call chain is reached. 
+An `Either` monad wraps either a result type or an error type, but not both, typically (`Either<LeftError, RightSuccess>`). Note that Rust is opposite, where left is success and right is error. An instance of a monad is passed between functions in a call chain. Wrapping errors within the ‘monadic context’ allows the functional call chain to be composed without polluting and breaking the chain with exceptions and error handling code.  If a function returns a LeftError wrapped in the Either, subsequent functions in the chain will short-circuit and will simply return the erroneous Either. This continues until the end of the call chain is reached.
 
-A `Validated` monad aggregates errors or exceptions within a functional call chain. The purpose is to capture all the errors rather than short-circuiting on the first. A simple example would be capturing all the errors on a form, rather than returning early on the first erroneous form entry. 
+A `Validated` monad aggregates errors or exceptions within a functional call chain. The purpose is to capture all the errors rather than short-circuiting on the first. A simple example would be capturing all the errors on a form, rather than returning early on the first erroneous form entry.
 
 Regarding exceptions in functional composition: If your language uses ‘Checked Exceptions’ (e.g., Java or when using other JVM languages that call out to underlying Java libs), you can’t throw checked exceptions during functional composition as they force you to handle the error and break the call chain with try/catch or throws statements. In this scenario, wrap the exception in the monadic context and return a LeftError. Note that throwing _unchecked_ exceptions is ok in a functional call chain as they don’t pollute the happy path with try/catch or throws, but you likely still want to wrap the error in the monadic context to return an error-as-value, e.g. if that error is not a programming error or is an exceptional circumstance.
 
@@ -615,7 +628,7 @@ The Special Case Pattern is one example for modelling your domain types in such 
 
 This simple combination of aggregation and choice is deceptively powerful and shows up in many programming languages to model domains, return types and function arguments:
 
-- Product Types are great for modelling aggregation, and include immutable data classes such as records, data objects, structs and traits. They are called ‘Product Types’ because their state ‘when considered as a whole’ is the cartesian product of their data. 
+- Product Types are great for modelling aggregation, and include immutable data classes such as records, data objects, structs and traits. They are called ‘Product Types’ because their state ‘when considered as a whole’ is the cartesian product of their data.
 
 - Sum Types can be used to represent choice and are polymorphic but with a fixed set of implementing subtypes (e.g., ‘sealed’ classes or interfaces in Kotlin/Java, ‘enum’ in Rust, ‘Union’ types in Python). They are called Sum Types because the set of possible types is the sum (union) of the total allowable set.
 
@@ -626,15 +639,15 @@ In modern languages, ADTs combine with ‘de-structuring’ and ‘pattern match
 A big topic, it can’t all be covered here, it ranges from single host shared memory parallelism, to multi-node clustering (e.g., HPC), to distributed multi-host cluster networks (e.g., remote Actors / FaaS). Concurrency is not parallelism. Concurrency is a software concern – context switching on a ‘carrier thread’ using continuations or virtual-threads gives the illusion that multiple things are happening at once, while true parallelism is both a software and hardware concern – you need hardware to support parallelism which can range from multiple cores on one CPU, multiple CPUs, nodes, local and remote actors, remote VMs, cloud functions such as Lambda and more. Here are some general recommendations:
 
 - Keep platform threads as isolated as possible & limit mutable global state
-	- Sharing of fixed immutable state is fine.
-	- Taking defensive copies of data can help prevent race conditions and other ‘spooky actions at a distance’.
-	- Try to be more functional and limit your use of global mutable state.
-	- Understand the pitfalls of multi-threaded code such as race-conditions, ghost reads, dirty reads, dirty writes, and deadlock.  
+ 	- Sharing of fixed immutable state is fine.
+ 	- Taking defensive copies of data can help prevent race conditions and other ‘spooky actions at a distance’.
+ 	- Try to be more functional and limit your use of global mutable state.
+ 	- Understand the pitfalls of multi-threaded code such as race-conditions, ghost reads, dirty reads, dirty writes, and deadlock.  
 
 - Keep synchronized critical sections as small as possible (Amdahl’s law)
-	- Even a small amount of synchronization *_significantly*_ affects performance. See Ahmdal’s law. For example, even if your code is 95% parallel, only 5% synchronisation means throwing more processors at the problem doesn’t improve speedup beyond ~256 processors.
-	- Understand the pitfalls of multi-threaded programming. If deadlock, live lock, ghost-reads, dirty reads, and atomic vs composite actions don’t make much sense to you (do you think ‘i++’ is atomic? – no it isn’t), then you will no doubt run in to problems. These days, there is often a much better approach to coding low-level multi-threaded and shared memory models.
-	- When testing, use more threads than processors – running with more threads than processor cores to encourage task swapping. The more frequently your tasks swap, the more likely you will find issues.
+ 	- Even a small amount of synchronization *_significantly*_ affects performance. See Ahmdal’s law. For example, even if your code is 95% parallel, only 5% synchronisation means throwing more processors at the problem doesn’t improve speedup beyond ~256 processors.
+ 	- Understand the pitfalls of multi-threaded programming. If deadlock, live lock, ghost-reads, dirty reads, and atomic vs composite actions don’t make much sense to you (do you think ‘i++’ is atomic? – no it isn’t), then you will no doubt run in to problems. These days, there is often a much better approach to coding low-level multi-threaded and shared memory models.
+ 	- When testing, use more threads than processors – running with more threads than processor cores to encourage task swapping. The more frequently your tasks swap, the more likely you will find issues.
 
 ![](attachments/Pasted%20image%2020240611095042.png)
 
@@ -642,23 +655,23 @@ A big topic, it can’t all be covered here, it ranges from single host shared m
 
 - IO Bound Tasks require asynchronous patterns to achieve concurrency. The solution patterns include:
 
-	- Async/Await and Coroutines (e.g., Go’s ‘Goroutines’ and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your code is split into two; red functions reflect asynchronous code paths and blue functions for synchronous code paths – here’s the original and now famous blog: [https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)
-	- Virtual-Threads / Fibres such as the ‘colourless’ Project Loom for the JDK where the virtual threads are implemented in user space using continuations: [https://wiki.openjdk.org/display/loom/Main](https://wiki.openjdk.org/display/loom/Main)
-	- Continuations are very low-level and are used to implement patterns such as coroutines & virtual threads. Continuations can be suspended, stored on the heap, and restarted. Typically, you wouldn’t code directly with continuation APIs (CPS – Continuation Passing Style), although some languages do have public APIs for them.
-	- Async-Wrapper types such as Futures & Promises. Note that these are really just higher-level synchronisation primitives, and the task that you await itself would need to be non-blocking to achieve high levels of concurrency.  
-	- Call-Back functions (beware ‘call-back hell’ as often seen in JavaScript). In fact, more friendly ‘syncrhonous’ patterns such as Coroutines and Continuations simply abstract much of the lower-level call backs from the programmer.
-	- Use non-blocking IO libs & APIs instead of blocking libs.
-	- Reactive Frameworks e.g., project Reactor.
+ 	- Async/Await and Coroutines (e.g., Go’s ‘Goroutines’ and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your code is split into two; red functions reflect asynchronous code paths and blue functions for synchronous code paths – here’s the original and now famous blog: [https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)
+ 	- Virtual-Threads / Fibres such as the ‘colourless’ Project Loom for the JDK where the virtual threads are implemented in user space using continuations: [https://wiki.openjdk.org/display/loom/Main](https://wiki.openjdk.org/display/loom/Main)
+ 	- Continuations are very low-level and are used to implement patterns such as coroutines & virtual threads. Continuations can be suspended, stored on the heap, and restarted. Typically, you wouldn’t code directly with continuation APIs (CPS – Continuation Passing Style), although some languages do have public APIs for them.
+ 	- Async-Wrapper types such as Futures & Promises. Note that these are really just higher-level synchronisation primitives, and the task that you await itself would need to be non-blocking to achieve high levels of concurrency.  
+ 	- Call-Back functions (beware ‘call-back hell’ as often seen in JavaScript). In fact, more friendly ‘syncrhonous’ patterns such as Coroutines and Continuations simply abstract much of the lower-level call backs from the programmer.
+ 	- Use non-blocking IO libs & APIs instead of blocking libs.
+ 	- Reactive Frameworks e.g., project Reactor.
 
 - For CPU Bound Tasks, the solution patterns include:
 
-	- Platform/OS/POSIX/Kernel threads (pthreads). These are good for numerical computations that don’t require (much) IO, such as ‘tight computational loops’. Note that platform threads are heavyweight and should be pooled for effective resource usage. For example, on Linux, each thread typically requires ~1MB of mem per thread – this is because they are controlled by the OS, and the OS has to be generic enough to handle a variety of use-cases, so 1MB was assumed to be a good default. Platform threads they are _very_ different from Virtual Threads in terms of how they are implemented.  A platform thread is very similar to a process in terms of resource-cost, except that threads allows memory sharing between multiple threads while multiple processes do not share the same memory space. For multiple processes, you need some other mechanism to share state and messages between processes, such as a common memory-mapped file(s), filesystem, databases, and message brokers.
-	- Shared memory frameworks such as OpenMP which make multi-threaded programming simpler by avoiding low-level synchronisation primitives.  
-	- Fork-Join-Pools and related ‘Work Stealing’ patterns that involve task queues. FJP is a highly recommended way to achieve best performance because low-level Kernel/OS threads can be re-used.
-	- Horizontal scaling with Pub-Sub and Competing Consumers. This is where multiple compute nodes subscribe to a message channel and pull messages from the channel. If the queue-depth gets too high, you add more consumers to process the messages.
-	- Lazy Parallel Streams in functional approaches.
-	- Message Passing e.g., the Actor model (e.g., Akka) & Message Passing Interface (e.g., OpenMPI) in HPC are both examples of message passing. Note that the Actor model is actually the canonical parallelism pattern, while MPI is quite niche (largely just the HPC community).
-	- If you must use low-level locks and synchronization primitives with critical sections, try to use ‘re-entrant’ locks for better composability and performance over non-re-entrant synchronized blocks. Check if the languages mutexes (semaphores, count-down latches) are re-entrant.
+ 	- Platform/OS/POSIX/Kernel threads (pthreads). These are good for numerical computations that don’t require (much) IO, such as ‘tight computational loops’. Note that platform threads are heavyweight and should be pooled for effective resource usage. For example, on Linux, each thread typically requires ~1MB of mem per thread – this is because they are controlled by the OS, and the OS has to be generic enough to handle a variety of use-cases, so 1MB was assumed to be a good default. Platform threads they are _very_ different from Virtual Threads in terms of how they are implemented.  A platform thread is very similar to a process in terms of resource-cost, except that threads allows memory sharing between multiple threads while multiple processes do not share the same memory space. For multiple processes, you need some other mechanism to share state and messages between processes, such as a common memory-mapped file(s), filesystem, databases, and message brokers.
+ 	- Shared memory frameworks such as OpenMP which make multi-threaded programming simpler by avoiding low-level synchronisation primitives.  
+ 	- Fork-Join-Pools and related ‘Work Stealing’ patterns that involve task queues. FJP is a highly recommended way to achieve best performance because low-level Kernel/OS threads can be re-used.
+ 	- Horizontal scaling with Pub-Sub and Competing Consumers. This is where multiple compute nodes subscribe to a message channel and pull messages from the channel. If the queue-depth gets too high, you add more consumers to process the messages.
+ 	- Lazy Parallel Streams in functional approaches.
+ 	- Message Passing e.g., the Actor model (e.g., Akka) & Message Passing Interface (e.g., OpenMPI) in HPC are both examples of message passing. Note that the Actor model is actually the canonical parallelism pattern, while MPI is quite niche (largely just the HPC community).
+ 	- If you must use low-level locks and synchronization primitives with critical sections, try to use ‘re-entrant’ locks for better composability and performance over non-re-entrant synchronized blocks. Check if the languages mutexes (semaphores, count-down latches) are re-entrant.
 - If you must use low-level locks and synchronization primitives with critical sections, try to use ‘re-entrant’ locks for better composability and performance over non-re-entrant synchronized blocks. Check if the languages mutexes (semaphores, count-down latches) are re-entrant (language agnostic advice).
 
 ### Security Development Practices
@@ -673,8 +686,6 @@ A big topic, it can’t all be covered here, it ranges from single host shared m
 - Familiarise yourself with OWASP's Top Ten security risks for webapps: [https://owasp.org/www-project-top-ten](https://owasp.org/www-project-top-ten)  
 - Always update default passwords that are shipped with products e.g., 'admin' is sometimes used default username and password pair.
 - To minimize injection attack surface, don’t use your own variable binding or hardcode parameters using string concatenation – use the supported variable binding tooling to ensure values are always escaped.
-
-
 
 ## Agile Process Guide aka Feedback Driven Development
 
@@ -696,17 +707,17 @@ Epics are like Work Packages. Typically, they require multiple tasks and span mu
 
 ### Define user stories with the INVEST Framework or Who-What-Why or the Connextra Card Template – all are good and you do not need to be too rigid
 
--  _“As userType [X], I need a way to do [what?] so that I can [what’s the benefit]”._
+- _“As userType [X], I need a way to do [what?] so that I can [what’s the benefit]”._
 
 - _Who, What Why_
 
 - INVEST:
-	- Independent - this means we try to design stories that do not need to be implemented in a particular order (a soft rule as there may well be stories that need to be prioritised).
-	- Negotiable - to retain agility, we recognise that requirements often/inevitably evolve and so we don't focus overtly on getting the details right up-front (i.e., Waterfall).
-	- Valuable - must have a clear and quantifiable benefit to the client.
-	- Estimable - a story must be concrete enough that developers can estimate it.
-	- Small - a story must not be larger than one or two developers can implement in a single iteration.
-	- Testable - when a developer says that its 90% ready, nobody really knows how close it is to being finished.
+ 	- Independent - this means we try to design stories that do not need to be implemented in a particular order (a soft rule as there may well be stories that need to be prioritised).
+ 	- Negotiable - to retain agility, we recognise that requirements often/inevitably evolve and so we don't focus overtly on getting the details right up-front (i.e., Waterfall).
+ 	- Valuable - must have a clear and quantifiable benefit to the client.
+ 	- Estimable - a story must be concrete enough that developers can estimate it.
+ 	- Small - a story must not be larger than one or two developers can implement in a single iteration.
+ 	- Testable - when a developer says that its 90% ready, nobody really knows how close it is to being finished.
   
 ### Arrange core user stories into a Journey Map with a narrative flow or backbone of Big Activities moving from left to right
 
@@ -732,7 +743,7 @@ Test the critical path and be pragmatic about coverage - 80% coverage often not 
 
 At the end of the sprint, demo your progress to the client. This is important. Agile can be paraphrased as ‘Feedback Driven Development’.  It is essential to get that customer feedback early and continuously.
 
-### Acceptance with Sign Off and Cucumbers 
+### Acceptance with Sign Off and Cucumbers
 
 - If possible, get the client to sign-off work every month (PMO have a ‘Decision Point Review’ template).
 - Use the Cucumber approach for acceptance testing i.e., ‘Given, When, Then’.  For example: ‘Given [a particular context/scenario], When [something happens], Then [this is the result]’.
@@ -751,11 +762,10 @@ At the end of the sprint, demo your progress to the client. This is important. A
 
 Thanks for reading, comments/feedback most welcome. Have fun !
 
-## Appendix Recommended Texts 
+## Appendix Recommended Texts
 
 ![](attachments/Pasted%20image%2020240611100930.png)
 
 ![](attachments/Pasted%20image%2020240611100944.png)
-
 
 ---

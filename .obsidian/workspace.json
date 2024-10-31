@@ -4,15 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "e2ce41ebae69ed5d",
+        "id": "23d80086165f1e50",
         "type": "tabs",
         "children": [
           {
-            "id": "d531d1af44600ac0",
+            "id": "4a4d6eb948a0a5e9",
             "type": "leaf",
             "state": {
               "type": "empty",
-              "state": {}
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -35,7 +37,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
             }
           },
           {
@@ -50,7 +54,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "Search"
             }
           },
           {
@@ -58,14 +64,16 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 328.50390243530273
+    "width": 200
   },
   "right": {
     "id": "c1c8e1962adcc80f",
@@ -88,7 +96,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
             }
           },
           {
@@ -99,7 +109,9 @@
               "state": {
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
             }
           },
           {
@@ -110,7 +122,9 @@
               "state": {
                 "sortOrder": "frequency",
                 "useHierarchy": true
-              }
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
             }
           },
           {
@@ -118,7 +132,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {},
+              "icon": "lucide-list",
+              "title": "Outline"
             }
           }
         ]
@@ -138,13 +154,16 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "d531d1af44600ac0",
+  "active": "4a4d6eb948a0a5e9",
   "lastOpenFiles": [
     "devGuidebook.md",
+    "devGuidebook.md~",
+    "attachments/Pasted image 20241027144154.png",
+    "attachments/Pasted image 20241027141335.png",
+    "attachments/Pasted image 20241027134617.png",
     "consistency-report.md",
     "Pasted image 20240905163511.png",
     "attachments/Pasted image 20241016180911.png",
-    "devGuidebook.md~",
     "g.md",
     "README.md",
     "devGuidebook/Untitled.md",
@@ -156,10 +175,7 @@
     "attachments/Pasted image 20240905163103.png",
     "attachments/Pasted image 20240905162859.png",
     "attachments/Pasted image 20240905161915.png",
-    "Pasted image 20240611100040.png",
     "toc.js",
-    "attachments/Pasted image 20240611100944.png",
-    "attachments/Pasted image 20240611100930.png",
     "attachments"
   ]
 }
