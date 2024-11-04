@@ -646,7 +646,7 @@ The Special Case Pattern is one example for modelling your domain types in such 
 
 In some modern languages (e.g Rust, modern Java, and others), ADTs can be efficiently processed using de-structuring and pattern matching for powerful exhaustive pattern matching with `when` & `switch` statements. Exhaustive matching means the compiler will generate a compilation error if not all types are explicitly handled. As highlighted by Gavin Bierman in his Devoxx talk, you can spot many 'lightly disguised abstractions such as JSON' and model them as ADTs as shown in the following diagram: 
 
-![](Pasted%20image%2020241103131635.png)
+![](attachments/Pasted%20image%2020241103131635.png)
 From Gavin Bierman's Devoxx talk, Java Language Futures: https://www.youtube.com/watch?v=NNPN5tvjzqA&t  Using the sealed interface, it would be simple to permit a range of additional custom types that implement `JsonValue` such as `MyCustomString` and `ThingArray` for example.  
 ### Concurrency and Parallelism
 
