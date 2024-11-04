@@ -9,91 +9,94 @@ dv.view('toc')
 ```
 
 --startContents
-1. [Why Software Dev Guidebook](#Why-Software-Dev-Guidebook)
-    1. [Target Audience](#Target-Audience)
-    2. [If it is not in Git it does not exist](#If-it-is-not-in-Git-it-does-not-exist)
-        1. [Feature Branching vs Trunk Based development](#Feature-Branching-vs-Trunk-Based-development)
-        2. [Integrating Upstream Changes](#Integrating-Upstream-Changes)
-        3. [Rebase vs Merge](#Rebase-vs-Merge)
-    3. [Adopt Semantic Versioning for tags and releases](#Adopt-Semantic-Versioning-for-tags-and-releases)
-    4. [Review each others code and be supportive](#Review-each-others-code-and-be-supportive)
-    5. [If the critical path has not been reviewed it should not go onto master branch](#If-the-critical-path-has-not-been-reviewed-it-should-not-go-onto-master-branch)
-    6. [Continuous Integration - If it does not have tests it does not work](#Continuous-Integration---If-it-does-not-have-tests-it-does-not-work)
-    7. [Continuous Delivery](#Continuous-Delivery)
-    8. [Continuous Deployment](#Continuous-Deployment)
-    9. [If it Does not have Documentation it is Not Usable](#If-it-Does-not-have-Documentation-it-is-Not-Usable)
-    10. [Learning mindset](#Learning-mindset)
-    11. [Customer Bill of Rights - modified from Uncle Bob Martin Clean Agile](#Customer-Bill-of-Rights---modified-from-Uncle-Bob-Martin-Clean-Agile)
-    12. [Developer Bill of Rights - modified from Uncle Bob Martin Clean Agile](#Developer-Bill-of-Rights---modified-from-Uncle-Bob-Martin-Clean-Agile)
-    13. [Tooling](#Tooling)
-        1. [Do not be Smart - Use the Right Tools for the Job and for your customer](#Do-not-be-Smart---Use-the-Right-Tools-for-the-Job-and-for-your-customer)
-        2. [To Garbage Collect or Not To GC](#To-Garbage-Collect-or-Not-To-GC)
-        3. [Kanban - Jira and Confluence](#Kanban---Jira-and-Confluence)
-        4. [Gitlab and Version Control](#Gitlab-and-Version-Control)
-        5. [Container Repository](#Container-Repository)
-        6. [Build Tools](#Build-Tools)
-        7. [Static Code Analysis](#Static-Code-Analysis)
-        8. [Containerisation for Portability](#Containerisation-for-Portability)
-        9. [Workflows and Containerisation](#Workflows-and-Containerisation)
-2. [Coding Recommendations and Best Practices](#Coding-Recommendations-and-Best-Practices)
-    1. [Quality is the best shortcut - Fowler Design Stamina Hypothesis](#Quality-is-the-best-shortcut---Fowler-Design-Stamina-Hypothesis)
-    2. [Naming with Meaningful and Descriptive Names](#Naming-with-Meaningful-and-Descriptive-Names)
-    3. [Testing has Three Main Purposes](#Testing-has-Three-Main-Purposes)
-    4. [Keep Classes and Functions Smallish](#Keep-Classes-and-Functions-Smallish)
-    5. [Limit the Number of Function Arguments](#Limit-the-Number-of-Function-Arguments)
-    6. [Functions should do one thing and do it well](#Functions-should-do-one-thing-and-do-it-well)
-    7. [Classes and Code Should be Cohesive](#Classes-and-Code-Should-be-Cohesive)
-    8. [Classes should have only one reason to change and do one thing and do it well](#Classes-should-have-only-one-reason-to-change-and-do-one-thing-and-do-it-well)
-    9. [If using OOP know SOLID](#If-using-OOP-know-SOLID)
-    10. [Dependency Inversion Principle](#Dependency-Inversion-Principle)
-    11. [Dependency Injection and Inversion of Control - IoC](#Dependency-Injection-and-Inversion-of-Control---IoC)
-    12. [Avoid Paying too much Inheritance Tax - Consider Interfaces or Traits with Composition to achieve Ad-hoc Polymorphism](#Avoid-Paying-too-much-Inheritance-Tax---Consider-Interfaces-or-Traits-with-Composition-to-achieve-Ad-hoc-Polymorphism)
-        1. [Structural Polymorphism and Duck Typing](#Structural-Polymorphism-and-Duck-Typing)
-        2. [Extension Functions](#Extension-Functions)
-        3. [Inheritance should be explicitly designed-for](#Inheritance-should-be-explicitly-designed-for)
-    13. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
-    14. [Know Some Design Patterns](#Know-Some-Design-Patterns)
-        1. [The Strategy Pattern Example](#The-Strategy-Pattern-Example)
-        2. [The Visitor Pattern](#The-Visitor-Pattern)
-    15. [Consider using the Builder Pattern for More Complex Object Creation Scenarios](#Consider-using-the-Builder-Pattern-for-More-Complex-Object-Creation-Scenarios)
-    16. [Information Hiding](#Information-Hiding)
-    17. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
-    18. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
-    19. [Comment in line As You Go](#Comment-in-line-As-You-Go)
-    20. [The Boy Scout Rule](#The-Boy-Scout-Rule)
-    21. [Law of Demiter and Train Wrecks](#Law-of-Demiter-and-Train-Wrecks)
-    22. [Functional vs OOP - Choose Two](#Functional-vs-OOP---Choose-Two)
-    23. [Do not pollute Functional Code with Mutable State](#Do-not-pollute-Functional-Code-with-Mutable-State)
-    24. [Make Immutability your Default](#Make-Immutability-your-Default)
-    25. [Interior Mutability](#Interior-Mutability)
-    26. [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
-    27. [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
-    28. [Error Handling - 4 Types of Problems](#Error-Handling---4-Types-of-Problems)
-    29. [Error Handling - Exceptions vs Errors-as-Values](#Error-Handling---Exceptions-vs-Errors-as-Values)
-    30. [Error Handling - Exceptions should not be used for flow control - exceptional does not mean conditional](#Error-Handling---Exceptions-should-not-be-used-for-flow-control---exceptional-does-not-mean-conditional)
-    31. [Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected errors - exceptional does not mean conditional](#Error-Handling---Only-use-exceptions-for-exceptional-situations-such-as-coding-errors-and-unexpected-errors---exceptional-does-not-mean-conditional)
-    32. [Error Handling - Provide relevant exceptions for the abstraction layer](#Error-Handling---Provide-relevant-exceptions-for-the-abstraction-layer)
-    33. [Error Handling - Bubble exceptions upwards or trap at source](#Error-Handling---Bubble-exceptions-upwards-or-trap-at-source)
-    34. [Error Handling – Model the absence of value explicitly](#Error-Handling-%E2%80%93-Model-the-absence-of-value-explicitly)
-    35. [Error Handling in Functional Programming – error monads such as Either and Validated](#Error-Handling-in-Functional-Programming-%E2%80%93-error-monads-such-as-Either-and-Validated)
-    36. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
-    37. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
-        1. [Know the difference between IO bound tasks and CPU bound tasks and their common solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-common-solution-patterns)
-    38. [Security Development Practices](#Security-Development-Practices)
-3. [Agile Process Guide aka Feedback Driven Development](#Agile-Process-Guide-aka-Feedback-Driven-Development)
-    1. [Design Thinking Workshops and Scoping Document](#Design-Thinking-Workshops-and-Scoping-Document)
-    2. [Epics and Work Package Span Multiple Sprints](#Epics-and-Work-Package-Span-Multiple-Sprints)
-    3. [Define user stories with the INVEST Framework or Who-What-Why or the Connextra Card Template – all are good and you do not need to be too rigid](#Define-user-stories-with-the-INVEST-Framework-or-Who-What-Why-or-the-Connextra-Card-Template-%E2%80%93-all-are-good-and-you-do-not-need-to-be-too-rigid)
-    4. [Arrange core user stories into a Journey Map with a narrative flow or backbone of Big Activities moving from left to right](#Arrange-core-user-stories-into-a-Journey-Map-with-a-narrative-flow-or-backbone-of-Big-Activities-moving-from-left-to-right)
-    5. [Task Backlog](#Task-Backlog)
-    6. [Requirements Document and System Architecture Document](#Requirements-Document-and-System-Architecture-Document)
-    7. [1 to 2-week Sprints](#1-to-2-week-Sprints)
-    8. [Inline Testing](#Inline-Testing)
-    9. [Demo and Playbacks](#Demo-and-Playbacks)
-    10. [Acceptance with Sign Off and Cucumbers](#Acceptance-with-Sign-Off-and-Cucumbers)
-    11. [Iteration and Incrementalism](#Iteration-and-Incrementalism)
-    12. [Cup Cake Road Maps](#Cup-Cake-Road-Maps)
-4. [Appendix Recommended Texts](#Appendix-Recommended-Texts)
+ 
+ [Why Software Dev Guidebook](#Why-Software-Dev-Guidebook)
+     [Target Audience](#Target-Audience)
+     [If it is not in Git it does not exist](#If-it-is-not-in-Git-it-does-not-exist)
+         [Feature Branching vs Trunk Based development](#Feature-Branching-vs-Trunk-Based-development)
+         [Integrating Upstream Changes](#Integrating-Upstream-Changes)
+         [Rebase vs Merge](#Rebase-vs-Merge)
+     [Adopt Semantic Versioning for tags and releases](#Adopt-Semantic-Versioning-for-tags-and-releases)
+     [Review each others code and be supportive](#Review-each-others-code-and-be-supportive)
+     [If the critical path has not been reviewed it should not go onto master branch](#If-the-critical-path-has-not-been-reviewed-it-should-not-go-onto-master-branch)
+     [Continuous Integration - If it does not have tests it does not work](#Continuous-Integration---If-it-does-not-have-tests-it-does-not-work)
+     [Continuous Delivery](#Continuous-Delivery)
+     [Continuous Deployment](#Continuous-Deployment)
+     [If it Does not have Documentation it is Not Usable](#If-it-Does-not-have-Documentation-it-is-Not-Usable)
+     [Learning mindset](#Learning-mindset)
+     [Customer Bill of Rights - modified from Uncle Bob Martin Clean Agile](#Customer-Bill-of-Rights---modified-from-Uncle-Bob-Martin-Clean-Agile)
+     [Developer Bill of Rights - modified from Uncle Bob Martin Clean Agile](#Developer-Bill-of-Rights---modified-from-Uncle-Bob-Martin-Clean-Agile)
+     [Tooling](#Tooling)
+         [Do not be Smart - Use the Right Tools for the Job and for your customer](#Do-not-be-Smart---Use-the-Right-Tools-for-the-Job-and-for-your-customer)
+         [To Garbage Collect or Not To GC](#To-Garbage-Collect-or-Not-To-GC)
+         [Kanban - Jira and Confluence](#Kanban---Jira-and-Confluence)
+         [Gitlab and Version Control](#Gitlab-and-Version-Control)
+         [Container Repository](#Container-Repository)
+         [Build Tools](#Build-Tools)
+         [Static Code Analysis](#Static-Code-Analysis)
+         [Containerisation for Portability](#Containerisation-for-Portability)
+         [Workflows and Containerisation](#Workflows-and-Containerisation)
+ [Coding Recommendations and Best Practices](#Coding-Recommendations-and-Best-Practices)
+    [Quality is the best shortcut - Fowler Design Stamina Hypothesis](#Quality-is-the-best-shortcut---Fowler-Design-Stamina-Hypothesis)
+    [Naming with Meaningful and Descriptive Names](#Naming-with-Meaningful-and-Descriptive-Names)
+    [Testing has Three Main Purposes](#Testing-has-Three-Main-Purposes)
+    [Keep Classes and Functions Smallish](#Keep-Classes-and-Functions-Smallish)
+    [Limit the Number of Function Arguments](#Limit-the-Number-of-Function-Arguments)
+    [Functions should do one thing and do it well](#Functions-should-do-one-thing-and-do-it-well)
+    [Classes and Code Should be Cohesive](#Classes-and-Code-Should-be-Cohesive)
+    [Classes should have only one reason to change and do one thing and do it well](#Classes-should-have-only-one-reason-to-change-and-do-one-thing-and-do-it-well)
+    [If using OOP know SOLID](#If-using-OOP-know-SOLID)
+    [Dependency Inversion Principle](#Dependency-Inversion-Principle)
+    [Dependency Injection and Inversion of Control - IoC](#Dependency-Injection-and-Inversion-of-Control---IoC)
+    [Avoid Paying too much Inheritance Tax - Consider Interfaces or Traits with Composition to achieve Ad-hoc Polymorphism](#Avoid-Paying-too-much-Inheritance-Tax---Consider-Interfaces-or-Traits-with-Composition-to-achieve-Ad-hoc-Polymorphism)
+         [Structural Polymorphism and Duck Typing](#Structural-Polymorphism-and-Duck-Typing)
+         [Extension Functions](#Extension-Functions)
+         [Inheritance should be explicitly designed-for](#Inheritance-should-be-explicitly-designed-for)
+    [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
+    [Know Some Design Patterns](#Know-Some-Design-Patterns)
+        [The Strategy Pattern Example](#The-Strategy-Pattern-Example)
+        [The Visitor Pattern](#The-Visitor-Pattern)
+    [Consider using the Builder Pattern for More Complex Object Creation Scenarios](#Consider-using-the-Builder-Pattern-for-More-Complex-Object-Creation-Scenarios)
+    [Information Hiding](#Information-Hiding)
+    [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
+    [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
+    [Comment in line As You Go](#Comment-in-line-As-You-Go)
+    [The Boy Scout Rule](#The-Boy-Scout-Rule)
+    [Law of Demiter and Train Wrecks](#Law-of-Demiter-and-Train-Wrecks)
+    [Functional vs OOP - Choose Two](#Functional-vs-OOP---Choose-Two)
+    [Do not pollute Functional Code with Mutable State](#Do-not-pollute-Functional-Code-with-Mutable-State)
+    [Make Immutability your Default](#Make-Immutability-your-Default)
+    [Interior Mutability](#Interior-Mutability)
+    [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
+    [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
+    [Error Handling - 4 Types of Problems](#Error-Handling---4-Types-of-Problems)
+    [Error Handling - Exceptions vs Errors-as-Values](#Error-Handling---Exceptions-vs-Errors-as-Values)
+    [Error Handling - Model Exceptions as Values with Algebraic Data Types](#Error-Handling---Model-Exceptions-as-Values-with-Algebraic-Data-Types)
+    [Error Handling - Exceptions should not be used for flow control - exceptional does not mean conditional](#Error-Handling---Exceptions-should-not-be-used-for-flow-control---exceptional-does-not-mean-conditional)
+    [Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected errors - exceptional does not mean conditional](#Error-Handling---Only-use-exceptions-for-exceptional-situations-such-as-coding-errors-and-unexpected-errors---exceptional-does-not-mean-conditional)
+    [Error Handling - Provide relevant exceptions for the abstraction layer](#Error-Handling---Provide-relevant-exceptions-for-the-abstraction-layer)
+    [Error Handling - Bubble exceptions upwards or trap at source](#Error-Handling---Bubble-exceptions-upwards-or-trap-at-source)
+    [Error Handling – Model the absence of value explicitly](#Error-Handling-%E2%80%93-Model-the-absence-of-value-explicitly)
+    [Error Handling in Functional Programming – error monads such as Either and Validated](#Error-Handling-in-Functional-Programming-%E2%80%93-error-monads-such-as-Either-and-Validated)
+    [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
+    [Concurrency and Parallelism](#Concurrency-and-Parallelism)
+        [Know the difference between IO bound tasks and CPU bound tasks and their common solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-common-solution-patterns)
+    [Security Development Practices](#Security-Development-Practices)
+[Agile Process Guide aka Feedback Driven Development](#Agile-Process-Guide-aka-Feedback-Driven-Development)
+    [Design Thinking Workshops and Scoping Document](#Design-Thinking-Workshops-and-Scoping-Document)
+    [Epics and Work Package Span Multiple Sprints](#Epics-and-Work-Package-Span-Multiple-Sprints)
+    [Define user stories with the INVEST Framework or Who-What-Why or the Connextra Card Template – all are good and you do not need to be too rigid](#Define-user-stories-with-the-INVEST-Framework-or-Who-What-Why-or-the-Connextra-Card-Template-%E2%80%93-all-are-good-and-you-do-not-need-to-be-too-rigid)
+    [Arrange core user stories into a Journey Map with a narrative flow or backbone of Big Activities moving from left to right](#Arrange-core-user-stories-into-a-Journey-Map-with-a-narrative-flow-or-backbone-of-Big-Activities-moving-from-left-to-right)
+    [Task Backlog](#Task-Backlog)
+    [Requirements Document and System Architecture Document](#Requirements-Document-and-System-Architecture-Document)
+    [1 to 2-week Sprints](#1-to-2-week-Sprints)
+    [Inline Testing](#Inline-Testing)
+    [Demo and Playbacks](#Demo-and-Playbacks)
+     [Acceptance with Sign Off and Cucumbers](#Acceptance-with-Sign-Off-and-Cucumbers)
+     [Iteration and Incrementalism](#Iteration-and-Incrementalism)
+     [Cup Cake Road Maps](#Cup-Cake-Road-Maps)
+[Appendix Recommended Texts](#Appendix-Recommended-Texts)
+
 --endContents
 
 ## Why Software Dev Guidebook
@@ -156,7 +159,7 @@ Whether to rebase or merge is generally down to preference:
 
 ### Adopt Semantic Versioning for tags and releases
 
-- SemVer - [https://semver.org/](https://semver.org/)
+- [SemVer](https://semver.org/](https://semver.org/)
 
 ### Review each others code and be supportive
 
@@ -473,7 +476,7 @@ type Visitor interface {
 
 ### Consider using the Builder Pattern for More Complex Object Creation Scenarios
 
-Builders are especially useful if the dependencies of your class have complex invariants. Basically, this means that if you class can only be constructed with a particularly complex combination of dependencies such as ‘my object requires A and B and either C, D, or E and F, but never G if D is present’ (I’m sure you get the idea), then the Builder pattern can help you.
+Builders are especially useful if the dependencies of your class have complex invariants. Basically, this means that if you class can only be constructed with a particularly complex combination of dependencies such as ‘my object requires A and B and either C, D, or E and F, but never G if D is present’ (I’m sure you get the idea), then the Builder pattern can help you. How to implement this in your chosen language varies of course e.g., in Go check out the [Functional Options Pattern](https://www.youtube.com/watch?v=MDy7JQN5MN4) where you pass functions to modify the state of a struct. This is a nicely explained example, but it has some issues, first it lacks a `build()` function that is typically used to validate invariants before returning a valid 'built' instance. Second, having a bunch of standalone functions in the Functional Options pattern gives poor discoverability, it can make more sense to use a Builder type bunch of setter functions to set invariants - this means you can easily discover and chain setters using dot notation and code-completion e.g. with pseudo code: `configOps = NewConfigOptionsBuilder().id("someId").maxConnections(10).prefix("somePrefix").build()` e.g. [builder pattern in Golang]( https://dev.to/kittipat1413/understanding-the-builder-pattern-in-go-gp9) 
 
 ### Information Hiding
 
@@ -553,14 +556,14 @@ _**Proponents of errors-as-values:**_
 - Supporters also argue that there is less uncertainty compared to throwing exceptions because it can be challenging to determine all the exception types that can be thrown by a deep call stack. Also recognise because unhandled unchecked exceptions do not create compilation errors, the compiler can't help you discover all of the different types of unchecked exception that could be thrown, unless you dig and read all the docs.
 - Another issue of a specific type of exception known as a 'checked' exception is that they prevent functional composition. This is because the compiler forces you to handle checked exceptions wherever they can be thrown, but they are not considered as part of a function's return signature and type system. Instead, exceptions invoke orthogonal flows that 'break out' of your regular functional flow. Checked exceptions therefore breaks 'referential transparency' (see discussion below on Error Monads such as `Either` & `Validated`). Checked exceptions are generally not recommended these days, except for certain special use-cases where they still have their supporters.
 
-_**Proponents of exceptions:**_
+_**Proponents of exceptions:**
 
 - Fans of exceptions argue that by forcing you to interleave error checking at function call sites throughout your code obscures the code's happy path and readability.  
 - Exception fans also argue that exceptions centralise your error handling code which gives a clean separation of concerns.
 - For low-level code, exceptions are largely considered an effective strategy for surfacing underlying issues such as low level operating system issues which may be mistakenly obscured by the errors-as-values pattern (although the same could be said by mindlessly catching all exceptions).
 - When used correctly and with discipline, exceptions can also be more performant than pervasive and interleaved error-value checking. This is because languages like C++ and Java have 'zero cost exception handling.' I think this is a misleading term, what it actually means is 'zero cost to the happy path code provided no exceptions are thrown.' Assuming no exceptions are thrown, quite simply, there is less for your code to do as there are no interleaved conditional error checks. While any performance hit from interleaved result checking is likely to be marginal for the majority of use-cases, it may become more pronounced in deeply nested code or tight compute loops. However, this can be mitigated with good code structuring by moving error checks out of and before any performance critical-sections.
 
-A key difference between `try/catch` and `panic/recover` is the resulting control flow following their triggering. In a try/catch, unless you re-throw, code coming after the catch/finally block will still execute. This does not happen with panic/recover - a function that is aborted begins to unwind the stack, running deferred blocks/functions as it encounters them (in Go, this is the only place recover takes affect, although use of recover is not widespread in Go and panic is typically used to end the program). Thus, panic/recover is very different to try/catch stemming out of the fact that it is built around deferred logic as a recovery mechanism (e.g. Go & Zig).
+A key difference between `try/catch` and `panic/recover` is the resulting control flow following their activation. In a try/catch, unless you re-throw, code coming after the catch/finally block will still execute. This does not happen with panic/recover - a function that is aborted begins to unwind the stack, running deferred blocks/functions as it encounters them (in Go, this is the only place recover takes affect, although use of recover is not widespread in Go and panic is typically used to end the program). Thus, panic/recover is very different to try/catch stemming out of the fact that it is built around deferred logic as a recovery mechanism (e.g. Go & Zig).
 
 Whether to use exceptions has profound implications on your API design and performance, be aware of the issues highlighted above. Some modern languages, e.g. Mojo, go as far as trying to address any choice for you by compiling exception handling code under-the-hood to use errors-as-values. I think the aim is to allow you cleanly separate the happy path from exception handling code (clean separate of concerns) while allowing you to retain the performance of error-as-values should an exception be thrown. At the time of writing, it is too early to tell if this is a successful strategy.
 
@@ -575,6 +578,19 @@ _**Can I use both:**_
 _**Hybrid Approach:**_
 
 - Languages may also support more advanced error handling strategies. For example, the Kotlin Arrow2 library simplifies the use of OOP and Functional error handling within the same code base (Functional vs OOP? - choose both). For example, lower level code or existing code can apply `try/catch/finally` blocks for localised exception handling and recovery if needed, while higher level calling code can provide a wrapping `error context` that can be used at the boundary; Rather than throwing exceptions at the boundary between different layers of code, exceptions can be _raised_ into the higher level error context. Raising rather than (re)throwing this allows the functions that raise to be composed within functional compositional call chains because raising does not break referential transparency. In the top layer of your code, such as in a top-level service facade or global error handler in a webapp, you would then need to handle the exceptions raised within the error context, such as performing a transaction roll back or performing a retry.  For a great presentation with examples, see this great talk from Simon Vergauwen from [Kotlin Conf 2023](https://youtu.be/JcFEI8_af3g?si=vH5OG86JTQWFrGnw) (note that context receivers as used in the talk will be replaced by context parameters in the future).
+
+### Error Handling - Model Exceptions as Values with Algebraic Data Types 
+
+With ADTs, for any single function, you can replace any thrown exceptions and return values using a single generic abstract data type. Using a sealed interface hierarchy, all possible success and error variations can then be modelled using ad-hoc polymorphism. This means the _abstract_ data type becomes an _algebraic_ data type (ADT), also known as a 'nominal' or  'named' union type (an ADT provides the combination of aggregation *and* choice to model all possible variants). The ADT replaces exceptions with 'errors-as-values,' and multiple optional success types, if required. 
+
+This is super-powerful because you can add new success and/or error/exception return types through ad-hoc polymorphism, and also intentionally restrict all calling clients to a single permissible enum set. This is invaluable for developers of libraries for example where you explicitly want to limit the return types of your library functions and prevent clients overriding with their own implementations.  
+
+To process the function's abstract return type with very little boilerplate, exhaustive pattern matching with switch ensures all possible variants are handled - the compiler will produce an error if any are unhandled. There is a lot to unpack here, but the example given below from Gavin Bierman clearly demonstrates this approach using modern Java (2024). The use of ADTs with pattern matching is being coined in the Java community as 'Data Orientated Programming,' and can be applied for modelling any data type hierarchies such as converting JSON to Java types, but Java certainly wasn't the first language to implement this approach. I suspect that this approach will become very popular in the Java community in the future, moving away from exceptions in higher level application code (note, as discussed above, exceptions will still have their place in lower level library and framework code). 
+
+![](attachments/Pasted%20image%2020241103122918.png)
+
+Using ADTs to model better return types. After Gavin Bierman's Devoxx talk, Java Language Futures: https://www.youtube.com/watch?v=NNPN5tvjzqA&t=2651s
+
 
 ### Error Handling - Exceptions should not be used for flow control - exceptional does not mean conditional
 
@@ -624,36 +640,36 @@ Regarding exceptions in functional composition: If your language uses ‘Checked
 
 ### Data Orientated Programming with Algebraic Data Types - ADTs
 
-The Special Case Pattern is one example for modelling your domain types in such a way that the absence of value is explicitly modelled in your domain making illegal program states and crashes more unlikely. However, you can go a lot further using Algebraic Data Types (ADTs). ADTs include both ‘Product Types’ for modelling aggregation such as a C’s or Golang's ‘struct’, and ‘Sum Types’ for modelling choice, also known as ‘Union Types’ or ‘Tagged Unions’.
-
-This simple combination of aggregation and choice is deceptively powerful and shows up in many programming languages to model domains, return types and function arguments:
+The Special Case Pattern is one example for modelling your domain types in such a way that the absence of value is explicitly modelled in your domain making illegal program states and crashes more unlikely. However, you can go a lot further using Algebraic Data Types (ADTs). ADTs combine ‘Product Types’ for modelling aggregation such as a C/Golang/Rust ‘structs’ or Java's Record type with ‘Sum Types’ for modelling choice, also known as ‘Union Types’ or ‘Tagged Unions’. This simple combination of aggregation and choice is deceptively powerful and shows up in many programming languages to model domains, return types and function arguments:
 
 - Product Types are great for modelling aggregation, and include immutable data classes such as records, data objects, structs and traits. They are called ‘Product Types’ because their state ‘when considered as a whole’ is the cartesian product of their data.
 
 - Sum Types can be used to represent choice and are polymorphic but with a fixed set of implementing subtypes (e.g., ‘sealed’ classes or interfaces in Kotlin/Java, ‘enum’ in Rust, ‘Union’ types in Python). They are called Sum Types because the set of possible types is the sum (union) of the total allowable set.
 
-In modern languages, ADTs combine with ‘de-structuring’ and ‘pattern matching’ to facilitate powerful ‘exhaustive’ pattern matching constructs with when & switch statements. Exhaustive matching means the compiler will generate a compilation error if not all sum types are explicitly handled.
+In some modern languages (e.g Rust, modern Java, and others), ADTs can be efficiently processed using de-structuring and pattern matching for powerful exhaustive pattern matching with `when` & `switch` statements. Exhaustive matching means the compiler will generate a compilation error if not all types are explicitly handled. As highlighted by Gavin Bierman in his Devoxx talk, you can spot many 'lightly disguised abstractions such as JSON' and model them as ADTs as shown in the following diagram: 
 
+![](Pasted%20image%2020241103131635.png)
+From Gavin Bierman's Devoxx talk, Java Language Futures: https://www.youtube.com/watch?v=NNPN5tvjzqA&t  Using the sealed interface, it would be simple to permit a range of additional custom types that implement `JsonValue` such as `MyCustomString` and `ThingArray` for example.  
 ### Concurrency and Parallelism
 
-A big topic, it can’t all be covered here, it ranges from single host shared memory parallelism, to multi-node clustering (e.g., HPC), to distributed multi-host cluster networks (e.g., remote Actors / FaaS). Concurrency is not parallelism. Concurrency is a software concern – context switching on a ‘carrier thread’ using continuations or virtual-threads gives the illusion that multiple things are happening at once, while true parallelism is both a software and hardware concern – you need hardware to support parallelism which can range from multiple cores on one CPU, multiple CPUs, nodes, local and remote actors, remote VMs, cloud functions such as Lambda and more. Here are some general recommendations:
+A big topic, it can’t all be covered here, it ranges from single host shared memory parallelism, to multi-node clustering (e.g., HPC), to distributed multi-host cluster networks (e.g., remote Actors / FaaS). In computing, concurrency is not parallelism, despite the two terms having similar definitions. Concurrency is a software concern involving context switching on a ‘carrier thread’ using continuations gives the illusion that multiple things are happening at once, while true parallelism is both a software and hardware concern requiring hardware to support parallelism which can range from multiple cores on one CPU, multiple CPUs, nodes, local and remote actors, remote VMs, cloud functions such as Lambda and more. Here are some general recommendations:
 
-- Keep platform threads as isolated as possible & limit mutable global state
- 	- Sharing of fixed immutable state is fine.
- 	- Taking defensive copies of data can help prevent race conditions and other ‘spooky actions at a distance’.
- 	- Try to be more functional and limit your use of global mutable state.
- 	- Understand the pitfalls of multi-threaded code such as race-conditions, ghost reads, dirty reads, dirty writes, and deadlock.  
+- Keep platform threads as isolated as possible & limit mutable global state:
+    - Sharing of fixed immutable state is fine. 	
+    - Taking defensive copies of data can help prevent race conditions and other concurrency related ‘spooky actions at a distance’.
+    - Try to be more functional and limit your use of global mutable state.
+    - Understand the pitfalls of multi-threaded code such as race-conditions, ghost reads, dirty reads, dirty writes, and deadlock.  
 
-- Keep synchronized critical sections as small as possible (Amdahl’s law)
- 	- Even a small amount of synchronization *_significantly*_ affects performance. See Ahmdal’s law. For example, even if your code is 95% parallel, only 5% synchronisation means throwing more processors at the problem doesn’t improve speedup beyond ~256 processors.
- 	- Understand the pitfalls of multi-threaded programming. If deadlock, live lock, ghost-reads, dirty reads, and atomic vs composite actions don’t make much sense to you (do you think ‘i++’ is atomic? – no it isn’t), then you will no doubt run in to problems. These days, there is often a much better approach to coding low-level multi-threaded and shared memory models.
- 	- When testing, use more threads than processors – running with more threads than processor cores to encourage task swapping. The more frequently your tasks swap, the more likely you will find issues.
+- Keep synchronized critical sections as small as possible (Amdahl’s law):
+     - Even a small amount of synchronization *_significantly*_ affects performance. See Ahmdal’s law. For example, even if your code is 95% parallel, only 5% synchronisation means throwing more processors at the problem doesn’t improve speedup beyond ~256 processors.
+     - Understand the pitfalls of multi-threaded programming. If deadlock, live lock, ghost-reads, dirty reads, and atomic vs composite actions don’t make much sense to you (do you think ‘i++’ is atomic? – no it isn’t), then you will no doubt run in to problems. These days, there is often a much better approach to coding low-level multi-threaded and shared memory models.
+     -  When testing, use more threads than processors – running with more threads than processor cores to encourage task swapping. The more frequently your tasks swap, the more likely you will find issues.
 
 ![](attachments/Pasted%20image%2020240611095042.png)
 
 #### Know the difference between IO bound tasks and CPU bound tasks and their common solution patterns
 
-- IO Bound Tasks require asynchronous patterns to achieve concurrency. The solution patterns include:
+- *IO Bound Tasks* require asynchronous patterns to achieve concurrency. The solution patterns include:
 
  	- Async/Await and Coroutines (e.g., Go’s ‘Goroutines’ and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your code is split into two; red functions reflect asynchronous code paths and blue functions for synchronous code paths – here’s the original and now famous blog: [https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)
  	- Virtual-Threads / Fibres such as the ‘colourless’ Project Loom for the JDK where the virtual threads are implemented in user space using continuations: [https://wiki.openjdk.org/display/loom/Main](https://wiki.openjdk.org/display/loom/Main)
@@ -663,7 +679,7 @@ A big topic, it can’t all be covered here, it ranges from single host shared m
  	- Use non-blocking IO libs & APIs instead of blocking libs.
  	- Reactive Frameworks e.g., project Reactor.
 
-- For CPU Bound Tasks, the solution patterns include:
+-  *CPU Bound Tasks* have different solution patterns:
 
  	- Platform/OS/POSIX/Kernel threads (pthreads). These are good for numerical computations that don’t require (much) IO, such as ‘tight computational loops’. Note that platform threads are heavyweight and should be pooled for effective resource usage. For example, on Linux, each thread typically requires ~1MB of mem per thread – this is because they are controlled by the OS, and the OS has to be generic enough to handle a variety of use-cases, so 1MB was assumed to be a good default. Platform threads they are _very_ different from Virtual Threads in terms of how they are implemented.  A platform thread is very similar to a process in terms of resource-cost, except that threads allows memory sharing between multiple threads while multiple processes do not share the same memory space. For multiple processes, you need some other mechanism to share state and messages between processes, such as a common memory-mapped file(s), filesystem, databases, and message brokers.
  	- Shared memory frameworks such as OpenMP which make multi-threaded programming simpler by avoiding low-level synchronisation primitives.  

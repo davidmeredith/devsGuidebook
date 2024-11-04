@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "23d80086165f1e50",
+        "id": "e7b7093b5511189f",
         "type": "tabs",
         "children": [
           {
-            "id": "4a4d6eb948a0a5e9",
+            "id": "c67b7018dac2a8bc",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "devGuidebook.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "devGuidebook"
             }
           }
         ]
@@ -73,7 +77,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 312.50390243530273
   },
   "right": {
     "id": "c1c8e1962adcc80f",
@@ -154,14 +158,21 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "4a4d6eb948a0a5e9",
+  "active": "c67b7018dac2a8bc",
   "lastOpenFiles": [
+    "canvas/images.canvas",
+    "attachments/Pasted image 20241104173624.png",
     "devGuidebook.md",
+    "consistency-report.md",
+    "attachments/Pasted image 20241104173604.png",
+    "canvas",
+    "attachments/Pasted image 20241103131635.png",
+    "attachments/Pasted image 20241103122918.png",
+    "Pasted image 20241103121956.png",
     "devGuidebook.md~",
     "attachments/Pasted image 20241027144154.png",
     "attachments/Pasted image 20241027141335.png",
     "attachments/Pasted image 20241027134617.png",
-    "consistency-report.md",
     "Pasted image 20240905163511.png",
     "attachments/Pasted image 20241016180911.png",
     "g.md",
@@ -170,11 +181,6 @@
     "attachments 1",
     "devGuidebook",
     "devGuidbook.md",
-    "attachments/Pasted image 20240906135416.png",
-    "attachments/Pasted image 20240906135400.png",
-    "attachments/Pasted image 20240905163103.png",
-    "attachments/Pasted image 20240905162859.png",
-    "attachments/Pasted image 20240905161915.png",
     "toc.js",
     "attachments"
   ]
