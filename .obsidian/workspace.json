@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "9f75639a12167b38",
+        "id": "6a8c636259a87308",
         "type": "tabs",
         "children": [
           {
-            "id": "d5c990453bc26538",
+            "id": "40282f2b5b28f73a",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -73,7 +73,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 312.50390243530273
+    "width": 312.50390243530273,
+    "collapsed": true
   },
   "right": {
     "id": "c1c8e1962adcc80f",
@@ -154,10 +155,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "d5c990453bc26538",
+  "active": "40282f2b5b28f73a",
   "lastOpenFiles": [
+    "devGuidebook.md~",
     "devGuidebook.md",
     "canvas/images.canvas",
+    "attachments/Pasted image 20241106152658.png",
     "attachments/Pasted image 20241104173624.png",
     "consistency-report.md",
     "attachments/Pasted image 20241104173604.png",
@@ -165,12 +168,10 @@
     "attachments/Pasted image 20241103131635.png",
     "attachments/Pasted image 20241103122918.png",
     "Pasted image 20241103121956.png",
-    "devGuidebook.md~",
     "attachments/Pasted image 20241027144154.png",
     "attachments/Pasted image 20241027141335.png",
     "attachments/Pasted image 20241027134617.png",
     "Pasted image 20240905163511.png",
-    "attachments/Pasted image 20241016180911.png",
     "g.md",
     "README.md",
     "devGuidebook/Untitled.md",
