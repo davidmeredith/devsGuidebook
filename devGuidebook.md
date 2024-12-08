@@ -4,6 +4,8 @@ Hi there. This is my attempt at writing a developer guidebook 📖. I originally
 
 Last Updated Dec 24.  Enjoy.
 
+## TOC
+
 ```dataviewjs
 dv.view('toc')
 ```
@@ -161,7 +163,8 @@ b) As shown below, rebasing basically ‘breaks off the feature branch from its 
 
 Note that rebasing doesn’t delete the feature branch, the feature branch still exists, but it is now ahead of the target branch, by 2 commits in the diagram below. To bring the target branch up to date, a fast-forward merge is required on the target branch.
 ![](attachments/Pasted%20image%2020240610204811.png)
-[top](#Dave's-Dev-Guidebook)
+
+[top](#TOC)
 
 #### Rebase vs Merge
 
