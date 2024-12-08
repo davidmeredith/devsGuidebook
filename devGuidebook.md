@@ -194,6 +194,7 @@ Whether to rebase or merge is generally down to preference:
 ### Continuous Delivery
 
 Means that the software should always be in a releasable-ready condition.  This is a recommendation for your master and dev branches. If you’re run over by a bus (ROBAB), and someone must come along and pick up your code and they must fight with it from the outset, there’s a strong chance it will become shelfware.  If you need to have prolonged branches for experimentation that aren’t release-ready, create a feature branch such as ‘feature:homersSandbox’ to isolate your experiments. [https://epubs.stfc.ac.uk/work/47984368](https://epubs.stfc.ac.uk/work/47984368)
+[top](#Dave's-Dev-Guidebook)
 
 ### Continuous Deployment
 
