@@ -111,10 +111,13 @@ dv.view('toc')
 
 To help everyone in the Centre build great software, I've put together a collection of development guidelines to help you build scalable, maintainable, reliable, performant, and usable code. Like all guidelines, these are not strict rules, and knowing when and where to apply these guidelines largely comes down to practice and experience.  This is not an exhaustive list. For more in-depth analysis, please see the list of recommended texts in the appendix. not going to repeat all that good advice here, that’s what the books are for, but I have tried to distil a range of key recommendations.
 
+```markdown
+[!TIP]
 Recognise that code is navigated and read far more than it is written, and that code is a form of expression designed for humans (machine code is for the machines).
 
 _“Programs must be written for people to read, and only incidentally for machines to execute.__"_
 Harold Abelson, the author of Structure and Interpretation of Computer Programs
+```
 
 Good quality code should read well, with details abstracted so that higher-level code reads almost like a form of ‘self-documenting’ story which is expressive of its intent. Implementation details should be hidden behind well named abstractions – a concept that is appropriate at a variety of scales, from variables at the small scale to names, functions, classes, interfaces, traits, facades, and packages/modules all the way up to application tiers and 'bounded contexts' (front-end, business logic, data tier), micro-services, services, to monoliths.
 
