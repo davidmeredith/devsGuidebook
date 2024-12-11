@@ -15,7 +15,8 @@ dv.view('toc')
 )
 
 --startContents
-1. [Why Software Dev Guidebook](#Why-Software-Dev-Guidebook)
+1. [Table Of Contents](#Table-Of-Contents)
+2. [Why Software Dev Guidebook](#Why-Software-Dev-Guidebook)
     1. [Target Audience](#Target-Audience)
     2. [If it is not in Git it does not exist](#If-it-is-not-in-Git-it-does-not-exist)
         1. [Feature Branching vs Trunk Based development](#Feature-Branching-vs-Trunk-Based-development)
@@ -41,7 +42,7 @@ dv.view('toc')
         7. [Static Code Analysis](#Static-Code-Analysis)
         8. [Containerisation for Portability](#Containerisation-for-Portability)
         9. [Workflows and Containerisation](#Workflows-and-Containerisation)
-2. [Coding Recommendations and Best Practices](#Coding-Recommendations-and-Best-Practices)
+3. [Coding Recommendations and Best Practices](#Coding-Recommendations-and-Best-Practices)
     1. [High quality code is easy to change](#High-quality-code-is-easy-to-change)
     2. [Quality is the best shortcut - Fowler Design Stamina Hypothesis](#Quality-is-the-best-shortcut---Fowler-Design-Stamina-Hypothesis)
     3. [Do Not Name Abstractions After Constituent Parts](#Do-Not-Name-Abstractions-After-Constituent-Parts)
@@ -52,34 +53,35 @@ dv.view('toc')
     8. [Functions should do one thing and do it well](#Functions-should-do-one-thing-and-do-it-well)
     9. [Classes and Code Should be Cohesive](#Classes-and-Code-Should-be-Cohesive)
     10. [Classes should have only one reason to change and do one thing and do it well](#Classes-should-have-only-one-reason-to-change-and-do-one-thing-and-do-it-well)
-    11. [If using OOP know SOLID](#If-using-OOP-know-SOLID)
-    12. [Dependency Inversion Principle](#Dependency-Inversion-Principle)
-    13. [Dependency Injection and Inversion of Control for Decreasing Code Coupling - IoC](#Dependency-Injection-and-Inversion-of-Control-for-Decreasing-Code-Coupling---IoC)
-    14. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
-    15. [Avoid Paying too much Inheritance Tax - Consider Interfaces or Traits with Composition to achieve Ad-hoc Polymorphism](#Avoid-Paying-too-much-Inheritance-Tax---Consider-Interfaces-or-Traits-with-Composition-to-achieve-Ad-hoc-Polymorphism)
+    11. [OOP and SOLID](#OOP-and-SOLID)
+    12. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
+    13. [Functional vs OOP - Choose Two](#Functional-vs-OOP---Choose-Two)
+    14. [Dependency Inversion Principle](#Dependency-Inversion-Principle)
+    15. [Dependency Injection and Inversion of Control for Decreasing Code Coupling - IoC](#Dependency-Injection-and-Inversion-of-Control-for-Decreasing-Code-Coupling---IoC)
+    16. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
+    17. [Avoid Paying too much Inheritance Tax - Consider Composition with Interfaces or Traits to achieve Ad-hoc Polymorphism](#Avoid-Paying-too-much-Inheritance-Tax---Consider-Composition-with-Interfaces-or-Traits-to-achieve-Ad-hoc-Polymorphism)
         1. [Structural Polymorphism and Duck Typing](#Structural-Polymorphism-and-Duck-Typing)
         2. [Extension Functions](#Extension-Functions)
         3. [Inheritance should be explicitly designed-for](#Inheritance-should-be-explicitly-designed-for)
-    16. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
-    17. [Know Some Design Patterns](#Know-Some-Design-Patterns)
+    18. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
+    19. [Know Some Design Patterns](#Know-Some-Design-Patterns)
         1. [The Strategy Pattern Example](#The-Strategy-Pattern-Example)
         2. [The Visitor Pattern](#The-Visitor-Pattern)
         3. [Builder Pattern for More Complex Object Creation Scenarios](#Builder-Pattern-for-More-Complex-Object-Creation-Scenarios)
-    18. [Information Hiding](#Information-Hiding)
-    19. [Keep it Simple Stupid KISS](#Keep-it-Simple-Stupid-KISS)
-    20. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
-    21. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
-    22. [Comment in line As You Go](#Comment-in-line-As-You-Go)
-    23. [The Boy Scout Rule](#The-Boy-Scout-Rule)
-    24. [Law of Demiter and Train Wrecks](#Law-of-Demiter-and-Train-Wrecks)
-    25. [Functional vs OOP - Choose Two](#Functional-vs-OOP---Choose-Two)
-    26. [Do not pollute Functional Code with Mutable State](#Do-not-pollute-Functional-Code-with-Mutable-State)
-    27. [Make Private your Default Class Level Visibility](#Make-Private-your-Default-Class-Level-Visibility)
-    28. [Make Immutability your Default](#Make-Immutability-your-Default)
-    29. [Interior Mutability](#Interior-Mutability)
-    30. [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
-    31. [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
-    32. [Error Handling](#Error-Handling)
+    20. [Information Hiding](#Information-Hiding)
+    21. [Keep it Simple Stupid KISS](#Keep-it-Simple-Stupid-KISS)
+    22. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
+    23. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
+    24. [Comment in line As You Go](#Comment-in-line-As-You-Go)
+    25. [The Boy Scout Rule](#The-Boy-Scout-Rule)
+    26. [Law of Demiter and Train Wrecks](#Law-of-Demiter-and-Train-Wrecks)
+    27. [Do not pollute Functional Code with Mutable State](#Do-not-pollute-Functional-Code-with-Mutable-State)
+    28. [Make Private your Default Class Level Visibility](#Make-Private-your-Default-Class-Level-Visibility)
+    29. [Make Immutability your Default](#Make-Immutability-your-Default)
+    30. [Interior Mutability](#Interior-Mutability)
+    31. [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
+    32. [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
+    33. [Error Handling](#Error-Handling)
         1. [Error Handling - 4 Types of Problems](#Error-Handling---4-Types-of-Problems)
         2. [Error Handling - Exceptions vs Errors-as-Values](#Error-Handling---Exceptions-vs-Errors-as-Values)
         3. [Error Handling - Model Exceptions as Values with Algebraic Data Types](#Error-Handling---Model-Exceptions-as-Values-with-Algebraic-Data-Types)
@@ -89,11 +91,11 @@ dv.view('toc')
         7. [Error Handling - Bubble exceptions upwards or trap at source](#Error-Handling---Bubble-exceptions-upwards-or-trap-at-source)
         8. [Error Handling – Model the absence of value explicitly](#Error-Handling-%E2%80%93-Model-the-absence-of-value-explicitly)
         9. [Error Handling in Functional Programming – error monads such as Either and Validated](#Error-Handling-in-Functional-Programming-%E2%80%93-error-monads-such-as-Either-and-Validated)
-    33. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
-    34. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
+    34. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
+    35. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
         1. [Know the difference between IO bound tasks and CPU bound tasks and their common solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-common-solution-patterns)
-    35. [Security Development Practices](#Security-Development-Practices)
-3. [Agile Process Guide aka Feedback Driven Development](#Agile-Process-Guide-aka-Feedback-Driven-Development)
+    36. [Security Development Practices](#Security-Development-Practices)
+4. [Agile Process Guide aka Feedback Driven Development](#Agile-Process-Guide-aka-Feedback-Driven-Development)
     1. [Design Thinking Workshops and Scoping Document](#Design-Thinking-Workshops-and-Scoping-Document)
     2. [Epics and Work Package Span Multiple Sprints](#Epics-and-Work-Package-Span-Multiple-Sprints)
     3. [Define user stories with the INVEST Framework or Who-What-Why or the Connextra Card Template – all are good and you do not need to be too rigid](#Define-user-stories-with-the-INVEST-Framework-or-Who-What-Why-or-the-Connextra-Card-Template-%E2%80%93-all-are-good-and-you-do-not-need-to-be-too-rigid)
@@ -106,7 +108,7 @@ dv.view('toc')
     10. [Acceptance with Sign Off and Cucumbers](#Acceptance-with-Sign-Off-and-Cucumbers)
     11. [Iteration and Incrementalism](#Iteration-and-Incrementalism)
     12. [Cup Cake Road Maps](#Cup-Cake-Road-Maps)
-4. [Appendix Recommended Texts](#Appendix-Recommended-Texts)
+5. [Appendix Recommended Texts](#Appendix-Recommended-Texts)
 --endContents
 
 ## Why Software Dev Guidebook
@@ -121,8 +123,6 @@ _"Programs must be written for people to read, and only incidentally for machine
 
 > [!TIP]
 Good quality code should read well, with details abstracted so that higher-level code reads almost like a form of ‘self-documenting’ story which is expressive of its intent.
-
-Implementation details should be hidden behind well named abstractions – a concept that is appropriate at a variety of scales, from variables at the small scale to names, functions, classes, interfaces, traits, facades, and packages/modules all the way up to application tiers and 'bounded contexts' (front-end, business logic, data tier), micro-services, services, to monoliths.
 
 ### Target Audience
 
@@ -145,6 +145,7 @@ Similarly, if you’re using low-level C/C++ or Fortran, many of the guidelines 
 Research by Forsgen & Humble (‘Accelerate’ book) shows that long-lived feature branches that remain open for prolonged periods of time hinder delivery and productivity. Team members are less likely to interact and merge conflicts are more likely. The general recommendation is to try and merge feature branches into dev every one or two days. However, the Accelerate book authors do acknowledge that longer lived feature branches are suitable for open-source development where committers are less likely to work full time on features, and so often need more long-lived feature branches.
 
 ![](attachments/Pasted%20image%2020240610204547.png)
+
 [https://nvie.com/posts/a-successful-git-branching-model/](https://nvie.com/posts/a-successful-git-branching-model/)
 
 Tutorials: [https://github.com/davidmeredith/scdIntroToGit](https://github.com/davidmeredith/scdIntroToGit)
@@ -160,14 +161,17 @@ Tutorials: [https://github.com/davidmeredith/scdIntroToGit](https://github.com/d
 There are two strategies to incorporating upstream commits from other branches - merging and rebasing.  Upstream commits are new commits that exist on another branch which need to be incorporated into your current branch to keep the branch up to date:
 
  a) Periodically merge the changes in the target branch (dev) into your feature branch. This creates the ‘braided’ graph pattern show opposite (flow is from top to bottom). When you’re ready to merge dev into master, a new merge-commit is created on the tip of the master branch.
+
  ![](attachments/Pasted%20image%2020240610204748.png)
 
 b) As shown below, rebasing basically ‘breaks off the feature branch from its root (yellow), and re-attaches it to the tip of the target branch (grey)’. During the rebase, the commits that exist on the feature branch are internally used to create a set of diffs in temporary files which are used by git to create new updated versions of your feature commits. Git needs to do this in order to incorporate any upstream changes that may have occurred on the target branch.
+
 ![](attachments/Pasted%20image%2020240610204801.png)
 
 [top](#Table-Of-Contents)
 
 Note that rebasing doesn’t delete the feature branch, the feature branch still exists, but it is now ahead of the target branch, by 2 commits in the diagram below. To bring the target branch up to date, a fast-forward merge is required on the target branch.
+
 ![](attachments/Pasted%20image%2020240610204811.png)
 
 [top](#Table-Of-Contents)
@@ -416,15 +420,49 @@ Examples of patterns that support cohesion include the State Pattern.
 
 - Separation of concerns at the class level.
 
-### If using OOP know SOLID
+### OOP and SOLID
 
-OOP isn’t as fashionable as Functional these days, mostly because of the mantra 'prefer composition over inheritance'. However, I believe that most of the OOP principles are tried, tested and proven. You can’t argue against the principles of abstraction, information hiding and runtime polymorphism, these are good design principles even in Functional paradigms.  Arguably, what pure OOP does over-emphasise is deep & brittle inheritance hierarchies – you can favour composition instead in the right scenarios.
+OPP is about "Program organsiation" (Bjarne Stroustroup). 
+
+OPP helps you to organise programs around data and the actions that are intended to operate on that data. From my perspective, what I like about OOP is that it is really clear how to organise my program around classes - locating the data alongside the functions that operate on that data is very common and feels natural. Without classes, you can lose some of this clarity. However, OPP is not the only option. Other paradigms such as Functional, Procedural, and Data Orientated Programming exist.
+
+I'm not a pureist - I believe you can and should apply all these paradigms when it is most convenient to do so. Most general purpose programming languages allow you to mix these paradigms. 
+
+OOP bashing is trendy, mostly because of the problems associated with heirarchical inhertiance, and I agree that heirarchical inhertiance should be applied judiciously. However, I believe that most of the other OOP principles are tried, tested, and proven. You can’t argue against three of the four principles or 'pillars' of OPP: Abstraction, Encapsulation (information hiding), and Polymorphism, these are good design principles available in any paradigm and across all modern programming languages.  Arguably, what pure OOP does over-emphasise is deep & brittle inheritance hierarchies – you can favour composition instead in the right scenarios.
+
+| Pillar | Implementations|
+| -------------- | --------------- |
+| Abstraction | interfaces, traits, service facade, closures |
+| Encapsulation | classes, records/struts/nested-structs, closures, modules, public/private/protected visiblity|
+| Polymorphism | type-classes, generics, dynamic-dispatch |
+| Inhertiance| rename to 'Sharing Behaviour' with impls including compostion, traits, interfaces  |
+
+I belive Inhertiance should be renamed to 'Sharing Behaviour'. For example, the other pillars don't tie themselves to their implementations. Inhertiance is only one way of sharing code across classes/structs/objects, but there are other ways to share code such as Composition (avaialble any language), traits (Rust), interfaces (Java/Go), type-classes (Scala). I agree that inheritance can be overdone, but it does have it place (see section on 'Don't pay too much inheritance tax').  
+
+For OPP, understand the principles of SOLID:
 
 - Single Responsibility Principle
-- Open for extension, closed for modification (dynamic dispatch and runtime polymorphism)
+- Open for extension, closed for modification 
 - Liskov’s Substitution principle (Barbara Liskov)
 - Interface Segregation principle
 - Dependency Inversion
+
+[top](#Table-Of-Contents)
+
+### Data Orientated Programming vs OOP - Choose Two 
+
+If you can do OOP, you can do DOP: DOP advocates for cleanly separating data from class methods. Data is typically modelled using heirarchically nested structs/records/data-objects. Behaviours that operate on the data are typically extracted into top-level or module/package level functions. Note, this does not include data validation and invarient checking logic - it perfectly valid (preferable) to co-locate initilisation and validation logic with your data classes, in class/record constructors for example. DOP tends to adopt more noun orientated naming approach whereas OPP tends to adopt a mix of nouns and verbs. 
+
+### Functional vs OOP - Choose Two
+
+To quote Eric Evans, an expert in both OOP and Functional paradigms and of 'Domain Driven Design' book fame: "At times, I found FP an awkward fit. The problem would have fit OOP better. I'm happy that it is easier than it used to be to move between both those ways of thinking." 
+
+I completely agree with Eric - if the language permits, combining functional approaches with OOP is convienent in the right scenario. Within the same code base, the recommendations are: 
+- Use a naming convention to identify pure functions (see below on 'Calculations to limit side effects')
+- Push out side effects to the out boundaries of your code (see the Dependency Rule / Bullseye) so they become 'intended effects’ and not nasty interleaved ‘side effects’.
+- Aim for a core of pure functions.
+
+Well worth a watch: [https://www.youtube.com/watch?v=HSk5fdKbd3o&t=543s](https://www.youtube.com/watch?v=HSk5fdKbd3o&t=543s)
 
 [top](#Table-Of-Contents)
 
@@ -490,23 +528,24 @@ Classic examples of dynamic applications include:
 [top](#Table-Of-Contents)
 
 
-### Avoid Paying too much Inheritance Tax - Consider Interfaces or Traits with Composition to achieve Ad-hoc Polymorphism
+### Avoid Paying too much Inheritance Tax - Consider Composition with Interfaces or Traits to achieve Ad-hoc Polymorphism
 
-- Deeply nested inheritance hierarchies where sub-classes extend super-classes can be brittle. This is because you are structurally tied to the classes in the parent hierarchy - if you don't need all of the behaviour provided through inheritance, it can be difficult to 'split-out' the behaviour that you do not need without widespread refactoring. If you don't have access to the parent hierarchy source code, this can force you to implement abstract methods which you typically implement by throwing unsupported exceptions/errors. If you do have access to the source code of the parent hierarchy, you may need to extract the required methods into a new level in the inheritance hierarchy and inherit from that appropriate level e.g., from the direct parent if you do want those methods, or from a higher-level ancestor if you do not need every method. As mentioned, this can be an expensive refactor and therefore deep inheritance is often considered a bit of an anti-pattern these days, especially for application developers. Having said that, inheritance definitely does have its place when developing libraries and frameworks, and especially for relationships that have a strong and natural "Is a" type of relationship e.g., 'typeA is a genuine / real sub-type of typeB.'
+- Deeply nested inheritance hierarchies where sub-classes extend super-classes can be brittle. This is because you are structurally tied to the classes in the parent hierarchy - if you don't need all of the behaviour provided through inheritance, it can be difficult to 'split-out' the behaviour that you do not need without widespread refactoring. If you don't have access to the parent hierarchy source code, this can force you to implement abstract methods which you don't need by typically throwing unsupported exceptions/errors. If you do have access to the source code of the parent hierarchy, you may need to extract the required methods into a new level in the inheritance hierarchy and inherit from that appropriate level e.g., from the direct parent if you do want those methods, or from a higher-level ancestor if you do not need every method. As mentioned, this can be an expensive refactor meaning deep inheritance is often considered a bit of an anti-pattern these days, especially for application developers. A number of modern langauges don't even support inhertiance. Having said that, inheritance definitely does have its place when developing libraries and frameworks, and especially for relationships that have a strong and natural "Is a" type of relationship e.g., 'typeA is a genuine / real sub-type of typeB.'
 
 - Rather than pay too much inheritance tax, you should consider using more flexible approaches such as object Composition, Interfaces, Traits & Mixins (I say "don't pay too much inheritance tax" intentionally because inheritance does still have its place as discussed above).
 
 [top](#Table-Of-Contents)
 
-- **Composition / Delegation**: A complex term that in practice simply means that one class contains or is passed an instance of another to use its capabilities. Importantly, note that composition alone does not establish a polymorphic type without the addition of an interface or trait.
+- **Composition / Delegation**: A complex term that in practice simply means that one class contains or is passed an instance of another to use its capabilities. Different languages do this in slightly different ways as described below.
 
-- **Interfaces / Traits**: A single class can optionally implement multiple interfaces or traits to 'graft' additional logic onto a class/record/struct to achieve ad-hoc polymorphism. This is a far more flexible approach for a type to be a subtype of something else compared to inheritance. Depending on the specifics of the language, the interface/trait may provide abstract function declarations, functions with default implementations, and optional member variables. Note that for default implementations, the interface/trait can only depend on elements defined within the interface/trait itself.
+> [!WARNING]
+Importantly, composition alone does not establish a polymorphic type without the addition of an interface or trait. 
 
-[top](#Table-Of-Contents)
+- **Interfaces / Traits**: A single class can optionally implement multiple interfaces or traits to 'graft' additional logic onto a class/record/struct to achieve ad-hoc polymorphism. This is a far more flexible approach for a type to be a subtype of something else compared to heirarchical inheritance. Depending on the specifics of the language, the interface/trait may provide abstract function declarations, functions with default implementations, and optional member variables. Note that for default implementations, the interface/trait can only depend on elements defined within the interface/trait itself.
 
 - Side Note: Object composition and ad-hoc polymorphism with interfaces/traits might be the only option available to you, especially if you don’t own the source-code of the object you want to extend. Therefore, the only way to extend such an object is to compose it within another object and hide its functionality behind interface(s).
 
-- Certain languages don’t even support object extension, relying instead on ad-hoc polymorphism (e.g., Rust/Go). Rust and Scala have an elegant way of declaring traits for any type, even types where you don't have access to the original source code of those types, as shown in the Rust example below:
+- Several modern languages don’t even support inhertiance (Rust, Zig, Go), relying instead on ad-hoc polymorphism.  Rust and Scala have an elegant way of declaring traits for any type, even types where you don't have access to the original source code of those types, as shown in the Rust example below:
 
 <img src="attachments/Pasted%20image%2020241027141335.png" style="width:400px;"/>
 
@@ -526,7 +565,7 @@ Each of these patterns are useful in different circumstances depending on whethe
 
 #### Extension Functions
 
-- Other languages have different ways to extend the functionality of an existing type. For example, C# and Kotlin support extension functions that graft logic onto types. Notice that in the example below, the `method` is defined on the trait named `GenericTrait` to establish a polymorphic type via an implementation with `TraitImpl`. If you could not access `TraitImpl` source code, you may need to either compose or extend the`TraitImpl` type with a new class e.g. `TraitImplComposed` before implementing the `GenericTrait` on that - much more fuss when compared to Rust/Scala/Go trait-style syntax that allows you to graft behaviour directly to existing types.
+- Other languages have different ways to extend the functionality of an existing type. For example, C# and Kotlin support extension functions that graft logic onto existing types. Notice that in the example below, the `method` is defined on the trait named `GenericTrait` to establish a polymorphic type via an implementation with `TraitImpl`. If you could not access the source code of `TraitImpl`, you may need to either compose or extend the`TraitImpl` type with a new type e.g. `TraitImplComposed` before implementing the `GenericTrait` on that - much more fuss when compared to Rust/Scala/Go trait-style syntax that allows you to graft behaviour directly to existing types.
 
 ![](attachments/Pasted%20image%2020241027144154.png)
 
@@ -655,17 +694,6 @@ From Uncle Bob’s ‘Clean Code’
 
 [top](#Table-Of-Contents)
 
-### Functional vs OOP - Choose Two
-
-The functional programming paradigm has seemed to have gained some popularity, but adopting a pure functional language might be a stretch (opinion only warning ⚠️).  OOP is ubiquitous and is here to stay. For example, OOP helps to address complexity through abstractions, and many algorithms are simply faster and more memory efficient if you (safely) mutate ‘in-place,’ sorting for example. 
-
-To quote Eric Evans, an expert in both paradigms and Domain Driven Design book fame: "At times, I found FP an awkward fit. The problem would have fit OOP better. I'm happy that it is easier than it used to be to move between those ways of thinking." 
-
-I completely agree with Eric - if the language permits and supports functional concepts, introducing functional approaches coupled with OOP  is highly recommended. Within the same code base, the general recommendation is to use a convention to identify the OPP and pure FN code-paths e.g. aim for a core of pure functions with a suitable naming convention (see below on 'Calculations to limit side effects' , and push out side effects to the out boundaries of your code (see the Dependency Rule / Bullseye) so they become 'intended effects’ and not nasty interleaved ‘side effects’.
-
-Well worth a watch: [https://www.youtube.com/watch?v=HSk5fdKbd3o&t=543s](https://www.youtube.com/watch?v=HSk5fdKbd3o&t=543s)
-
-[top](#Table-Of-Contents)
 
 ### Do not pollute Functional Code with Mutable State
 

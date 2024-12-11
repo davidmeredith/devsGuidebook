@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "62c779bfe457ab53",
+        "id": "9ffbe861eef6f1ee",
         "type": "tabs",
         "children": [
           {
-            "id": "ce11ca9be066e16d",
+            "id": "4a3d3549751548fb",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "devGuidebook.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "devGuidebook"
+              "title": "New tab"
             }
           }
         ]
@@ -159,10 +155,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "ce11ca9be066e16d",
+  "active": "4a3d3549751548fb",
   "lastOpenFiles": [
-    "devGuidebook.md~",
     "devGuidebook.md",
+    "devGuidebook.md~",
     "canvas/images.canvas",
     "attachments/Pasted image 20241106152658.png",
     "attachments/Pasted image 20241104173624.png",
