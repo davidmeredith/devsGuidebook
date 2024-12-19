@@ -55,38 +55,43 @@ dv.view('toc')
     10. [Classes should have only one reason to change and do one thing and do it well](#Classes-should-have-only-one-reason-to-change-and-do-one-thing-and-do-it-well)
     11. [OOP Redefined](#OOP-Redefined)
     12. [SOLID](#SOLID)
-    13. [Polymorphism Redefined](#Polymorphism-Redefined)
+    13. [Pervasive Polymorphism](#Pervasive-Polymorphism)
         1. [Inheritance should be explicitly designed-for](#Inheritance-should-be-explicitly-designed-for)
-        2. [Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Augment your Type-System](#Avoid-Paying-too-much-Inheritance-Tax---Use-Parametric-Polymorphism-to-Augment-your-Type-System)
-        3. [Parametric Polymorphism Attaches Behaviour To Custom and Existing Types](#Parametric-Polymorphism-Attaches-Behaviour-To-Custom-and-Existing-Types)
+        2. [Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Augment your Type-System With Shared Marker Types](#Avoid-Paying-too-much-Inheritance-Tax---Use-Parametric-Polymorphism-to-Augment-your-Type-System-With-Shared-Marker-Types)
+        3. [Parametric Polymorphism for Existing Types](#Parametric-Polymorphism-for-Existing-Types)
         4. [Extension Functions for Augmenting Existing Types](#Extension-Functions-for-Augmenting-Existing-Types)
         5. [Structural Polymorphism and Duck Typing](#Structural-Polymorphism-and-Duck-Typing)
-    14. [Sealing](#Sealing)
-    15. [Composition / Delegation](#Composition-/-Delegation)
-    16. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
-    17. [Functional vs OOP - Choose Two](#Functional-vs-OOP---Choose-Two)
-    18. [Dependency Inversion Principle](#Dependency-Inversion-Principle)
-    19. [Dependency Injection and Inversion of Control for Decreasing Code Coupling - IoC](#Dependency-Injection-and-Inversion-of-Control-for-Decreasing-Code-Coupling---IoC)
-    20. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
-    21. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
-    22. [Know Some Design Patterns](#Know-Some-Design-Patterns)
+        6. [Sealing](#Sealing)
+        7. [Composition / Delegation](#Composition-/-Delegation)
+    14. [Parametric Polymorphism Language Comparison](#Parametric-Polymorphism-Language-Comparison)  
+        1. [Rust Example](#Rust-Example)  
+        1. [Kotlin Example](#Kotlin-Example)  
+        1. [Java Example](#Java-Example)  
+        1. [Go Example](#Go-Example)
+    15. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
+    16. [FP vs OOP - Choose Two](#FP-vs-OOP---Choose-Two)
+    17. [Dependency Inversion Principle](#Dependency-Inversion-Principle)
+    18. [Dependency Injection and Inversion of Control for Decreasing Code Coupling - IoC](#Dependency-Injection-and-Inversion-of-Control-for-Decreasing-Code-Coupling---IoC)
+    19. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
+    20. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
+    21. [Know Some Design Patterns](#Know-Some-Design-Patterns)
         1. [The Strategy Pattern Example](#The-Strategy-Pattern-Example)
         2. [The Visitor Pattern](#The-Visitor-Pattern)
         3. [Builder Pattern for More Complex Object Creation Scenarios](#Builder-Pattern-for-More-Complex-Object-Creation-Scenarios)
-    23. [Information Hiding](#Information-Hiding)
-    24. [Keep it Simple Stupid KISS](#Keep-it-Simple-Stupid-KISS)
-    25. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
-    26. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
-    27. [Comment in line As You Go](#Comment-in-line-As-You-Go)
-    28. [The Boy Scout Rule](#The-Boy-Scout-Rule)
-    29. [Law of Demiter and Train Wrecks](#Law-of-Demiter-and-Train-Wrecks)
-    30. [Do not pollute Functional Code with Mutable State](#Do-not-pollute-Functional-Code-with-Mutable-State)
-    31. [Make Private your Default Class Level Visibility](#Make-Private-your-Default-Class-Level-Visibility)
-    32. [Make Immutability your Default](#Make-Immutability-your-Default)
-    33. [Interior Mutability](#Interior-Mutability)
-    34. [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
-    35. [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
-    36. [Error Handling](#Error-Handling)
+    22. [Information Hiding](#Information-Hiding)
+    23. [Keep it Simple Stupid KISS](#Keep-it-Simple-Stupid-KISS)
+    24. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
+    25. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
+    26. [Comment in line As You Go](#Comment-in-line-As-You-Go)
+    27. [The Boy Scout Rule](#The-Boy-Scout-Rule)
+    28. [Law of Demiter and Train Wrecks](#Law-of-Demiter-and-Train-Wrecks)
+    29. [Do not pollute Functional Code with Mutable State](#Do-not-pollute-Functional-Code-with-Mutable-State)
+    30. [Make Private your Default Class Level Visibility](#Make-Private-your-Default-Class-Level-Visibility)
+    31. [Make Immutability your Default](#Make-Immutability-your-Default)
+    32. [Interior Mutability](#Interior-Mutability)
+    33. [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
+    34. [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
+    35. [Error Handling](#Error-Handling)
         1. [Error Handling - 4 Types of Problems](#Error-Handling---4-Types-of-Problems)
         2. [Error Handling - Exceptions vs Errors-as-Values](#Error-Handling---Exceptions-vs-Errors-as-Values)
         3. [Error Handling - Model Exceptions as Values with Algebraic Data Types](#Error-Handling---Model-Exceptions-as-Values-with-Algebraic-Data-Types)
@@ -96,10 +101,10 @@ dv.view('toc')
         7. [Error Handling - Bubble exceptions upwards or trap at source](#Error-Handling---Bubble-exceptions-upwards-or-trap-at-source)
         8. [Error Handling – Model the absence of value explicitly](#Error-Handling-%E2%80%93-Model-the-absence-of-value-explicitly)
         9. [Error Handling in Functional Programming – error monads such as Either and Validated](#Error-Handling-in-Functional-Programming-%E2%80%93-error-monads-such-as-Either-and-Validated)
-    37. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
-    38. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
+    36. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
+    37. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
         1. [Know the difference between IO bound tasks and CPU bound tasks and their common solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-common-solution-patterns)
-    39. [Security Development Practices](#Security-Development-Practices)
+    38. [Security Development Practices](#Security-Development-Practices)
 4. [Agile Process Guide aka Feedback Driven Development](#Agile-Process-Guide-aka-Feedback-Driven-Development)
     1. [Design Thinking Workshops and Scoping Document](#Design-Thinking-Workshops-and-Scoping-Document)
     2. [Epics and Work Package Span Multiple Sprints](#Epics-and-Work-Package-Span-Multiple-Sprints)
@@ -429,18 +434,18 @@ Examples of patterns that support cohesion include the State Pattern.
 
 OPP is about "Program organsiation" (Bjarne Stroustroup). 
 
-The OOP data model of class inheritance hierarchies and interface implementations has, undoubtedly, proven to be highly effective in modeling real-word data, largely due to its frequent natural fit for representing real-world objects, and also due to its expressiveness. OOP still dominates compared to other programming paradigms such as functional and procedural. OPP helps you to organise programs around data and the actions that are intended to operate on that data. From my perspective, what I like about OOP is that it is really clear how to organise my program around classes - locating the data alongside the functions that operate on that data is very common and often feels natural. Without classes, you can lose some of this clarity, especially in large programs. However, OPP is not the only option. Other paradigms such as Functional, Procedural, and Data Orientated Programming exist. I'm not a pureist - I believe you can and should apply all these paradigms when it is most convenient to do so. Most general purpose programming languages allow you to mix paradigms to some extent. 
+The OOP data model of class inheritance hierarchies and interface implementations has, undoubtedly, proven to be highly effective in modelling real-word data, largely due to its frequent natural fit for representing real-world objects, and also due to its expressiveness. OOP still dominates compared to other programming paradigms such as functional and procedural. OPP helps you to organise programs around data and the actions that are intended to operate on that data. From my perspective, what I like about OOP is that it is really clear how to organise my program around classes - locating the data alongside the functions that operate on that data is very common and often feels natural. Without classes, you can lose some of this clarity, especially in large programs. However, OPP is not the only option. Other paradigms such as Functional, Procedural, and Data Orientated Programming exist. I'm not a purist - I believe you can and should apply all these paradigms when it is most convenient to do so. Most general purpose programming languages allow you to mix paradigms to some extent. 
 
-OOP bashing appears to be popular these days, but this is mostly because of the problems associated with heirarchical inhertiance (see section on Don't Pay Too Much Inheritance Tax), and I agree that heirarchical inhertiance should be applied judiciously. However, I believe that most of the other OOP principles are tried, tested, and proven. You can’t argue against three of the four 'pillars' of OPP: Abstraction, Encapsulation, and Polymorphism. These are good design principles largely available across all modern programming languages.  Arguably, what pure OOP can over-emphasise is deep & brittle inheritance hierarchies, but insteads you can favour composition instead in the right scenarios.
+OOP bashing appears to be popular these days, but this is mostly because of the problems associated with hierarchical inheritance (see section on Don't Pay Too Much Inheritance Tax), and I agree that hierarchical inheritance should be applied judiciously. However, I believe that most of the other OOP principles are tried, tested, and proven. You can’t argue against three of the four 'pillars' of OPP: Abstraction, Encapsulation, and Polymorphism. These are good design principles largely available across all modern programming languages.  Arguably, what pure OOP can over-emphasise is deep & brittle inheritance hierarchies, but instead you can favour composition instead in the right scenarios.
 
 | Pillar | Implementations|
 | -------------- | --------------- |
 | Abstraction | Interfaces, Traits, Service Facade, Closures |
 | Encapsulation | Classes, Records/struts/nested-structs, Closures, Modules, Public/Private/Protected visiblity|
 | Polymorphism | Inheritance, Type-classes, Generics & Parametric Polymorphism, Interfaces/Traits, Dynamic-Dispatch |
-| Inhertiance| Replace with 'Code Sharing' with impls inc. Compostion/Delegation, Traits, Interfaces  |
+| Inhertiance| Arguably, this should be replaced with 'Code Sharing' with implementations including Compostion/Delegation, Traits, Default Interfaces  |
 
-I belive Inhertiance should be replaced with 'Code Sharing': the other pillars are generic to accommodate multiple implementations and inhertiance is not the only way of sharing code across types. Other ways to share code incldue Composition (avaialble any language), traits (Scala, Rust), interfaces with default implementations and attributes (Java, Go, Py), and type-classes (Scala), to name a few. I agree that inheritance can be overdone, but it does have it place (see section on 'Don't pay too much inheritance tax').  
+I believe inheritance should be replaced with 'Code Sharing': the other pillars are generic to accommodate multiple implementations and inheritance is not the only way of sharing code across types. Other ways to share code include Composition (available any language), traits (Scala, Rust), interfaces with default implementations and attributes (Java, Go, Py), and type-classes (Scala), to name a few. I agree that inheritance can be overdone, but it does have it place (see section on 'Don't pay too much inheritance tax').  
 
 ### SOLID
 
@@ -454,241 +459,83 @@ For OPP, understand the principles of SOLID:
 
 [top](#Table-Of-Contents)
 
-### Polymorphism Redefined
+### Pervasive Polymorphism
 
-What does polymorphism mean to you? For those with background in OPP, you most likely think of inhertiance using an abstract base-classes with sub-type specialisations. However, I agree with [Bruce Eckle](https://www.youtube.com/watch?v=ojffu0F_aQQ) in that it is more than that, polymorphism crops up everwhere: 
+What does polymorphism mean to you? For those with background in OPP, you most likely think of inheritance using an abstract base-classes with sub-type specialisations. However, I agree with [Bruce Eckle](https://www.youtube.com/watch?v=ojffu0F_aQQ) in that it should be regarded as a much broader term, and polymorphism can crop up all over: 
 
 > [!TIP]
-Don't limit your understanding of Polymorphism to inheritance alone, it broadly means that 'a single type can represent multiple types,' typically through dynamic-dispatch.
+Don't limit your understanding of Polymorphism to inheritance alone, it broadly means that 'a single type can represent multiple types.'
 
 If we acknowledge this interpretation, then polymorphism can include: 
 | Polymorphism type   | Description|
 |--------------- | --------------- |
-| Sub-Type Polymorphism   | Classic inheritance with base class & sub-type specialisation  |
-| Union/Sum Types  | A type must be one from a selection of types (choice)|
-| Parametric Polymorphism | Code **attached to an existing type** to represent another type, typically via genercis|
-| Structural Polymorphism/Protocols/DuckTypes | A type is **compatible** if has methods/attributes defined by a protocol|
-
+| Inheritance | Classic inheritance hierarchies with base class & sub-type specialisations  |
+| Union/Sum Types  | A type must be one from a selection of types to implement choice|
+| Parametric (often implies Composition) | A 'marker type' is ***attached to a type*** to represent another type, often by composing objects |
+| Structural Typing / Protocols | A type is ***compatible*** if has methods that correspond to an interface protocol, with compile-time checks (eg Go)  |
+| Duck Typing | Same as Structrual Typing with dynamic-dispatch (eg Python)|
  
 #### Inheritance should be explicitly designed-for
 
-In many languages, you can extend a class by default, unless you explicitly disallow it e.g., using the `final` keyword in Java or through sealing. In more modern languages, classes are closed to extension by default.  For example, in Kotlin you have to explicitly enable class extension using the `open` keyword to make it explicit that this class is designed to be extended. This makes SOLID’s 'Open for Extension, Closed for Modification' best-practice explicit in the language.  
+By default, in some languages you can extend a class by default, unless you explicitly disallow it e.g., using the `final` keyword in Java or through Sealing. In modern languages, classes are typically closed to extension by default.  For example, in Kotlin you have to explicitly enable class extension using the `open` keyword to make it explicit that this class is designed to be extended. This makes SOLID’s 'Open for Extension, Closed for Modification' best-practice explicit in the language.  
 
 [top](#Table-Of-Contents)
 
-#### Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Augment your Type-System
+#### Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Augment your Type-System With Shared Marker Types
 
-- Deeply nested inheritance hierarchies where sub-classes extend super-classes can be brittle. This is because you are structurally tied to the classes in the parent hierarchy - if you don't need all of the behaviour provided through inheritance, it can be difficult to 'split-out' the behaviour that you do not need without widespread refactoring. If you don't have access to the src of the parent hierarchy, this can force you to implement abstract methods for methods you don't need by typically throwing unsupported exceptions/errors. If you do have access to the src of the parent hierarchy, you may need to extract the required methods into a new level in the inheritance hierarchy and inherit from that appropriate level e.g., from the direct parent if you do want those methods, or from a higher-level ancestor if you do not need every method. This can be an expensive refactor meaning deep inheritance is often considered an anti-pattern these days, especially for application developers. A number of modern languages don't even support inheritance. Having said that, inheritance definitely does have its place when developing libraries and frameworks, and especially for relationships that have a strong and natural "Is a" type of relationship e.g., 'typeA is a genuine / real sub-type of typeB.'
+- Deeply nested inheritance hierarchies where sub-classes extend super-classes can become very brittle. This is because you are structurally tied to the classes in the parent hierarchy: 
+  - If you don't need all of the characteristics provided through inheritance, it can be difficult to 'split-out' what is not wanted without widespread refactoring. 
+  - If you don't have access to the src of the parent hierarchy, this can force you to implement abstract methods for methods you don't need, typically by throwing unsupported exceptions/errors. 
+
+If you do have access to the src of the parent hierarchy, you may need to extract the required methods into a new level in the inheritance hierarchy and inherit from that appropriate level to facilitate better segregation of concerns e.g., from the direct parent if you do want those methods, or from a higher-level ancestor if you do not need every method. This can be an expensive refactor meaning deep inheritance is often considered an anti-pattern these days, especially for application developers. A number of modern languages don't even support inheritance. Having said that, inheritance arguably does have its place when developing libraries and frameworks, and especially for relationships that have a strong and natural "Is a" type of relationship e.g., 'typeA is a genuine / real sub-type of typeB.'
 
 > [!TIP]
-Rather than pay too much inheritance tax, consider using 'Parametric Polymorphism' where a type can implement some shared code which allows that type to be represented as another type. This shared code augments your type-system with new polymorphic types for use in function parameters, return values, and attribute declarations, often in conjunction with generic 'holder types' such as Generics. The canonical name for this type of polymorphism is "parametric polymorphism" or "generic programming." 
+Rather than pay too much inheritance tax, consider using 'Parametric Polymorphism' where a 'marker type' defines a contract which allows a type to be represented as another type. This shared marker type augments your type-system for use in function parameters, return values, and attribute declarations, often in conjunction with generics ('holder types'). The canonical name for this type of polymorphism is "parametric polymorphism" or "generic programming." It is often used in conjunction with Composition under the hood where an object uses the functionality of another object to implement its behaviour.  
 
-The mechanism for sharing code subtly varies across languages and includes Interfaces (eg Java), Traits (eg Rust), Mixins (eg Python), and Type-Classes (eg Scala). I like the term 'Type-Class' because it is expressive of its intent: by attaching behaviour to an existing class, you can use the existing class as a new type.
+The mechanism for sharing code varies across languages and includes Interfaces (eg Java), Traits (eg Rust), Mixins (eg Python), and Type-Classes (eg Scala). Often, composition is used under the hood to share behaviour.
 
 > [!TIP]
 I say "don't pay too much inheritance tax" intentionally because at can be argued that inheritance does still have its place, especially in building frameworks and for strong/natural "Is a" relationships e.g. "type A is a type of B."
 
 - Several modern languages don’t even support inheritance (Rust, Zig, Go), relying instead on parametric polymorphism.  
 
-#### Parametric Polymorphism Attaches Behaviour To Custom and Existing Types
+| Parametric Polymorphism| Inheritance |
+|--------------- | --------------- |
+| Interface segregation is finer grained - you choose what to implement    | You may need to inherit everything from all ancestors   |
+| More loosley coupled   | Tightly coupled   |
+| More flexible   | Can be more restrictive|
 
-Some languages allow you to 'attach/graft' shared behaviour onto existing types where you don't have access to the src code of those types. For example, new types can be introduced through library imports. Rust, Scala, and Go all lexically split their type definitions from the attached behaviour definition using an additional 'referencing-layer' that attaches the behaviour to the type. 
+#### Parametric Polymorphism for Existing Types
+
+The mechanism for attaching marker types varies across languages. Some languages allow you to attach the marker type onto existing types without having to modify the original type. This is very convenient and powerful for easily creating 'blanket implementations,' and when you don't have access to the src code of those types e.g., types defined in external packages. Rust and Scala lexically split their type definitions from the definition of the attached marker type using an additional 'referencing-layer.' Conversely, Kotlin and C# provide extension functions to extend the behaviour of existing (or custom) types, which is a subtly different approach. 
 
 > [!TIP]
-Attaching behaviour to a type through an extra 'referencing layer' is elegant and more powerful than implementing shared behaviour directly on a type, such as implementing an interface directly on a class. This is because you don't need to modify the existing type. If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
+Lexically splitting a type from a marker type via an extra 'referencing layer' is elegant and powerful compared to implementing the marker directly on the original type definition itself, such as implementing an interface directly on a class declaration. This is because you don't need to modify the existing type which facilitates simple blanket implementations, and when you do not have access to the src code of the original type. If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
 
-A Rust example is shown below:
-
-<img src="attachments/Pasted%20image%2020241027141335.png" style="width:400px;"/>
-
-While Rust-like traits are elegant and powerful, you can achieve a similar effect using a combination of interfaces with default method implementations and composition, a Java example is shown below. As you can see, there is a lot more fuss, and this is still not as powerful as Rust-like traits which allow automatic 'blanket' implementations, trait-inheritance, and IDE dot-completion/suggestions. 
-
-```java
-// Trait (interface) definition - similar to a Rust trait
-interface Printable {
-    // Default method implementation - similar to Rust trait methods
-    default String prettyPrint() {
-        return "[" + toString() + "]";
-    }
-
-    // Abstract method that implementing classes must define
-    String format();
-}
-
-// Extension method for adding functionality to existing types
-interface StringExtensions {
-    // Default method that can be "mixed in" to any String
-    default String truncate(int maxLength) {
-        if (this.toString().length() <= maxLength) {
-            return this.toString();
-        }
-        return this.toString().substring(0, maxLength) + "...";
-    }
-}
-
-// Example class demonstrating trait-like behavior
-class User implements Printable, StringExtensions {
-    private String name;
-    private int age;
-
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    // Implementing the required method from Printable
-    @Override
-    public String format() {
-        return name + " (Age: " + age + ")";
-    }
-
-    // Optional override of prettyPrint if needed
-    @Override
-    public String prettyPrint() {
-        return "User: " + format();
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-}
-
-// Demonstration class
-public class TraitDemo {
-    public static void main(String[] args) {
-        User user = new User("Alice", 30);
-
-        // Using default method from Printable trait
-        System.out.println(user.prettyPrint());
-
-        // Using default method from StringExtensions trait
-        String longString = "This is a very long string that needs truncation";
-        System.out.println(((StringExtensions) longString).truncate(10));
-    }
-}
-```
+Rust
+![](attachments/Pasted%20image%2020241216191248.png)
 
 [top](#Table-Of-Contents)
 
-Compared to Rust, Kotlin provides a similar approach to traits through combination of interfaces with default methods and extension functions, providing a very powerful type system that can be augmented. 
-
-```Kotlin
-// Rust-like trait implemented with a Kotlin interface with default methods & extension functions
-interface Printable {
-    // Default method implementation similar to Rust trait methods
-    fun prettyPrint(): String {
-        return "[$this]"
-    }
-
-    // Abstract method that implementing classes must define
-    fun format(): String
-}
-
-// Extension function to add functionality to existing types
-// This is similar to Rust's trait methods that can extend existing types
-fun String.truncate(maxLength: Int): String {
-    return if (length <= maxLength) this 
-    else substring(0, maxLength) + "..."
-}
-
-// Extension function with more complex logic (see section on Exension Functions)
-fun String.wordCount(): Int {
-    return trim().split("\\s+".toRegex()).size
-}
-
-// Sealed class to demonstrate trait-like behavior (see section on Sealing)
-sealed class ValidationResult {
-    data class Success(val message: String) : ValidationResult()
-    data class Failure(val error: String) : ValidationResult()
-}
-
-// Trait-like interface for validation
-interface Validatable {
-    fun validate(): ValidationResult {
-        // Default implementation
-        return ValidationResult.Success("Default validation passed")
-    }
-}
-
-// Data class implementing multiple "traits"
-data class User( val name: String, val age: Int) : Printable, Validatable {
-    // Implementing required method from Printable
-    override fun format(): String {
-        return "$name (Age: $age)"
-    }
-
-    // Optional override of prettyPrint
-    override fun prettyPrint(): String {
-        return "User: ${format()}"
-    }
-
-    // Custom validation implementation
-    override fun validate(): ValidationResult {
-        return when {
-            name.isBlank() -> ValidationResult.Failure("Name cannot be blank")
-            age < 0 -> ValidationResult.Failure("Age cannot be negative")
-            else -> ValidationResult.Success("User is valid")
-        }
-    }
-}
-
-// Demonstration of type augmentation and trait-like behavior
-fun main() {
-    // Demonstrate extension functions
-    val longString = "This is a very long string that needs truncation"
-    println(longString.truncate(10))
-    println(longString.wordCount())
-
-    // Demonstrate trait-like behavior with User
-    val user = User("Alice", 30)
-    
-    // Using methods from different "traits"
-    println(user.prettyPrint())
-    println(user.format())
-    
-    // Validation demonstration
-    val validationResult = user.validate()
-    when (validationResult) {
-        is ValidationResult.Success -> println("Validation passed: ${validationResult.message}")
-        is ValidationResult.Failure -> println("Validation failed: ${validationResult.error}")
-    }
-
-    // Trait-like composition and extension
-    val users = listOf(
-        User("Alice", 30),
-        User("Bob", 25),
-        User("Charlie", 35)
-    )
-
-    // Extension function that works with collections
-    fun List<User>.filterValidUsers(): List<User> {
-        return filter { it.validate() is ValidationResult.Success }
-    }
-
-    println("Valid users: ${users.filterValidUsers()}")
-}
-```
-
 #### Extension Functions for Augmenting Existing Types
 
-Some languages allow you to extend the functionality of existing types using extension functions e.g., C# and Kotlin. Extension functions can be grafted onto existing types even if you don't have access to the src code for those types. Notice that in the example below, the `method` is grafted onto the `GenericTrait` interface, outside of the class declaration, so that all other implementations of `GenericTrait` can call `method`. 
+Some languages allow you to extend the functionality of existing types using extension functions e.g., C# and Kotlin. Extension functions can be grafted onto existing types even if you don't have access to the src code for those types. Notice that in the example below, the `method` is grafted onto the `GenericTrait` interface, outside of the class declaration, so that all other implementations of `GenericTrait` can call `method` (a 'blanket implementation). 
 
+Kotlin
 ![](attachments/Pasted%20image%2020241027144154.png)
 
 [top](#Table-Of-Contents)
 
 #### Structural Polymorphism and Duck Typing
 
-Some languages have have ‘Duck Typing,’ this is like using an interface at the call site but does not require you to explicitly define a contract on a type using scaffolding code such as `implements interface` or `impl trait for`. Instead, if a function defines a particular type and the type that is passed into the function has the corresponding functions available, those functions will be invoked: “if it walks and swims like a duck, it’s probably a duck,” otherwise a runtime error is generated.  This is also known as ‘Structural Polymorphism.’ It is generally more common in dynamic languages, but C++ has it too through `Template` classes with the advantage of compile-time checks.  
+Some languages have have ‘Duck Typing,’ this is like using an interface at a call site (eg the type of a function parameter or return value), but *does not require you to explicitly define a contract on a type using scaffold code* such as `class A implements interfaceB` (Java) or `impl traitB for typeA` (Rust). Instead, a particular type implicitly implements an interface if has the corresponding methods available: “if it walks and swims like a duck, it’s probably a duck,” otherwise an error is generated. If the type checking occurs at compile time, it is often called ‘Structural Typing/Polymorphism’ eg `Template` classes in C++ and in Go. If type checking occurs at runtime and produces runtime errors, it is called "Duck typing" which is more common in dynamic languages.  
 
 >[!TIP]
-The ease and speed of development that duck typing brings is great for scripting and smaller code bases, but as the size and complexity of the code increases, I would advise using scaffolding code for stronger compile time type checking (for Pythonistas, you can always introduce static typing such as Python’s optional type hints). 
+The ease and speed of development that duck typing brings is great for scripting and smaller code bases, but as the size and complexity of the code increases, I would advise using scaffolding code for stronger compile time type checking (for Pythonistas, you can always introduce static typing such as Python’s optional type hints, and for Go, see the code in the 'Go Example' above for a tip to check a type implements an interface). 
 
 [top](#Table-Of-Contents)
 
-
-### Sealing 
+#### Sealing 
 
 Some languages allow the developer to seal interfaces/classes/types in order to restrict the range of allowed subtypes. 
 
@@ -699,26 +546,716 @@ As a simple example, consider a sealed result class that has a fixed number of s
 
 [top](#Table-Of-Contents)
 
-### Composition / Delegation
+#### Composition / Delegation
 
 A complex term that in practice simply means that one class contains or is passed an instance of another to use its capabilities. Different languages do this in slightly different ways. 
 
 > [!WARNING]
 Unless your language supports duck-typing, composition alone may not establish a polymorphic type without the addition of additional scaffolding code such as an interface or trait. 
 
-- Object composition and parametric polymorphism might be the only option available to you, especially if you don’t own the source-code of the object you want to augment. Therefore, the only way to extend such an object is to compose it within another object and hide its functionality behind scaffold code such as interfaces.
+[top](#Table-Of-Contents)
 
+
+### Parametric Polymorphism Language Comparison
+
+I feel demonstrating parametric polymorphism across a selection of languages is a useful endeavour because it also demonstrates several related concepts such as interfaces/traits, composition, extension methods, union types and sealing.  
+
+##### Rust Example
+
+Arguably, Rust has one of the most powerful type systems available (I think Kotlin is comparable). We will start with Rust and follow with examples from other programming languages.
+
+The detailed example below demonstrates:
+- Default method implementations on traits.
+- Optional method overriding.
+- Trait composition and implementing multiple traits - see `Product`.
+- Extension Trait to augment existing types - see `StringExt`.
+- Generic functions and trait bounds - see `filter_items`.
+
+```Rust
+// Rust Parametric Polymorphism
+use std::fmt;
+
+// Printable trait with default and required methods
+trait Printable {
+    // Default method implementation
+    fn pretty_print(&self) -> String {
+        format!("[Default pretty_print: {:?}]", self.format())
+    }
+    // Required method to implement
+    fn format(&self) -> String;
+}
+
+// Serializable trait with default methods
+trait Serializable {
+    fn serialize(&self) -> String;
+
+    // Default validation method
+    fn validate(&self) -> Result<(), ValidationError> {
+        Ok(())
+    }
+}
+
+// Custom error type for validation
+#[derive(Debug)]
+struct ValidationError {
+    message: String,
+}
+
+impl fmt::Display for ValidationError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.message)
+    }
+}
+
+impl std::error::Error for ValidationError {}
+
+// Product struct implementing multiple traits
+#[derive(Debug, Clone)]
+struct Product {
+    name: String,
+    price: f64,
+    quantity: i32,
+}
+
+impl Printable for Product {
+    // Implementing required format method
+    fn format(&self) -> String {
+        format!(
+            "{} (Price: ${:.2}, Quantity: {})",
+            self.name, self.price, self.quantity
+        )
+    }
+
+    // Optional override of pretty_print
+    fn pretty_print(&self) -> String {
+        format!("[Product: {}]", self.format())
+    }
+}
+
+impl Serializable for Product {
+    fn serialize(&self) -> String {
+        format!(
+            "Product{{name={},price={:.2},quantity={}}}",
+            self.name, self.price, self.quantity
+        )
+    }
+
+    // Custom validation implementation
+    fn validate(&self) -> Result<(), ValidationError> {
+        if self.price < 0.0 {
+            return Err(ValidationError {
+                message: "Price cannot be negative".to_string(),
+            });
+        }
+        if self.quantity < 0 {
+            return Err(ValidationError {
+                message: "Quantity cannot be negative".to_string(),
+            });
+        }
+        Ok(())
+    }
+}
+
+// Display trait for pretty printing
+impl fmt::Display for Product {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.format())
+    }
+}
+
+// Inventory management trait
+trait InventoryManager {
+    fn is_low_stock(&self, threshold: i32) -> bool;
+    fn restock(&mut self, amount: i32);
+}
+
+impl InventoryManager for Product {
+    fn is_low_stock(&self, threshold: i32) -> bool {
+        self.quantity < threshold
+    }
+
+    fn restock(&mut self, amount: i32) {
+        self.quantity += amount;
+        println!("Restocked {} by {} units", self.name, amount);
+    }
+}
+
+// Extension trait for string manipulation
+trait StringExt {
+    fn truncate(&self, max_length: usize) -> String;
+    fn word_count(&self) -> usize;
+}
+
+impl StringExt for str {
+    fn truncate(&self, max_length: usize) -> String {
+        if self.len() <= max_length {
+            self.to_string()
+        } else {
+            format!("{}...", &self[..max_length])
+        }
+    }
+
+    fn word_count(&self) -> usize {
+        self.split_whitespace().count()
+    }
+}
+
+// Generic filter function similar to Go's FilterItems
+fn filter_items<T, F>(items: &[T], predicate: F) -> Vec<T>
+where
+    // Trait bounds used to constrain the generics F and T
+    F: Fn(&T) -> bool,
+    T: Clone,
+{
+    items
+        .iter()
+        .filter(|&item| predicate(item))
+        .cloned()
+        .collect()
+}
+
+fn main() {
+    // Create products
+    let laptop = Product {
+        name: "MacBook Pro".to_string(),
+        price: 1999.99,
+        quantity: 5,
+    };
+
+    let keyboard = Product {
+        name: "Mechanical Keyboard".to_string(),
+        price: 129.99,
+        quantity: 2,
+    };
+
+    // Demonstrate trait methods
+    println!("Pretty Print: {}", laptop.pretty_print());
+    println!("Serialized: {}", laptop.serialize());
+
+    // Validation demonstration
+    match laptop.validate() {
+        Ok(_) => println!("Validation passed"),
+        Err(e) => println!("Validation Error: {}", e),
+    }
+
+    // Demonstrate extension trait
+    let long_string = "This is a very long string that needs truncation";
+    println!("Truncated: {}", long_string.truncate(10));
+    println!("Word count: {}", long_string.word_count());
+
+    // Demonstrate polymorhpic filtering
+    let products = vec![laptop.clone(), keyboard.clone()];
+    let low_stock_products = filter_items(&products, |p| p.is_low_stock(3));
+    println!("Low Stock Products:");
+    for mut p in low_stock_products {
+        println!("{} - Quantity: {}", p.name, p.quantity);
+        p.restock(10);
+    }
+}
+
+```
+[top](#Table-Of-Contents)
+
+##### Kotlin Example
+
+Kotlin provides a similar approach to Rust's polymorphic traits through a combination of:
+- interfaces with default methods
+- optional overrides
+- extension functions for extending existing and custom types directly, whether on the type or an interface (this is a slightly different approach to Rust which requires a trait definition)
+- Sum/Union type implemented with sealing to model choice (also available in Rust)
+
+This combination is very powerful, facilitating type augmentation and dot completion for extension method findability.
+
+```Kotlin
+package org.example
+
+import org.example.ValidationResult.Success
+import org.example.ValidationResult.Failure
+
+// Kotlin Parametric Polymorphism
+
+// Rust-like trait implemented with a Kotlin interface using default & extension methods
+interface Printable {
+    // Default method implementation similar to Rust trait methods
+    fun prettyPrint(): String {
+        return "[$this]"
+    }
+    // Abstract method that implementing classes must define
+    fun format(): String
+}
+
+interface Serializable {
+    fun serialize(): String
+    // Default Validation method
+    fun validate(): ValidationResult {
+       return Success("Validation passed")
+    }
+}
+
+// Extension function to add functionality to existing types
+// This is similar to Rust's trait methods that can augment existing types
+fun String.truncate(maxLength: Int): String {
+    return if (length <= maxLength) this
+    else substring(0, maxLength) + "..."
+}
+
+// Extension function with more complex logic (see section on Extension Functions)
+fun String.wordCount(): Int {
+    return trim().split("\\s+".toRegex()).size
+}
+
+// Sealed class to demonstrate exhaustive trait-like behavior (see section on Sealing)
+sealed class ValidationResult {
+    data class Success(val message: String) : ValidationResult()
+    data class Failure(val error: String) : ValidationResult()
+}
+
+interface InventoryManager {
+    fun isLowStock(threshold: Int): Boolean
+    fun restock(amount: Int)
+}
+
+data class Product(val name: String, val price: Float, var quantity: Int) :
+    Printable, Serializable, InventoryManager {
+    override fun format(): String {
+        return "$name (Price: $price Quantity: $quantity)"
+    }
+    override fun serialize(): String {
+        return "Product{name=$name,price=$price,quantity=$quantity}"
+    }
+    // Custom validation implementation
+    override fun validate(): ValidationResult {
+        return when {
+            name.isBlank() -> Failure("Name cannot be blank")
+            price < 0 -> Failure("Price cannot be negative")
+            else -> Success("Product is valid")
+        }
+    }
+
+    override fun isLowStock(threshold: Int): Boolean {
+       return this.quantity < threshold
+    }
+
+    override fun restock(amount: Int) {
+        // TODO make thread safe
+        this.quantity += amount
+        println("Restocked $name by $amount units")
+    }
+}
+
+// Demonstrate Extension method on an existing List interface - similar to a Rust extension trait
+fun List<Product>.filterValidProducts(): List<Product> {
+    return filter { it.isLowStock(3) }
+}
+
+// Demonstration of type augmentation and trait-like behavior
+fun main() {
+    // Create products
+    val laptop = Product("MacBook Pro", 1999.99f, 5)
+    val keyboard = Product("Mechanical Keyboard", 129.99f, 2)
+
+    // Demonstrate extension functions
+    val longString = "This is a very long string that needs truncation"
+    println(longString.truncate(10))
+    println(longString.wordCount())
+
+    // Validation demonstration
+    val validationResult = keyboard.validate()
+    when (validationResult) {
+        is Success -> println("Validation passed: ${validationResult.message}")
+        is Failure -> println("Validation failed: ${validationResult.error}")
+    }
+
+    // Demonstrate trait methods
+    println("Pretty Print: ${keyboard.prettyPrint()}")
+    println("Serialised: ${keyboard.serialize()}")
+
+    // Demonstrate polymorphic filtering
+    val products = listOf(keyboard, laptop)
+    println("Low stock items: ${products.filterValidProducts()}")
+    laptop.restock(10)
+}
+```
+[top](#Table-Of-Contents)
+
+##### Java Example
+
+While Rust-like traits are elegant and powerful, you can achieve a similar effect using a combination of interfaces with default method implementations, and a mixture of composition and inheritance. As you can see in the Java example below, there is a lot more boilerplate. Java's approach is still not as powerful as Rust and Kotlin's approaches which allow automatic 'blanket implementations' on existing types and trait/extension-function inheritance.
+
+Limitations:
+- Extension of existing types from another package may not be possible (eg final classes).
+- No trait or extension-function inheritance.
+- May need to use a combination of composition or inheritance to augment existing types, which may not be as convenient as attaching marker types. 
+
+```java
+
+import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
+
+// Java Parametric Polymorphism
+
+interface Printable {
+    // Default method implementation - similar to Rust trait methods
+    default String prettyPrint() {
+        return "[Default Pretty Print: " + this.format() + "]";
+    }
+    // Abstract method that implementing classes must define
+    String format();
+}
+
+interface Serializable {
+    String serialize();
+    default Result validate() {
+        return new Ok();
+    }
+}
+
+sealed interface Result permits Ok, Err { }
+record Ok() implements Result {}
+record Err(String err) implements Result {}
+
+
+interface StringExtensions {
+    // Default method that can be "mixed-in" to any non-final class
+    default String truncate(int maxLength) {
+        if (this.toString().length() <= maxLength) {
+            return this.toString();
+        }
+        return this.toString().substring(0, maxLength) + "...";
+    }
+}
+
+// Because String is final, we can't extend String so we have to compose it
+// in order to implement StringExtensions
+record MyExtendedString(String str) implements StringExtensions {
+    @Override
+    public String truncate(int maxLength) {
+        if (str.length() <= maxLength) {
+            return str;
+        }
+        return str.substring(0, maxLength) + "...";
+    }
+}
+
+interface InventoryManager {
+    boolean isLowStock(int threshold);
+    void restock(int amount);
+}
+
+class Product implements Printable, Serializable,  InventoryManager {
+    String name;
+    Float price;
+    Integer quantity;
+    ReentrantLock re;
+
+    public Product(String name, Float price, Integer quantity){
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.re = new ReentrantLock(true);
+    }
+
+    @Override
+    public String toString(){
+        return this.name;
+    }
+    @Override
+    public String format() {
+        return this.name+" (Price: $"+this.price+", Quantity: "+quantity+")";
+    }
+    @Override
+    public String prettyPrint(){
+        return "Product: "+this.format();
+    }
+    @Override
+    public String serialize() {
+        return "";
+    }
+
+    @Override
+    public Result validate() {
+        if(this.price < 0.0f) {
+            return new Err("Price cannot be negative");
+        }
+        if(this.quantity < 0){
+            return new Err("Quantity cannot be negative");
+        }
+        return new Ok();
+    }
+
+    @Override
+    public boolean isLowStock(int threshold) {
+        return this.quantity < threshold;
+    }
+
+    @Override
+    public void restock(int amount) {
+        try {
+            re.lock();
+            this.quantity += amount;
+        } finally {
+            re.unlock();
+        }
+        System.out.println("Restocked "+name+ " by "+amount+" units");
+    }
+}
+
+// Demonstration class
+public class Main {
+    public static void main(String[] args) {
+        // Create products
+        Product laptop = new Product("MacBook Pro", 1999.99f, 5);
+        Product keyboard = new Product("Mechanical keyboard", 129.99f, 2);
+
+        // Demonstrate trait/interface methods
+        System.out.println("Pretty Print: "+laptop.prettyPrint());
+        System.out.println("Serialize: "+laptop.serialize());
+
+        // Validation demo with polymorphic Result and Exhaustive pattern matching
+        switch (laptop.validate()){
+            case Ok _ -> System.out.println("Validation passed");
+            case Err err -> System.out.println("Validation err "+err);
+        }
+
+        // Extension Trait with Composition demo
+        // Unlike Rust, you can't augment an existing final class like String.
+        // To impl ExtendedString interface you need to compose the String.
+        MyExtendedString longString = new MyExtendedString("This is a very long string that needs truncation.");
+        System.out.println("Truncated: "+longString.truncate(10));
+
+        // Demonstrate Polymorphic filtering
+        List<Product> products = List.of(laptop, keyboard);
+        System.out.println("Low Stock Products:");
+        List<Product> lowStockProducts = products.stream().filter(p -> p.isLowStock(3)).toList();
+        lowStockProducts.forEach(p -> {
+            System.out.println(p+" - Quantity: "+p.quantity);
+            p.restock(10);
+        });
+    }
+}
+```
+[top](#Table-Of-Contents)
+
+##### Go Example
+
+In Go, you can create trait-like behaviour using 'mixin' structs to provide default implementations of interfaces.
+
+Limitations
+- No extension/augmentation of existing types in another package.
+- No trait inheritance.
+- No Generic constraints.
+
+```Go
+// Go Parametric Polymorphism
+package main
+
+import (
+	"fmt"
+	"unicode"
+)
+
+// Interface for Printable trait
+type Printable interface {
+	// Method that can have a default implementation
+	PrettyPrint() string
+	// Required method to implement
+	Format() string
+}
+
+// Interface for Serializable trait
+type Serializable interface {
+	Serialize() string
+	// Default validation method
+	Validate() error
+}
+
+// Mixin struct to provide default implementations
+type PrintableMixin struct{}
+
+// Default implementation of PrettyPrint
+func (p PrintableMixin) PrettyPrint() string {
+	return "Default Pretty Print"
+}
+
+// Validation mixin
+type ValidatableMixin struct{}
+
+// Default validation implementation
+func (v ValidatableMixin) Validate() error {
+	return nil
+}
+
+// Custom error type for validation
+type ValidationError struct {
+	Message string
+}
+
+func (e *ValidationError) Error() string {
+	return e.Message
+}
+
+// Product struct implementing multiple "traits"
+type Product struct {
+	PrintableMixin
+	ValidatableMixin
+	Name     string
+	Price    float64
+	Quantity int
+}
+
+// Implementing required Format method
+func (p *Product) Format() string {
+	return fmt.Sprintf("%s (Price: $%.2f, Quantity: %d)",
+		p.Name, p.Price, p.Quantity)
+}
+
+// Override PrettyPrint method
+func (p *Product) PrettyPrint() string {
+	return fmt.Sprintf("[Product: %s]", p.Format())
+}
+
+// Custom Serialize method
+func (p *Product) Serialize() string {
+	return fmt.Sprintf("Product{name=%s,price=%.2f,quantity=%d}",
+		p.Name, p.Price, p.Quantity)
+}
+
+// Custom Validate method
+func (p *Product) Validate() error {
+	if p.Price < 0 {
+		return &ValidationError{"Price cannot be negative"}
+	}
+	if p.Quantity < 0 {
+		return &ValidationError{"Quantity cannot be negative"}
+	}
+	return nil
+}
+
+// Extension-like functionality using generics (Go 1.18+)
+func FilterItems[T any](items []T, predicate func(T) bool) []T {
+	var filtered []T
+	for _, item := range items {
+		if predicate(item) {
+			filtered = append(filtered, item)
+		}
+	}
+	return filtered
+}
+
+// --------- 1. Wrapper type extension of existing type--------
+type ExtendedString string
+
+func (es ExtendedString) Truncate(maxLength int) string {
+	s := string(es)
+	if len(s) <= maxLength {
+		return s
+	}
+	return s[:maxLength] + "..."
+}
+
+// --------- 2. Inteface based extension---------
+type Capitializer interface {
+	Caps() string
+}
+type CapitalizeString struct { // no 'implements' needed
+	original string
+}
+
+// Implicit implementation of Capitializer.Caps()
+func (cs CapitalizeString) Caps() string {
+	if cs.original == "" {
+		return cs.original
+	}
+	firstChar := []rune(cs.original)[0]
+	return string(unicode.ToUpper(firstChar)) + cs.original[len(string(unicode.ToLower(firstChar))):]
+}
+
+// --------- 3. Util function is more idiomatic in Go---------
+func TruncateUtil(s string, maxLength int) string {
+	if len(s) <= maxLength {
+		return s
+	}
+	return s[:maxLength] + "..."
+}
+
+// Inventory management "trait"
+type InventoryManager interface {
+	IsLowStock(threshold int) bool
+	Restock(amount int)
+}
+
+// Implement InventoryManager for Product
+func (p *Product) IsLowStock(threshold int) bool {
+	return p.Quantity < threshold
+}
+
+func (p *Product) Restock(amount int) {
+	p.Quantity += amount
+	fmt.Printf("Restocked %s by %d units\n", p.Name, amount)
+}
+
+func main() {
+	// Create products
+	laptop := &Product{
+		Name:     "MacBook Pro",
+		Price:    1999.99,
+		Quantity: 5,
+	}
+	keyboard := &Product{
+		Name:     "Mechanical Keyboard",
+		Price:    129.99,
+		Quantity: 2,
+	}
+
+	// Demonstrate "trait" methods
+	fmt.Println("Pretty Print:", laptop.PrettyPrint())
+	fmt.Println("Serialized:", laptop.Serialize())
+
+	// Validation demonstration
+	if err := laptop.Validate(); err != nil {
+		fmt.Println("Validation Error:", err)
+	}
+
+	longString := "This is a very long string that needs truncation"
+
+	// -------- Demonstrate 1. Wrapper type extension of existing type --------
+	extString := ExtendedString(longString)
+	fmt.Println("Truncated:", extString.Truncate(10))
+
+	// -------- Demonstrate 2. Interface-based Extension--------
+	capitalized := CapitalizeString{original: longString}
+	// You can verify that capitalized type implements Capitializer
+	// with the folllowing trick, compiler errors if not:
+	var _ Capitializer = capitalized
+	fmt.Println("Caps:", capitalized.Caps())
+
+	//  Filtering with generics
+	products := []*Product{laptop, keyboard}
+	lowStockProducts := FilterItems(products, func(p *Product) bool {
+		return p.IsLowStock(3)
+	})
+
+	fmt.Println("Low Stock Products:")
+	for _, p := range lowStockProducts {
+		fmt.Println(p.Name, "- Quantity:", p.Quantity)
+		p.Restock(10)
+	}
+}
+```
 [top](#Table-Of-Contents)
 
 ### Data Orientated Programming vs OOP - Choose Two 
 
-If you can do OOP, you can do DOP: DOP advocates for cleanly separating data from class methods. Data is typically modelled using hierarchically nested structs/records/data-objects. Behaviours that operate on the data are typically extracted into top-level or module/package level functions. Note, this does not include data validation and invariant checking logic - it perfectly valid (preferable) to co-locate initialisation and validation logic with your data classes, in class/record constructors for example. DOP tends to adopt more noun orientated naming approach whereas OPP tends to adopt a mix of nouns and verbs. 
+If you can do OOP, you can do DOP: DOP advocates for cleanly separating data from behaviour. Data is modelled using hierarchically nested structs/records/data-objects, and methods that operate on those data are typically extracted into top-level or module/package level functions. DOP tends to adopt more noun orientated naming approach whereas OPP tends to adopt a mix of nouns and verbs.
 
-### Functional vs OOP - Choose Two
+>[!TIP]
+There is no need to extract logic such as data validation and invariant checking into utility functions, this logic should be co-located with your data types, in class/record constructors for example.
+
+### FP vs OOP - Choose Two
 
 To quote Eric Evans, an expert in both OOP and Functional paradigms and of 'Domain Driven Design' book fame: "At times, I found FP an awkward fit. The problem would have fit OOP better. I'm happy that it is easier than it used to be to move between both those ways of thinking." 
 
-I completely agree with Eric - if the language permits, combining functional approaches with OOP is convienent in the right scenario. Within the same code base, the recommendations are: 
+I completely agree with Eric - if the language permits, combining functional approaches with OOP is convenient in the right scenario. Within the same code base, the recommendations are: 
 - Use a naming convention to identify pure functions (see below on 'Calculations to limit side effects')
 - Push out side effects to the out boundaries of your code (see the Dependency Rule / Bullseye) so they become 'intended effects’ and not nasty interleaved ‘side effects’.
 - Aim for a core of pure functions.
@@ -769,7 +1306,7 @@ For the `Car` class, unless we decide to break encapsulation and make `engine` p
 ### Dynamic Late Binding vs Static Binding 
 This is a big topic, but as ever, there are trade-offs between the different approaches which ultimately depends on your use-case:
 
-- *Dynamic/late binding:* Allows new code to be deployed without having to re-build and re-start your runtime. This literally means that your application code can evolve over time without re-building and re-starting your application. To do this, you require a dynamic language and runtime such as languages built on the JVM, JS, C# Python and Ruby. A classic example of a dynamic application is Minecraft where player-made mods or custom maps and APIs can be added to a running Minecraft realm. Another example where late binding is for applications that have plugins, this is common in business applications that need to be easily extended such as adding new file parsers or algorithms without having to re-build and re-start the app server. Typically, new functionalities are loaded using *class loaders* through special pluggable library files e.g., `.jar` files containing *dynamic proxies* and implementations of *Service Provider Interfaces* (SPIs). For these types of use-case, late binding is very powerful, but in my opinion, for the majority of applications, it is overkill. Late binding is commonly implemented using a technique called *reflection* which is not as performant as static binding because code needs to be introspected in order to invoke the new functionality. Polymorphism also allows method overriding for new sub-types to be loaded at runtime using *dynamic dispatch*. A classic example is dynamically loaded component pallets containing new object sub-types.
+- *Dynamic/late binding:* Allows new code to be deployed without having to re-build and re-start your runtime. This literally means that your application code can evolve over time without re-building and re-starting your application. To do this, you require a dynamic language and runtime such as languages built on the JVM, JS, C# Python and Ruby. A classic example of a dynamic application is Minecraft where player-made mods or custom maps and APIs can be added to a running Minecraft realm. Another example where late binding is for applications that have plugins, this is common in business applications that need to be easily extended such as adding new file parsers or algorithms without having to re-build and re-start the app server. Typically, new functionalities are loaded using *class loaders* through special pluggable library files e.g., `.jar` files containing *dynamic proxies* and implementations of *Service Provider Interfaces* (SPIs). For these types of use-case, late binding is very powerful, but in my opinion, for the majority of applications, it is overkill. Late binding is commonly implemented using a technique called *reflection* which is not as performant as static binding because code needs to be introspected in order to invoke the new functionality. Polymorphism also allows method overriding for new sub-types to be loaded at runtime using *dynamic dispatch*. A classic example is dynamically loaded component pallets in a CAD application containing new object sub-types.
 
 [top](#Table-Of-Contents)
 
@@ -787,7 +1324,6 @@ Classic examples of dynamic applications include:
 - *Static binding:* If you do not need to modify runtime behaviour with plugins or highly dynamic late binding, for the majority of simpler use cases choose static binding for more performant Ahead of Time (AOT) compilation. Late binding is generally more secure considering the additional potential to load malicious code. 
 
 [top](#Table-Of-Contents)
-
 
 ### It Should Not be Possible to Create an Object in an Invalid State
 
@@ -909,7 +1445,7 @@ From Uncle Bob’s ‘Clean Code’
 
 ### Do not pollute Functional Code with Mutable State
 
-importantly, keep functional call chains pure; you really don’t want to pollute your functional code with shared mutable state across threads. Consider the following example - one is broken, the other is ok, the difference is subtle.  So, while combing FN + OOP is powerful, be very careful.
+Importantly, keep functional call chains pure; you really don’t want to pollute your functional code with shared mutable state across threads. Consider the following example - one is broken, the other is ok, the difference is subtle.  So, while combing FN + OOP is powerful, be very careful.
 
 ![](attachments/Pasted%20image%2020240611094242.png)
 
@@ -1040,7 +1576,7 @@ If you use exceptions (not all languages have exceptions e.g., Rust, Go), define
 
 #### Error Handling - Bubble exceptions upwards or trap at source
 
-Generally, pushing exception handling code up to the ‘outer layers’ of your code toward the boundaries is usually a good approach. It also helps cleanly separate the ‘happy path’ from interleaving error handling code.  However, this isn’t a hard rule, in some situations you may need to try/catch/finally at the source of the error to take important corrective actions such as closing an IO resource or rolling-back a DB transaction.
+Generally, pushing exception handling code up to the ‘outer layers’ of your code toward the boundaries is usually a good approach. It also helps cleanly separate the ‘happy path’ from interleaving error handling code.  However, this is not a hard rule, in some situations you may need to try/catch/finally at the source of the error to take important corrective actions such as closing an IO resource or rolling-back a DB transaction.
 
 [top](#Table-Of-Contents)
 
@@ -1082,7 +1618,7 @@ Regarding exceptions in functional composition: If your language uses ‘Checked
 
 The Special Case Pattern is one example for modelling your domain types in such a way that the absence of value is explicitly modelled in your domain making illegal program states and crashes more unlikely. However, you can go a lot further using Algebraic Data Types (ADTs). ADTs combine ‘Product Types’ for modelling aggregation such as a C/Golang/Rust ‘structs’ or Java's Record type with ‘Sum Types’ for modelling choice, also known as ‘Union Types’ or ‘Tagged Unions’. This simple combination of aggregation and choice is deceptively powerful and shows up in many programming languages to model domains, return types and function arguments:
 
-- Product Types are great for modelling aggregation, and include immutable data classes such as records, data objects, and structs. They are called ‘Product Types’ because their state ‘when considered as a whole’ is the cartesian product of their data.
+- Product Types are great for modelling aggregation, and include immutable data classes such as records, data objects, and structs. They are called ‘Product Types’ because their state ‘when considered as a whole’ is the Cartesian product of their data.
 
 - Sum Types can be used to represent choice and are polymorphic - an abstraction such as a marker/type interface with a fixed set of implementing subtypes (e.g., ‘sealed’ classes or interfaces in Kotlin/Java, ‘enum’ in Rust, ‘Union’ types in Python). They are called Sum Types because the set of possible types is the sum (union) of the total allowable set.
 
@@ -1103,11 +1639,11 @@ In computing, concurrency is not parallelism, despite the two terms having very 
 For example, parallelism with increasingly 'heavyweight' hardware implementations could range from:
 - single host with shared memory parallelism using platform threads that map to multiple cores/CPUs on the same motherboard, 
 - as above but data is shared within the same process using other mechanisms than memory, such as a memory-mapped file (memory and disk) or other inter-process-communication methods (IPC), 
-- multi-processing where each child-process has its own memory space and each processes cosumes one core, 
+- multi-processing where each child-process has its own memory space and each processes consumes one core, 
 - K8s worker nodes working within the same K8s cluster but typically without a high performance interconnect,
-- HPC using compute clusters that message-pass over a 'tightly coupled' high perfomance interconnect, 
-- geograpically distributed nodes (e.g., remote Actors / FaaS / Grid computing), 
-- geograpically distributed multi-clustering (e.g., Grid, federated HPC, a potential route to exa-scale). 
+- HPC using compute clusters that message-pass over a 'tightly coupled' high performance interconnect, 
+- geographically distributed nodes (e.g., remote Actors / FaaS / Grid computing), 
+- geographically distributed multi-clustering (e.g., Grid, federated HPC, a potential route to exa-scale). 
 
 Some general recommendations:
 - Keep platform threads as isolated as possible & limit mutable global state:
@@ -1119,9 +1655,9 @@ Some general recommendations:
 - Keep synchronised critical sections as small as possible:
      - Amdahl’s law: "The overall performance improvement gained by optimising (i.e. parallelising) a single p art of a system is limited by the fraction of time that the improved part is actually used," or more simply: even a small amount of synchronization *_significantly*_ affects performance. 
      - Here are some examples of Amdahl's law:  
-         - If 95% of the time spent by your code is parallel, throwing more processors at the problem doesn’t improve speedup beyond ~256 processors. 
-         - If the amount of time spent by your code is <50% parallel, adding more processors won't speedup your code at all.
-         - If the amount of time spent by your code is ~95% parallel, the maximum speedup is only 20 times and this takes 2048 processors. 
+         - If 95% of the time spent by your code is parallel, throwing more processors at the problem does not improve speed up beyond ~256 processors. 
+         - If the amount of time spent by your code is <50% parallel, adding more processors won't speed up your code at all.
+         - If the amount of time spent by your code is ~95% parallel, the maximum speed up is only 20 times and this takes 2048 processors. 
 
 ![](attachments/Pasted%20image%2020240611095042.png)
 
@@ -1136,8 +1672,8 @@ Some general recommendations:
 
 - *IO Bound Tasks* require asynchronous patterns to achieve concurrency. The solution patterns include:
 
- 	- **Async/Await and Coroutines** (e.g., Go’s ‘Goroutines’ and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your functions are typically split into two types; 1) red functions for asynchronous code typically requiring special keyword modifiers to annotate functions and their call-sites e.g. `async` (function) and `await` (call-site) and; 2) blue functions for plain synchronous code having no modifiers. Note, it could be argued that Go's Goroutines are not coloured because they only require the `go` keyword at the function call-site, there is no need to annotate a function as asynchronous which allows you to call regular functions in an asynchronous way (although you frequently need to pass in concurrency primitives to share data such as `Channels`).  Here is the original and now famous blog: [https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)
- 	- **Virtual-Threads / Fibres** such as the ‘colourless’ Project Loom for the JDK where the virtual threads are implemented in user space using continuations: [https://wiki.openjdk.org/display/loom/Main](https://wiki.openjdk.org/display/loom/Main). With the release of Loom, the venerable JVM platform arguably boasts the most advanced approach to concurrency. JVM languages can implement a truly colourless programming approach on top using a combination of platform and virtual threads and higher-level abstractions such as the streams API. 
+ 	- **Async/Await and Coroutines** (e.g., Go’s ‘Goroutines’ and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your functions are typically split into two types; 1) red functions for asynchronous code typically requiring special keyword modifiers to annotate functions and their call-sites e.g. `async` (function) and `await` (call-site) and; 2) blue functions for plain synchronous code having no modifiers. Note, it could be argued that Go's Goroutines are not coloured because they only require the `go` keyword at the function call-site, there is no need to annotate a function as asynchronous which allows you to call regular functions in an asynchronous way (although you frequently need to pass in concurrency primitives to share data such as `Channels`).  Here is the [original and now famous blog](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function).
+ 	- **Virtual-Threads / Fibres** such as the ‘colourless’ [Project Loom](https://wiki.openjdk.org/display/loom/Main) for the JDK where the virtual threads are implemented in user space using continuations. With the release of Loom, the venerable JVM platform arguably boasts the most advanced approach to concurrency. JVM languages can implement a truly colourless programming approach on top using a combination of platform and virtual threads and higher-level abstractions such as the streams API. 
  	- **Continuations** are very low-level and are used to implement patterns such as coroutines & virtual threads. Continuations can be suspended, stored on the heap, and restarted. Typically, you would not directly use continuation APIs using a Continuation Passing Style (CPS) in your own application logic, although some languages do have public APIs for CPS.
  	- **Async-Wrapper types such as Futures & Promises.** Note that these are really just higher-level synchronisation primitives, and the task that you await itself would need to be non-blocking to achieve high levels of concurrency.  
  	- **Call-Back functions** (beware ‘call-back hell’ as often seen in JavaScript). In fact, more friendly ‘synchronous’ patterns such as Coroutines and Continuations simply abstract much of the lower-level call backs from the programmer.
@@ -1154,7 +1690,9 @@ Some general recommendations:
  	- **Horizontal scaling with Pub-Sub and Competing Consumers.** This is where multiple compute nodes subscribe to a message channel and pull messages from the channel. If the queue-depth gets too high, you add more consumers to process the messages.
  	- **Lazy Parallel Streams** in functional approaches. Functional streams are typically executed lazily, importantly after the whole computation has been fully defined. This allows the caller or runtime to perform optimisations such as automatic parallelisation. This can only be achieved because the full stream is defined lazily, ahead of time.    
  	- **Message Passing** e.g., the Actor model (e.g., Akka) & Message Passing Interface (e.g., OpenMPI) in HPC are both examples of message passing. Note that the Actor model is actually the canonical parallelism pattern, while MPI is quite niche (largely just the HPC community).
-- If you must use low-level locks and synchronization primitives with critical sections, try to use ‘re-entrant’ locks for better composability and performance over non-re-entrant synchronized blocks. Check if the languages mutexes (semaphores, count-down latches) are re-entrant (language agnostic advice).
+
+
+If you must use low-level locks and synchronization primitives with critical sections, try to use ‘re-entrant’ locks for better composability and performance over non-re-entrant synchronized blocks. Check if the languages mutexes (semaphores, count-down latches) are re-entrant (language agnostic advice).
 
 [top](#Table-Of-Contents)
 
@@ -1173,7 +1711,7 @@ Some general recommendations:
 - Always consider linting and scanning your code for vulnerabilities and anti-patterns using well-established tooling such as FindBugs, Snyk for containers, OWASP's Dependency Check tool suite: [https://owasp.org/www-project-dependency-check](https://owasp.org/www-project-dependency-check)  
 - Familiarise yourself with OWASP's Top Ten security risks for webapps: [https://owasp.org/www-project-top-ten](https://owasp.org/www-project-top-ten)  
 - Always update default passwords that are shipped with products e.g., 'admin' is sometimes used default username and password pair.
-- To minimize injection attack surface, don’t use your own variable binding or hardcode parameters using string concatenation – use the supported variable binding tooling to ensure values are always escaped.
+- To minimize injection attack surface, don’t use your own variable binding or hard code parameters using string concatenation – use the supported variable binding tooling to ensure values are always escaped.
 
 [top](#Table-Of-Contents)
 
@@ -1187,13 +1725,13 @@ According to the values of the original Agile manifesto (search the original ‘
 
 [top](#Table-Of-Contents)
 
-We recommend weekly or fortnightly iterations involving customer playbacks and demos. Anything longer than 2 weeks can require significant course correct if/when you go in the wrong direction - agile aims to catch problems early and to course correct.  According to Uncle Bob Martin, the emergence of agile was to “find out how screwed we were as early as possible, it wasn’t just about writing software quickly”.
+We recommend weekly or fortnightly iterations involving customer playbacks and demos. Anything longer than 2 weeks can require significant course correct if/when you go in the wrong direction - agile aims to catch problems early and to course correct.  According to Uncle Bob Martin, the emergence of agile was to “find out how screwed we were as early as possible, it was not just about writing software quickly”.
 
 [top](#Table-Of-Contents)
 
 ### Design Thinking Workshops and Scoping Document
 
-Design Thinking puts you in the shoes of the customer so that you can understand their pain points. This helps design solutions that really address customer needs. Hartree have a set of recipes for activities that you can use to conduct [DT workshops](https://stfc365.sharepoint.com/:f:/r/sites/TheHartreeCentreCommunityChannel/Shared%20Documents/Hartree%20Communications/Business%20Development/Design%20Thinking%20Workshops?csf=1&web=1&e=cpdeqS). The activities don’t have to be applied religiously and you can adapt as needed. The activities include As Is Scenario Journey Map, Empathy Maps, User Persona and Problem Statements, User Stories, Ideation, Prioritisation, Ideal To-Be Scenario Journey Map, Outcome Statements, Cupcake Roadmaps.
+Design Thinking puts you in the shoes of the customer so that you can understand their pain points. This helps design solutions that really address customer needs. Hartree have a set of recipes for activities that you can use to conduct [DT workshops](https://stfc365.sharepoint.com/:f:/r/sites/TheHartreeCentreCommunityChannel/Shared%20Documents/Hartree%20Communications/Business%20Development/Design%20Thinking%20Workshops?csf=1&web=1&e=cpdeqS). The activities don’t have to be applied religiously and you can adapt as needed. The activities include As Is Scenario Journey Map, Empathy Maps, User Persona and Problem Statements, User Stories, Ideation, Prioritisation, Ideal To-Be Scenario Journey Map, Outcome Statements, Cupcake road maps.
 
 Hartree also has a [scoping doc](https://stfc365.sharepoint.com/:f:/r/sites/TheHartreeCentreCommunityChannel/Shared%20Documents/Hartree%20Communications/Business%20Development/Design%20Thinking%20Workshops?csf=1&web=1&e=cpdeqS) that you can send the customer ahead of time to help focus minds.
 
