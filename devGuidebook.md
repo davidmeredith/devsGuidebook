@@ -1647,11 +1647,10 @@ This largely depends on the language you are using:
 
 #### Error Handling in Functional Programming - Error Monads such as Either and Validated
 
-Before I get to error monads such as Either and Validated, I'll try to briefly explain Monads and functional composition. 
+Before I get to error monads such as `Either` and `Validated,` I'll try to briefly explain Monads and functional composition. 
 
 ##### What are Monads and Higher-Kinded Types in Functional Composition
 
-A monad is a virtual burrito or bento-box. If you've looked into functional programming, you'll understand this joke: Monads are a notoriously difficult concept to explain, and there is a common aphorism that a monad is basically like a burrito because it is a wrapper (the taco) around a type (the filling) with additional helper methods that map given functions to the monad's wrapped type. I prefer the bento-box analogy, because there are a more moving parts to a bento-box which better describes a monad (opinion only).
 A monad is a virtual burrito 🌯 or bento-box 🍱. If you've looked into functional programming, you'll understand this joke: Monads are a notoriously difficult concept to explain, and there is a common aphorism that a monad is basically like a burrito because it is a wrapper (the taco) around a type (the filling) with additional helper methods that map given functions to the monad's wrapped type. I prefer the bento-box analogy, because there are a more moving parts to a bento-box which better describes a monad (opinion only).
 
 With those analogies in mind, a monad is more formally described as: 
