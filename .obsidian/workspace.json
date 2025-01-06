@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "61a496e325c7b52b",
+        "id": "10d0c9076ed234a5",
         "type": "tabs",
         "children": [
           {
-            "id": "350f8cfc44f9f635",
+            "id": "5e1154be729a8e72",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -73,7 +73,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 312.50390243530273
+    "width": 257.50390243530273,
+    "collapsed": true
   },
   "right": {
     "id": "c1c8e1962adcc80f",
@@ -154,10 +155,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "350f8cfc44f9f635",
+  "active": "5e1154be729a8e72",
   "lastOpenFiles": [
-    "devGuidebook.md",
     "devGuidebook.md~",
+    "devGuidebook.md",
+    "attachments/Pasted image 20241220110926.png",
     "consistency-report.md",
     "Pasted image 20241216190846.png",
     "attachments/Pasted image 20241216191248.png",
@@ -170,7 +172,6 @@
     "attachments/Pasted image 20241103122918.png",
     "Pasted image 20241103121956.png",
     "attachments/Pasted image 20241027144154.png",
-    "attachments/Pasted image 20241027141335.png",
     "g.md",
     "README.md",
     "devGuidebook/Untitled.md",

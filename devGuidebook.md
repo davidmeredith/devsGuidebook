@@ -2,7 +2,7 @@
 
 Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre but now I maintain an updated version here. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. Happy reading. DaveM
 
-Last Updated Dec 24.  Enjoy.
+Last Updated 06/01/25.  Enjoy.
 
 ## Table Of Contents
 
@@ -35,6 +35,8 @@ dv.view('toc')
     13. [Tooling](#Tooling)
         1. [Do not be Smart - Use the Right Tools for the Job and for your customer](#Do-not-be-Smart---Use-the-Right-Tools-for-the-Job-and-for-your-customer)
         2. [To Garbage Collect or Not To GC](#To-Garbage-Collect-or-Not-To-GC)
+            1. [Monads and Green Threads need a GC](#Monads-and-Green-Threads-need-a-GC)
+            2. [Should I Use Rust for Everything](#Should-I-Use-Rust-for-Everything)
         3. [Kanban - Jira and Confluence](#Kanban---Jira-and-Confluence)
         4. [Gitlab and Version Control](#Gitlab-and-Version-Control)
         5. [Container Repository](#Container-Repository)
@@ -55,6 +57,8 @@ dv.view('toc')
     10. [Classes should have only one reason to change and do one thing and do it well](#Classes-should-have-only-one-reason-to-change-and-do-one-thing-and-do-it-well)
     11. [OOP Redefined](#OOP-Redefined)
     12. [SOLID](#SOLID)
+        1. [SRP](#SRP)
+        2. [Open-Closed Principle](#Open-Closed-Principle)
     13. [Pervasive Polymorphism](#Pervasive-Polymorphism)
         1. [Inheritance should be explicitly designed-for](#Inheritance-should-be-explicitly-designed-for)
         2. [Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Augment your Type-System With Shared Marker Types](#Avoid-Paying-too-much-Inheritance-Tax---Use-Parametric-Polymorphism-to-Augment-your-Type-System-With-Shared-Marker-Types)
@@ -99,8 +103,10 @@ dv.view('toc')
         5. [Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected errors - exceptional does not mean conditional](#Error-Handling---Only-use-exceptions-for-exceptional-situations-such-as-coding-errors-and-unexpected-errors---exceptional-does-not-mean-conditional)
         6. [Error Handling - Provide relevant exceptions for the abstraction layer](#Error-Handling---Provide-relevant-exceptions-for-the-abstraction-layer)
         7. [Error Handling - Bubble exceptions upwards or trap at source](#Error-Handling---Bubble-exceptions-upwards-or-trap-at-source)
-        8. [Error Handling – Model the absence of value explicitly](#Error-Handling-%E2%80%93-Model-the-absence-of-value-explicitly)
-        9. [Error Handling in Functional Programming – error monads such as Either and Validated](#Error-Handling-in-Functional-Programming-%E2%80%93-error-monads-such-as-Either-and-Validated)
+        8. [Error Handling – Model the Absence of Values Explicitly](#Error-Handling-%E2%80%93-Model-the-Absence-of-Values-Explicitly)
+        9. [Error Handling in Functional Programming – Error Monads such as Either and Validated](#Error-Handling-in-Functional-Programming-%E2%80%93-Error-Monads-such-as-Either-and-Validated)
+            1. [What are Monads and Higher-Kinded Types in Functional Composition](#What-are-Monads-and-Higher-Kinded-Types-in-Functional-Composition)
+            2. [Sequential Computation Blocks with Typed Errors](#Sequential-Computation-Blocks-with-Typed-Errors)
     36. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
     37. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
         1. [Know the difference between IO bound tasks and CPU bound tasks and their common solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-common-solution-patterns)
@@ -284,17 +290,33 @@ Customers have the right to:
 
 #### Do not be Smart - Use the Right Tools for the Job and for your customer
 
-As a centre, we should be using the right tools for the job, we all have our preferences, but there’s no need to be stubbornly loyal about a particular language or OS. As software professionals, we should recognise the right tools for the job and for our clients.  
-
-#### To Garbage Collect or Not To GC
-
-For HPC and when squeezing software into tight spaces such as in low-level systems programming (systems software isn’t HPC BTW), a Garbage Collected (GC) language probably isn’t the best choice. The GC adds lots of memory requirement. However, for full-stack, enterprise-applications / services, mobile, and general-purpose programming, it's probably best to use a memory safe language – “A human garbage collector is just wasted effort” (Eckle & Ward, Happy Path Programming). Similarly, there is a recognised shift in industry away from memory unsafe languages as it is widely known that the majority Common Vulnerability Exploits (CVEs) stem from unsafe memory language exploits, causing organisations such as [Google](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html) (for Android), [NSA and Microsoft to urge the use of memory-safe languages](https://www.theregister.com/2022/11/11/nsa_urges_orgs_to_use/).
+As a centre, we should be using the right tools for the job, we all have our preferences, but there’s no need to be stubbornly loyal about a particular language. As software professionals, we should recognise the right tools for the job and for our clients.  
 
 Have the customer in mind. For example, Haskell and other Lisps are great (I’ve played with Clojure), but don’t be smart and use this as an opportunity to explore your favourite pet-programmer project, it’s not going to be much use to the customer. It’s hard to hire Haskell programmers.
 
 ![](attachments/Pasted%20image%2020240611091943.png)
 
+#### To Garbage Collect or Not To GC
+
+For HPC and when squeezing software into tight spaces such as embedded systems, a Garbage Collected (GC) language probably isn’t the best choice as GC adds extra memory, disk, and CPU requirement. However, for most other types of software such as full-stack enterprise-applications, web services, mobile, and general-purpose programming, I recommend using a memory safe language probably having a GC – “A human garbage collector is just wasted effort” (Eckle & Ward, Happy Path Programming). Similarly, there is a recognised shift in industry away from memory unsafe languages as the vast majority Common Vulnerability Exploits (CVEs) stem from unsafe memory language exploits, causing organisations such as [Google](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html) (for Android), [NSA and Microsoft to urge the use of memory-safe languages](https://www.theregister.com/2022/11/11/nsa_urges_orgs_to_use/).
+
+Have the customer in mind. For example, Haskell and other Lisps are great (I’ve played with Clojure), but don’t be smart and use this as an opportunity to explore your favourite pet-programmer project, it’s not going to be much use to the customer. It’s hard to hire Haskell programmers.
+
+![](attachments/Pasted%20image%2020240611091943.png)
+
+##### Monads and Green Threads need a GC
+
+At the time of writing, there doesn't seem to be a non-GC language that supports monads for functional composition coupled with a colourless async runtime eg green threads and coroutines. Note, I do not mean platform/kernel/OS threads, I mean virtual threads that are implemented by the runtime eg Go's Goroutines, Java's Project Loom, and Fibres in other languages. This appears to be a current open research topic in non-GC'd languages. According to this [Rust maintainer](https://www.youtube.com/watch?v=1zOd52_tUWg), async is possible with coloured approaches such as `async/await` (eg C++, Rust), but colourless approaches such as green threads and coroutines, and advanced functional programming with monads currently requires a GC. The GC handles memory clean-up for several low level complexities eg async task cancellation, how to implement memory clean up without higher-level approaches such as RAII and destructors, and providing a debugger that is usable for complex async code. I'm currently monitoring what Zig does in future - [here is an interesting summary](https://github.com/ziglang/zig/wiki/FAQ#what-is-the-status-of-async-in-zig), and apparently Zig's `defer/errdefer` becomes impractical in an async context. 
+
+> [!INFO]
+For me, the increased productivity, and availability of a colourless async runtime with the ability to implement monads for functional composition is (currently) worth the cost of using a GC language, especially for application programming.
+
 [top](#Table-Of-Contents)
+
+##### Should I Use Rust for Everything
+
+TODO I don't have enough hard-won experience to confidently make this call, so I'll have to defer to the opinion of of others. According to Lars Bergstrom, Director of Engineering for Android at Google, 
+
 
 #### Kanban - Jira and Confluence
 
@@ -414,7 +436,8 @@ Separation of concerns at the function level.
 
 ### Classes and Code Should be Cohesive
 
-Classes should be cohesive – high cohesion means the methods and variables of the class are co-dependent and often change together. This can be paraphrased as "Changes to the code over here should not affect code over there" and/or "Code that changes together stays together. "
+> [!TIP]
+Classes should be cohesive which is related to the Single Responsibility Principle. High cohesion means the methods and variables of  a class are co-dependent and often change together. This can be paraphrased as "Changes to the code over here should not affect code over there" and "Code that changes together stays together." Another useful interpretation: "When you want to add something, you intuitively know which class should be modified."
 
 Here’s the authoritative view from the famous [Kent Beck from Nov (2022) and his ‘Tidy First’ approach to software development:](https://twitter.com/KentBeck/status/1587825849755049984)
 
@@ -450,18 +473,35 @@ I believe inheritance should be replaced with 'Code Sharing': the other pillars 
 ### SOLID
 
 For OPP, understand the principles of SOLID:
+| SOLD  | Meaning|
+| -------------- | --------------- |
+| Single Responsibility Principle (SRP) | A module (you can assume 'class' here too) should be reponsible to one, and only one, ACTOR (Bob Martin's reinterpretation) |
+| Open-Closed Principle |  Classes should be explicitly designed for extension and can't be unintentionally modified.|
+| Liskov’s Substitution principle (Barbara Liskov) |  A subclass can substitute for a parent, this mostly surfaces when chaining function calls.|
+| Interface Segregation Principle|  Seprate interfaces so they do not cross multiple concerns.|
+| Dependency Inversion |  High-level modules shouldn't depend on low-level modules, and Abstractions shouldn't depend on details, but details should depend on abstractions. To do this, an abstraction layer (interface) is extracted to separate the high and low level modules. |
 
-- Single Responsibility Principle
-- Open for extension, closed for modification 
-- Liskov’s Substitution principle (Barbara Liskov)
-- Interface Segregation principle
-- Dependency Inversion
+#### SRP
+
+A common misinterpretation of SRP is "One function/class should only do one thing." While I don't disagree with this advice, its not actually what the SRP was getting at. The formal interpretation is "A module should have one, and only one, reason to change." This is a touch ambiguous, I prefer Uncle Bob Martin's reinterpretation "A module/class should be responsible to one, and only one, ACTOR" because the reason to change comes from the actor, a useful clarification in my opinion. In Bob's great book, Clean Architecture: A Craftman's Guide to Software Structure and Design, Bob illustrates a violation with an Employee class that mixes three business rule methods, where each is required by a different actor: `calculatePay()` for the Finance team, `reportHours()` for HR and `save()` for Operations. Under the hood, these methods could refer to some common private logic eg `regularHours()`, however, this de-duplication can often become a source of bugs, especially for complex code which spans different dev teams which requires merging of different branches. SRP says don't do this, separate the code that different actors depend on, even at the expense of some intentional duplication.
+
+> [!TIP]
+SRP is closely related to cohesion: "Code that changes together stays together" and when you want to implement SRP think "It should be easy to identify which class should be modified if I want to change something."
+
+A solution to the Employee class violation example would be to use a data object that holds nothing but the employee data (no methods) and move the behaviour into separate facade(s) for processing business rules, one for each actor for example (`PayCalculator` `HourReporter` and `EmployeePersistor`). Notice that this solution is the end of a spectrum of possible solutions - Bob does explain that some developers or in some scenarios you may prefer to keep the most important business rules close to the data. In this case, the original `Employee` class can still contain the three business rule methods, but these methods are very short and simply delegate to the appropriate business rule calculator facades under the hood (Composition).  
+
+> [!TIP]
+It is silly to have to define a data type (class) solely as a container for a *single* function to do something. This is overkill - just write functions in a facade and call them. 
 
 [top](#Table-Of-Contents)
 
+#### Open-Closed Principle
+
+OCP is relevant only for classic hierarchical class extension, however, as we prefer object composition over inheritance these days, this principle has less relevance in modern software engineering. You should explicitly make classes non-extendable by default meaning you explicitly have to design classes for inheritance when you need to.
+
 ### Pervasive Polymorphism
 
-What does polymorphism mean to you? For those with background in OPP, you most likely think of inheritance using an abstract base-classes with sub-type specialisations. However, I agree with [Bruce Eckle](https://www.youtube.com/watch?v=ojffu0F_aQQ) in that it should be regarded as a much broader term, and polymorphism can crop up all over: 
+What does polymorphism mean to you? For those with background in OPP, you most likely think of inheritance using an abstract base-classes with sub-type specialisations. However, I agree with [Bruce Eckle](https://www.youtube.com/watch?v=ojffu0F_aQQ) in that it should be regarded as a much broader term, and polymorphism can crop-up all over: 
 
 > [!TIP]
 Don't limit your understanding of Polymorphism to inheritance alone, it broadly means that 'a single type can represent multiple types.'
@@ -477,7 +517,7 @@ If we acknowledge this interpretation, then polymorphism can include:
  
 #### Inheritance should be explicitly designed-for
 
-By default, in some languages you can extend a class by default, unless you explicitly disallow it e.g., using the `final` keyword in Java or through Sealing. In modern languages, classes are typically closed to extension by default.  For example, in Kotlin you have to explicitly enable class extension using the `open` keyword to make it explicit that this class is designed to be extended. This makes SOLID’s 'Open for Extension, Closed for Modification' best-practice explicit in the language.  
+By default, in some languages you can extend a class by default, unless you explicitly disallow it e.g., using the `final` keyword in Java or through Sealing. In modern languages, classes are typically closed to extension by default.  For example, in Kotlin you have to explicitly enable class extension using the `open` keyword to make it explicit that this class is designed to be extended. This makes SOLID’s 'Open Closed Principle' best-practice explicit in the language.  
 
 [top](#Table-Of-Contents)
 
@@ -485,29 +525,32 @@ By default, in some languages you can extend a class by default, unless you expl
 
 - Deeply nested inheritance hierarchies where sub-classes extend super-classes can become very brittle. This is because you are structurally tied to the classes in the parent hierarchy: 
   - If you don't need all of the characteristics provided through inheritance, it can be difficult to 'split-out' what is not wanted without widespread refactoring. 
-  - If you don't have access to the src of the parent hierarchy, this can force you to implement abstract methods for methods you don't need, typically by throwing unsupported exceptions/errors. 
+  - Some languages (eg Java) do not allow multiple inheritance which could encourage deeper inheritance hierarchies. 
+  - If you don't have access to the src of the parent hierarchy, you may be forced to implement abstract methods you don't need, typically by throwing unsupported exceptions/errors. 
 
-If you do have access to the src of the parent hierarchy, you may need to extract the required methods into a new level in the inheritance hierarchy and inherit from that appropriate level to facilitate better segregation of concerns e.g., from the direct parent if you do want those methods, or from a higher-level ancestor if you do not need every method. This can be an expensive refactor meaning deep inheritance is often considered an anti-pattern these days, especially for application developers. A number of modern languages don't even support inheritance. Having said that, inheritance arguably does have its place when developing libraries and frameworks, and especially for relationships that have a strong and natural "Is a" type of relationship e.g., 'typeA is a genuine / real sub-type of typeB.'
+If you do have access to the src of the parent hierarchy, you may need to extract the required methods into a new level and inherit from that level to facilitate better segregation of concerns e.g., from the direct parent if you do want those methods, or from a higher-level ancestor if you do not need every method. This can be an expensive refactor meaning deep inheritance is often considered an anti-pattern these days, especially for application developers. A number of modern languages don't even support inheritance. Having said that, inheritance arguably does have its place when developing libraries and frameworks, and especially for relationships that have a strong and natural "Is a" type of relationship e.g., 'typeA is a genuine / real sub-type of typeB.'
 
 > [!TIP]
-Rather than pay too much inheritance tax, consider using 'Parametric Polymorphism' where a 'marker type' defines a contract which allows a type to be represented as another type. This shared marker type augments your type-system for use in function parameters, return values, and attribute declarations, often in conjunction with generics ('holder types'). The canonical name for this type of polymorphism is "parametric polymorphism" or "generic programming." It is often used in conjunction with Composition under the hood where an object uses the functionality of another object to implement its behaviour.  
+Rather than pay too much inheritance tax, consider using 'Parametric Polymorphism' where a 'marker type' attaches a contract which allows a type to be represented as another type. This shared marker type augments your type-system for use in function parameters, return values, and attribute declarations, often in conjunction with generics ('holder types'). The canonical name for this type of polymorphism is "parametric polymorphism" or "generic programming." It is typically implemented with dynamic-dispatch and is often used in conjunction with Composition under the hood where an object uses the functionality of another object to implement its behaviour.  
 
 The mechanism for sharing code varies across languages and includes Interfaces (eg Java), Traits (eg Rust), Mixins (eg Python), and Type-Classes (eg Scala). Often, composition is used under the hood to share behaviour.
 
 > [!TIP]
 I say "don't pay too much inheritance tax" intentionally because at can be argued that inheritance does still have its place, especially in building frameworks and for strong/natural "Is a" relationships e.g. "type A is a type of B."
 
-- Several modern languages don’t even support inheritance (Rust, Zig, Go), relying instead on parametric polymorphism.  
+- Several modern languages don’t even support inheritance (Rust, Zig, Go), relying instead on parametric polymorphism.
 
-| Parametric Polymorphism| Inheritance |
-|--------------- | --------------- |
-| Interface segregation is finer grained - you choose what to implement    | You may need to inherit everything from all ancestors   |
-| More loosley coupled   | Tightly coupled   |
-| More flexible   | Can be more restrictive|
+| Parametric Polymorphism                                               | Inheritance                                              |
+| --------------------------------------------------------------------- | -------------------------------------------------------- |
+| Interface segregation is finer grained - you choose what to implement | You may need to inherit everything from all ancestors    |
+| More loosley coupled, changes to an attached trait does not affect other traits.| Tightly coupled - changes in the parent hierarchy can vertically affect all sub-types |
+| More flexible - attach multiple marker types                          | Single inheritance in some languages is more restrictive |
+
+![](Pasted%20image%2020241220110926.png)
 
 #### Parametric Polymorphism for Existing Types
 
-The mechanism for attaching marker types varies across languages. Some languages allow you to attach the marker type onto existing types without having to modify the original type. This is very convenient and powerful for easily creating 'blanket implementations,' and when you don't have access to the src code of those types e.g., types defined in external packages. Rust and Scala lexically split their type definitions from the definition of the attached marker type using an additional 'referencing-layer.' Conversely, Kotlin and C# provide extension functions to extend the behaviour of existing (or custom) types, which is a subtly different approach. 
+The mechanism for attaching marker types varies across languages. Some languages allow you to attach the marker type onto existing types without having to modify the original type. This is very convenient and powerful for easily creating '*blanket implementations*,' and when you don't have access to the src code of those types e.g., types defined in external packages. Rust and Scala lexically split their type definitions from the definition of the attached marker type using an additional 'referencing-layer.' Conversely, Kotlin and C# provide extension functions to extend the behaviour of existing (or custom) types, which is a subtly different approach. 
 
 > [!TIP]
 Lexically splitting a type from a marker type via an extra 'referencing layer' is elegant and powerful compared to implementing the marker directly on the original type definition itself, such as implementing an interface directly on a class declaration. This is because you don't need to modify the existing type which facilitates simple blanket implementations, and when you do not have access to the src code of the original type. If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
@@ -1580,7 +1623,7 @@ Generally, pushing exception handling code up to the ‘outer layers’ of your 
 
 [top](#Table-Of-Contents)
 
-#### Error Handling – Model the absence of value explicitly
+#### Error Handling – Model the Absence of Values Explicitly
 
 This largely depends on the language you are using:
 
@@ -1602,15 +1645,69 @@ This largely depends on the language you are using:
 
 [top](#Table-Of-Contents)
 
-#### Error Handling in Functional Programming – error monads such as Either and Validated
+#### Error Handling in Functional Programming – Error Monads such as Either and Validated
 
-In functional languages monads are widely used to chain a sequence of function calls into a clean ‘happy path’. This is also known as ‘functional composition’. A core tenant of functional approaches is to produce more declarative and expressive code over classical imperative approaches which usually interleave error handling with the happy path. In functional approaches, you define ‘what to do’ with functions, not ‘how to do it’ as with imperative approaches.
+Before I get to error monads such as Either and Validated, I'll try to briefly explain Monads and functional composition. 
 
-An `Either` monad wraps either a result type or an error type, but not both, typically (`Either<LeftError, RightSuccess>`). Note that Rust is opposite, where left is success and right is error. An instance of a monad is passed between functions in a call chain. Wrapping errors within the ‘monadic context’ allows the functional call chain to be composed without polluting and breaking the chain with exceptions and error handling code.  If a function returns a LeftError wrapped in the Either, subsequent functions in the chain will short-circuit and will simply return the erroneous Either. This continues until the end of the call chain is reached.
+##### What are Monads and Higher-Kinded Types in Functional Composition
 
-A `Validated` monad aggregates errors or exceptions within a functional call chain. The purpose is to capture all the errors rather than short-circuiting on the first. A simple example would be capturing all the errors on a form, rather than returning early on the first erroneous form entry.
+A monad is a virtual burrito or bento-box. If you've looked into functional programming, you'll understand this joke: Monads are a notoriously difficult concept to explain, and there is a common aphorism that a monad is basically like a burrito because it is a wrapper (the taco) around a type (the filling) with additional helper methods that map given functions to the monad's wrapped type. I prefer the bento-box analogy, because there are a more moving parts to a bento-box which better describes a monad (opinion only).
 
-Regarding exceptions in functional composition: If your language uses ‘Checked Exceptions’ (e.g., Java or when using other JVM languages that call out to underlying Java libs), you can’t throw checked exceptions during functional composition as they force you to handle the error and break the call chain with try/catch or throws statements. In this scenario, wrap the exception in the monadic context and return a LeftError. Note that throwing _unchecked_ exceptions is ok in a functional call chain as they don’t pollute the happy path with try/catch or throws, but you likely still want to wrap the error in the monadic context to return an error-as-value, e.g. if that error is not a programming error or is an exceptional circumstance.
+With those analogies in mind, a monad is more formally described as: 
+- A parameterised 'wrapper' type which typically wraps either a successful result or some type of failure resulting from a given/passed-in function. An example is the Either monad: `Either<LeftError, RightSuccess>` (note that Rust is opposite, where left is success and right is error). A `Validated` monad aggregates multiple errors or exceptions within a functional call chain. The purpose is to capture all the errors rather than short-circuiting on the first. A simple example would be capturing all the errors on a form, rather than returning early on the first erroneous form entry.
+- A monad has higher-order methods that accept computations/functions/lambdas that 'map over' the monad's wrapped type to generate and return a new monad result. These higher order methods include 'map,' 'flatMap' and 'bind.' 
+- A monad may generate optional side effects when applying a given function.
+- Monads are designed so that they can be composed ('mix & matched') into a chain of operations, passing monadic-typed results from left to right to achieve an end result. This is commonly also known as ‘functional composition’ or 'chaining'.
+- If a mapper returns an error type, e.g. a `LeftError` wrapped within the `Either`, subsequent calls in the chain will short-circuit and will simply return the erroneous `Either`. This continues until the end of the call chain.
+- Custom monads exist for several common computation patterns - you've likely used monads and have not even realised.
+- A core tenant of the functional paradigm is to produce a more declarative and expressive 'happy path' over imperative approaches, which usually interleave error handling logic polluting the happy path. In functional approaches, you define ‘what to do’ by chaining monads to achieve an end result, not ‘how to do it’ as in imperative approaches where computation logic is typically more exposed.
+- Most likely you may not need to build your own monads, but it is useful to understand them if needed.
+
+Monads are also known as 'Higher-Kinded types,' this is a fancy term to simply describe the fact that a monad wraps a more complex, constructed type. The core abstractions are given below: 
+ - A monad wraps a type `<A>`. This is not a primitive type (int, string etc), but a type that requires its own constructor, hence 'higher-kinded' type.
+ - A monad also has a standard set of helper methods. These helper methods include 'of' 'map' and 'flatMap':
+   - The 'of' method, also known as the 'unit' method, initialises a monad `F` by wrapping the given type `<A>` within the monadic context and has the form: `F<A>.of(A)`.
+   - The 'flatMap' method, also known as 'bind,' accepts a function/lambda that itself returns a new monad `F<B>`. This function is applied i.e. 'mapped' to the monad's wrapped type and its return value is directly/'flatly' returned by flatMap (I think a more accurate name for 'flatMap' is 'mapAndFlatReturn').  FlatMap has the following form, notice the 'next' function's return type is the same as flatMap's return type: `F<A>.flatMap(next: (A) -> F<B>): F<B>`.
+   - Unlike flatMap, the 'map' method accepts a function that returns a plain type `<B>`.  Before returning this value, map wraps this plain value within a newly created monad instance and returns that, so the return type is the same as flatMap, i.e. `F<B>` (I think a more accurate name for 'map' is 'mapWrapAndReturn'). Map has the form: `F<A>.map(next: (A) -> <B>): F<B>`.
+
+Regarding exceptions in functional composition: If your language uses ‘Checked Exceptions’ (e.g., old-style Java or when using other JVM languages that call out to underlying old-style Java libs), you can’t throw checked exceptions during functional composition as they force you to handle the error and break the call chain with try/catch or throws statements. In this scenario, wrap the exception in the monadic context and return a LeftError. Note that throwing _unchecked_ exceptions is OK in a functional call chain as they don’t pollute the happy path with try/catch or throws, but you likely still want to wrap the error in a monad to return an error-as-value e.g., if that error is not a programming error or an exceptional circumstance.
+
+[top](#Table-Of-Contents)
+
+##### Sequential Computation Blocks with Typed Errors
+
+As described above, monads are designed to be chained together in a sequential call chain to produce a final result. For example, this includes [Scala's for comprehension](https://docs.scala-lang.org/tour/for-comprehensions.html), [Haskell's do notation](https://en.wikibooks.org/wiki/Haskell/do_notation) and the [Arrow2 Raise DSL in Kotlin](https://arrow-kt.io/learn/typed-errors/from-either-to-raise/). 
+
+I'm going to use some of Arrow2's excellent documentation as an example in Kotlin. Let's assume the following functions, where 'f, g, h' all return an Either monad, and `Thing.summarize` returns a plain String. 
+
+```Kotlin
+fun f(n: Int): Either<Error, String>
+fun g(s: String): Either<Error, Thing>
+fun h(s: String): Either<Boo, Thing>
+fun Thing.summarize(): String
+```
+
+Our first attempt at functional composition looks like the following, note that we can mix `flatMap` and `map` as required - we use `map` when our computation (i.e. the summarize function) does not itself return a monad, and flatMap when the computation does return a monad: 
+
+```Kotlin
+fun foo(n: Int): Either<Error, String> =
+  f(n).flatMap { s ->
+    g(s).map { t ->
+      t.summarize()
+    }
+  }
+```
+
+Pretty straight forward so far. A more idiomatic example is shown below using Arrow2's Raise DSL which includes the `either` builder:
+
+```Kotlin
+fun foo(n: Int): Either<Error, String> = either {
+  val s = f(n).bind()
+  val t = g(s).bind()
+  t.summarize()
+}
+```
+No nesting, much nicer, but where did those `bind()` methods come from, they aren't declared on Arrow2's Either type? Well, those bind functions are extension functions that are grafted onto `Either` from within the `either` context block. Recall from our discussion on pervasive polymorphism above, that some languages (Kotlin, C#) use extension functions to allow you to extending existing types. This is an example of [extensions](https://kotlinlang.org/docs/extensions.html) with [extension receivers](https://kotlinlang.org/docs/extensions.html#declaring-extensions-as-members) and [function literals with receiver](https://kotlinlang.org/docs/lambdas.html#function-literals-with-receiver). It's quite complex with several variations, so please refer to the Kotlin and Arrow2 docs for more info and for tutorials. Hopefully however, this shows how errors are generally handled using monads in a functional call chain.
 
 [top](#Table-Of-Contents)
 
@@ -1636,60 +1733,61 @@ From Gavin Bierman's Devoxx talk, Java Language Futures: https://www.youtube.com
 
 In computing, concurrency is not parallelism, despite the two terms having very similar dictionary definitions. *Concurrency is a software concern* involving context switching of a process on a single CPU core via a ‘kernel thread’ (these types of thread are also commonly referred to as process thread, carrier thread, and platform thread) . Context switching gives the illusion that multiple things are happening at once because the time slicing is so small. *True parallelism is both a software and hardware concern* which requires increasingly more hardware to do more things at once. This can range from multiple cores on one CPU, multiple CPUs, multiple nodes, remote actors, remote VMs, cloud functions such as Lambda and more. 
 
-For example, parallelism with increasingly 'heavyweight' hardware implementations could range from:
-- single host with shared memory parallelism using platform threads that map to multiple cores/CPUs on the same motherboard, 
-- as above but data is shared within the same process using other mechanisms than memory, such as a memory-mapped file (memory and disk) or other inter-process-communication methods (IPC), 
-- multi-processing where each child-process has its own memory space and each processes consumes one core, 
-- K8s worker nodes working within the same K8s cluster but typically without a high performance interconnect,
-- HPC using compute clusters that message-pass over a 'tightly coupled' high performance interconnect, 
-- geographically distributed nodes (e.g., remote Actors / FaaS / Grid computing), 
-- geographically distributed multi-clustering (e.g., Grid, federated HPC, a potential route to exa-scale). 
+For example, parallelism with increasingly heavyweight implementations from small to large could range from:
+- Single host with shared memory parallelism using low level platform threads and locks (mutexes), where threads map to cores. Programming with platform threads and locks is low level and is really for library developers rather than application developers.
+- Single host with shared memory parallelism using software abstractions built on lower level threads, such as co-routines with channels for sharing data, virtual threads a.k.a. fibers, async/await methods, pragmas to parallelise tight loops such as used in in OpenMP.   
+- Multi-processing where each child-process has its own memory space and data is separately distributed to each process for processing, or data can be shared using inter-process-communication mechanisms (IPC) such as memory-mapped files (memory and disk) or messaging over sockets.
+- K8s worker nodes/pods hosted in the same K8s cluster with communication over ethernet. 
+- HPC using compute clusters where 'tightly coupled' workloads message-pass over a high performance interconnect (MPI). 
+- Geographically distributed compute nodes/servers such as remote Actors / FaaS / Grid computing / service mesh. 
+- Geographically distributed multi-clustering (e.g., Grid, federated HPC - a potential route to exa-scale). 
 
 Some general recommendations:
 - Keep platform threads as isolated as possible & limit mutable global state:
-    - Sharing of fixed immutable state is fine. 	
+    - Sharing of fixed immutable state is fine.
     - Taking defensive copies of data can help prevent race conditions and other concurrency related ‘spooky actions at a distance’.
     - Try to be more functional and limit your use of global mutable state.
-    - Understand the pitfalls of multi-threaded code such as race-conditions, ghost reads, dirty reads, dirty writes, and deadlock.  
+    - Understand the pitfalls of multi-threaded code such as race-conditions, ghost reads, dirty reads, dirty writes, and thread deadlock.
 
 - Keep synchronised critical sections as small as possible:
-     - Amdahl’s law: "The overall performance improvement gained by optimising (i.e. parallelising) a single p art of a system is limited by the fraction of time that the improved part is actually used," or more simply: even a small amount of synchronization *_significantly*_ affects performance. 
-     - Here are some examples of Amdahl's law:  
-         - If 95% of the time spent by your code is parallel, throwing more processors at the problem does not improve speed up beyond ~256 processors. 
+     - Amdahl’s law: "The overall performance improvement gained by optimising (i.e. parallelising) a single p art of a system is limited by the fraction of time that the improved part is actually used," or more simply: even a small amount of synchronization *_significantly*_ affects performance.
+     - Here are some examples of Amdahl's law:
+         - If 95% of the time spent by your code is parallel, throwing more processors at the problem does not improve speed up beyond ~256 processors.
          - If the amount of time spent by your code is <50% parallel, adding more processors won't speed up your code at all.
-         - If the amount of time spent by your code is ~95% parallel, the maximum speed up is only 20 times and this takes 2048 processors. 
+         - If the amount of time spent by your code is ~95% parallel, the maximum speed up is only 20 times and this takes 2048 processors.
 
 ![](attachments/Pasted%20image%2020240611095042.png)
 
 [top](#Table-Of-Contents)
 
-- Understand the pitfalls of multi-threaded programming. If deadlock, live lock, ghost-reads, dirty reads, and atomic vs composite actions don’t make much sense to you (do you think ‘i++’ is atomic? – no it is not), then you will no doubt run in to problems. These days, there is often a much better approach to coding low-level multi-threaded and shared memory models.
+- Understand the pitfalls of multi-threaded programming. If deadlock, live-lock, ghost-reads, dirty reads, and atomic vs composite actions don’t make much sense to you (do you think ‘i++’ is atomic? – no it is not), then you will no doubt run in to problems. For application developers rather than lower level library developers, there is often a much better approach to coding low-level multi-threaded and shared memory models.
 -  When testing, use more threads than processors – running with more threads than processor cores encourages task swapping. The more frequently your tasks swap, the more likely you will find issues.
 
 [top](#Table-Of-Contents)
 
 #### Know the difference between IO bound tasks and CPU bound tasks and their common solution patterns
 
-- *IO Bound Tasks* require asynchronous patterns to achieve concurrency. The solution patterns include:
+*IO Bound Tasks* require asynchronous patterns to achieve concurrency. The solution patterns include:
 
- 	- **Async/Await and Coroutines** (e.g., Go’s ‘Goroutines’ and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your functions are typically split into two types; 1) red functions for asynchronous code typically requiring special keyword modifiers to annotate functions and their call-sites e.g. `async` (function) and `await` (call-site) and; 2) blue functions for plain synchronous code having no modifiers. Note, it could be argued that Go's Goroutines are not coloured because they only require the `go` keyword at the function call-site, there is no need to annotate a function as asynchronous which allows you to call regular functions in an asynchronous way (although you frequently need to pass in concurrency primitives to share data such as `Channels`).  Here is the [original and now famous blog](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function).
- 	- **Virtual-Threads / Fibres** such as the ‘colourless’ [Project Loom](https://wiki.openjdk.org/display/loom/Main) for the JDK where the virtual threads are implemented in user space using continuations. With the release of Loom, the venerable JVM platform arguably boasts the most advanced approach to concurrency. JVM languages can implement a truly colourless programming approach on top using a combination of platform and virtual threads and higher-level abstractions such as the streams API. 
- 	- **Continuations** are very low-level and are used to implement patterns such as coroutines & virtual threads. Continuations can be suspended, stored on the heap, and restarted. Typically, you would not directly use continuation APIs using a Continuation Passing Style (CPS) in your own application logic, although some languages do have public APIs for CPS.
- 	- **Async-Wrapper types such as Futures & Promises.** Note that these are really just higher-level synchronisation primitives, and the task that you await itself would need to be non-blocking to achieve high levels of concurrency.  
- 	- **Call-Back functions** (beware ‘call-back hell’ as often seen in JavaScript). In fact, more friendly ‘synchronous’ patterns such as Coroutines and Continuations simply abstract much of the lower-level call backs from the programmer.
- 	- **Non-blocking IO primitives** where libs & APIs are non-blocking instead of blocking.
- 	- **Reactive Frameworks** e.g., project Reactor. Performant, but typically requiring a horrible API that has a lot of 'hidden magic.' In the JDK space, with the delivery of Project Loom (see above), I believe reactive approaches will decrease in popularity.
+- **Async/Await and Coroutines** (e.g., Rust's async/await functions and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your functions are typically split into two types; 1) red functions for asynchronous code typically requiring special keyword modifiers to annotate functions and their call-sites e.g. `async` (function) and `await` (call-site) and; 2) blue functions for plain synchronous code having no modifiers. Here is the [original and now famous blog - What Color is Your Function](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)
+- **Colourless Coroutines** (e.g. Go's Goroutines). It could be argued that Go's Goroutines are not coloured because they only require the `go` keyword at the function call-site, there is no need to annotate a function as asynchronous which allows you to call regular functions in an asynchronous way (although you frequently need to pass in concurrency primitives to share data such as `Channels`). 
+- **Virtual-Threads / Fibres** such as the ‘colourless’ [Project Loom](https://wiki.openjdk.org/display/loom/Main) for the JDK where the virtual threads are implemented in user space using continuations. With the release of Loom, the venerable JVM platform arguably boasts the most advanced approach to concurrency. JVM languages can implement a truly colourless programming approach on top using a combination of platform and virtual threads and higher-level abstractions such as the streams API. 
+- **Continuations** are very low-level and are used to implement patterns such as coroutines & virtual threads. Continuations can be suspended, stored on the heap, and restarted. Typically, you would not directly use continuation APIs using a Continuation Passing Style (CPS) in your own application logic, although some languages do have public APIs for CPS.
+- **Async-Wrapper types such as Futures & Promises.** Note that these are really just higher-level synchronisation primitives, and the task that you await itself would need to be non-blocking to achieve high levels of concurrency.  
+- **Call-Back functions** (beware ‘call-back hell’ as often seen in JavaScript). In fact, more friendly ‘synchronous’ patterns such as Coroutines and Continuations simply abstract much of the lower-level call backs from the programmer.
+- **Non-blocking IO primitives** where libs & APIs are non-blocking instead of blocking.
+- **Reactive Frameworks** e.g., project Reactor. Performant, but typically requiring a horrible API that has a lot of 'hidden magic.' In the JDK space, with the delivery of Project Loom (see above), I believe reactive approaches will decrease in popularity.
 
 [top](#Table-Of-Contents)
 
--  *CPU Bound Tasks* have different solution patterns:
+*CPU Bound Tasks* have different solution patterns:
 
- 	- **Platform/OS/POSIX/Kernel threads (pthreads).** These are good for numerical computations that do not require much, preferably no, IO. An example would be a ‘tight computational loop’ that performs an in-memory calculation that has no side-effects.  Note that platform threads are rather heavyweight and so should be pooled for effective resource usage (see Fork-Join-Pools). For example, on Linux, each thread typically requires ~1MB of memory per thread – this is because they are controlled by the operating system, and the OS has to be generic enough to handle a variety of use-cases, so 1MB was assumed to be a catch-all default. Platform threads are _very_ different from Virtual Threads in terms of how they are implemented.  A platform thread is very similar to a process in terms of resource-cost, except that threads allows memory sharing between multiple threads while multiple processes do not share the same memory space. For multiple processes, you need some other mechanism to share state and messages between processes, such as a common memory-mapped file(s), file system, databases, and message brokers.
- 	- **Shared memory frameworks** such as OpenMP which make multi-threaded programming simpler by avoiding low-level synchronisation primitives.  
- 	- **Fork-Join-Pools and related ‘Work Stealing’** patterns that involve task queues. FJP is a highly recommended way to achieve best possible performance because low-level Kernel/OS threads are re-used to maximum effect.
- 	- **Horizontal scaling with Pub-Sub and Competing Consumers.** This is where multiple compute nodes subscribe to a message channel and pull messages from the channel. If the queue-depth gets too high, you add more consumers to process the messages.
- 	- **Lazy Parallel Streams** in functional approaches. Functional streams are typically executed lazily, importantly after the whole computation has been fully defined. This allows the caller or runtime to perform optimisations such as automatic parallelisation. This can only be achieved because the full stream is defined lazily, ahead of time.    
- 	- **Message Passing** e.g., the Actor model (e.g., Akka) & Message Passing Interface (e.g., OpenMPI) in HPC are both examples of message passing. Note that the Actor model is actually the canonical parallelism pattern, while MPI is quite niche (largely just the HPC community).
+- **Platform/OS/POSIX/Kernel threads (pthreads).** These are good for numerical computations that do not require much, preferably no, IO. An example would be a ‘tight computational loop’ that performs an in-memory calculation that has no side-effects.  Note that platform threads are rather heavyweight and so should be pooled for effective resource usage (see Fork-Join-Pools). For example, on Linux, each thread typically requires ~1MB of memory per thread – this is because they are controlled by the operating system, and the OS has to be generic enough to handle a variety of use-cases, so 1MB was assumed to be a catch-all default. Platform threads are _very_ different from Virtual Threads in terms of how they are implemented.  A platform thread is very similar to a process in terms of resource-cost, except that threads allows memory sharing between multiple threads while multiple processes do not share the same memory space. For multiple processes, you need some other mechanism to share state and messages between processes, such as a common memory-mapped file(s), file system, databases, and message brokers.
+- **Shared memory frameworks** such as OpenMP which make multi-threaded programming simpler by avoiding low-level synchronisation primitives.  
+- **Fork-Join-Pools and related ‘Work Stealing’** patterns that involve task queues. FJP is a highly recommended way to achieve best possible performance because low-level Kernel/OS threads are re-used to maximum effect.
+- **Horizontal scaling with Pub-Sub and Competing Consumers.** This is where multiple compute nodes subscribe to a message channel and pull messages from the channel. If the queue-depth gets too high, you add more consumers to process the messages.
+- **Lazy Parallel Streams** in functional approaches. Functional streams are typically executed lazily, importantly after the whole computation has been fully defined. This allows the caller or runtime to perform optimisations such as automatic parallelisation. This can only be achieved because the full stream is defined lazily, ahead of time.    
+- **Message Passing** e.g., the Actor model (e.g., Akka) & Message Passing Interface (e.g., OpenMPI) in HPC are both examples of message passing. Note that the Actor model is actually the canonical parallelism pattern, while MPI is quite niche (largely just the HPC community).
 
 
 If you must use low-level locks and synchronization primitives with critical sections, try to use ‘re-entrant’ locks for better composability and performance over non-re-entrant synchronized blocks. Check if the languages mutexes (semaphores, count-down latches) are re-entrant (language agnostic advice).
