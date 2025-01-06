@@ -103,8 +103,8 @@ dv.view('toc')
         5. [Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected errors - exceptional does not mean conditional](#Error-Handling---Only-use-exceptions-for-exceptional-situations-such-as-coding-errors-and-unexpected-errors---exceptional-does-not-mean-conditional)
         6. [Error Handling - Provide relevant exceptions for the abstraction layer](#Error-Handling---Provide-relevant-exceptions-for-the-abstraction-layer)
         7. [Error Handling - Bubble exceptions upwards or trap at source](#Error-Handling---Bubble-exceptions-upwards-or-trap-at-source)
-        8. [Error Handling – Model the Absence of Values Explicitly](#Error-Handling-%E2%80%93-Model-the-Absence-of-Values-Explicitly)
-        9. [Error Handling in Functional Programming – Error Monads such as Either and Validated](#Error-Handling-in-Functional-Programming-%E2%80%93-Error-Monads-such-as-Either-and-Validated)
+        8. [Error Handling - Model the Absence of Values Explicitly](#Error-Handling---Model-the-Absence-of-Values-Explicitly)
+        9. [Error Handling in Functional Programming – Error Monads such as Either and Validated](#Error-Handling-in-Functional-Programming---Error-Monads-such-as-Either-and-Validated)
             1. [What are Monads and Higher-Kinded Types in Functional Composition](#What-are-Monads-and-Higher-Kinded-Types-in-Functional-Composition)
             2. [Sequential Computation Blocks with Typed Errors](#Sequential-Computation-Blocks-with-Typed-Errors)
     36. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
@@ -1623,7 +1623,7 @@ Generally, pushing exception handling code up to the ‘outer layers’ of your 
 
 [top](#Table-Of-Contents)
 
-#### Error Handling – Model the Absence of Values Explicitly
+#### Error Handling - Model the Absence of Values Explicitly
 
 This largely depends on the language you are using:
 
@@ -1645,7 +1645,7 @@ This largely depends on the language you are using:
 
 [top](#Table-Of-Contents)
 
-#### Error Handling in Functional Programming – Error Monads such as Either and Validated
+#### Error Handling in Functional Programming - Error Monads such as Either and Validated
 
 Before I get to error monads such as Either and Validated, I'll try to briefly explain Monads and functional composition. 
 
