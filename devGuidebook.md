@@ -536,7 +536,7 @@ Rather than pay too much inheritance tax, consider using 'Parametric Polymorphis
 The mechanism for sharing code varies across languages and includes Interfaces (eg Java), Traits (eg Rust), Mixins (eg Python), and Type-Classes (eg Scala). Often, composition is used under the hood to share behaviour.
 
 > [!TIP]
-I say "don't pay too much inheritance tax" intentionally because at can be argued that inheritance does still have its place, especially in building frameworks and for strong/natural "Is a" relationships e.g. "type A is a type of B."
+I say "don't pay too much inheritance tax" intentionally because it can be argued that inheritance does still have its place, especially in building frameworks and for strong/natural "Is a" relationships e.g. "type A is a type of B."
 
 - Several modern languages don’t even support inheritance (Rust, Zig, Go), relying instead on parametric polymorphism.
 
@@ -1707,7 +1707,7 @@ fun foo(n: Int): Either<Error, String> = either {
   t.summarize()
 }
 ```
-No nesting, much nicer, but where did those `bind()` methods come from, they aren't declared on Arrow2's Either type? Well, those bind functions are extension functions that are grafted onto `Either` from within the `either` context block. Recall from our discussion on pervasive polymorphism above, that some languages (Kotlin, C#) use extension functions to allow you to extending existing types. This is an example of [extensions](https://kotlinlang.org/docs/extensions.html) with [extension receivers](https://kotlinlang.org/docs/extensions.html#declaring-extensions-as-members) and [function literals with receiver](https://kotlinlang.org/docs/lambdas.html#function-literals-with-receiver). It's quite complex with several variations, so please refer to the Kotlin and Arrow2 docs for more info and for tutorials. Hopefully however, this shows how errors are generally handled using monads in a functional call chain.
+No nesting, much nicer, but where did those `bind()` methods come from, they aren't declared on Arrow2's Either type? Well, those bind functions are extension functions that are grafted onto `Either` from within the `either` context block. They are needed to short-circuit annd return early in the case of an error. Recall from our discussion on pervasive polymorphism above, that some languages (Kotlin, C#) use extension functions to allow you to extending existing types. This is an example of [extensions](https://kotlinlang.org/docs/extensions.html) with [extension receivers](https://kotlinlang.org/docs/extensions.html#declaring-extensions-as-members) and [function literals with receiver](https://kotlinlang.org/docs/lambdas.html#function-literals-with-receiver). It's quite complex with several variations, so please refer to the Kotlin and Arrow2 docs for more info and for tutorials. Hopefully however, this shows how errors are generally handled using monads in a functional call chain.
 
 [top](#Table-Of-Contents)
 
