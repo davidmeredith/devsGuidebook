@@ -2,7 +2,7 @@
 
 Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre but now I maintain an updated version here. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. Happy reading. DaveM
 
-Last Updated 06/01/25.  Enjoy.
+Last Updated 20/01/25.  Enjoy.
 
 ## Table Of Contents
 
@@ -34,83 +34,98 @@ dv.view('toc')
     12. [Developer Bill of Rights - modified from Uncle Bob Martin Clean Agile](#Developer-Bill-of-Rights---modified-from-Uncle-Bob-Martin-Clean-Agile)
     13. [Tooling](#Tooling)
         1. [Do not be Smart - Use the Right Tools for the Job and for your customer](#Do-not-be-Smart---Use-the-Right-Tools-for-the-Job-and-for-your-customer)
-        2. [To Garbage Collect or Not To GC](#To-Garbage-Collect-or-Not-To-GC)
-            1. [Monads and Green Threads need a GC](#Monads-and-Green-Threads-need-a-GC)
-            2. [Should I Use Rust for Everything](#Should-I-Use-Rust-for-Everything)
-        3. [Kanban - Jira and Confluence](#Kanban---Jira-and-Confluence)
-        4. [Gitlab and Version Control](#Gitlab-and-Version-Control)
-        5. [Container Repository](#Container-Repository)
-        6. [Build Tools](#Build-Tools)
-        7. [Static Code Analysis](#Static-Code-Analysis)
-        8. [Containerisation for Portability](#Containerisation-for-Portability)
-        9. [Workflows and Containerisation](#Workflows-and-Containerisation)
+            1. [To Garbage Collect or Not To GC](#To-Garbage-Collect-or-Not-To-GC)
+            2. [Monads and Green Threads need a GC](#Monads-and-Green-Threads-need-a-GC)
+            3. [What about Rust or Zig](#What-about-Rust-or-Zig)
+        2. [Kanban - Jira and Confluence](#Kanban---Jira-and-Confluence)
+        3. [Gitlab and Version Control](#Gitlab-and-Version-Control)
+        4. [Container Repository](#Container-Repository)
+        5. [Build Tools](#Build-Tools)
+        6. [Static Code Analysis](#Static-Code-Analysis)
+        7. [Containerisation for Portability](#Containerisation-for-Portability)
+        8. [Workflows and Containerisation](#Workflows-and-Containerisation)
 3. [Coding Recommendations and Best Practices](#Coding-Recommendations-and-Best-Practices)
     1. [High quality code is easy to change](#High-quality-code-is-easy-to-change)
     2. [Quality is the best shortcut - Fowler Design Stamina Hypothesis](#Quality-is-the-best-shortcut---Fowler-Design-Stamina-Hypothesis)
-    3. [Do Not Name Abstractions After Constituent Parts](#Do-Not-Name-Abstractions-After-Constituent-Parts)
-    4. [Naming with Meaningful and Descriptive Names](#Naming-with-Meaningful-and-Descriptive-Names)
-    5. [Testing has Three Main Purposes](#Testing-has-Three-Main-Purposes)
-    6. [Keep Classes and Functions Smallish](#Keep-Classes-and-Functions-Smallish)
-    7. [Limit the Number of Function Arguments](#Limit-the-Number-of-Function-Arguments)
-    8. [Functions should do one thing and do it well](#Functions-should-do-one-thing-and-do-it-well)
-    9. [Classes and Code Should be Cohesive](#Classes-and-Code-Should-be-Cohesive)
-    10. [Classes should have only one reason to change and do one thing and do it well](#Classes-should-have-only-one-reason-to-change-and-do-one-thing-and-do-it-well)
-    11. [OOP Redefined](#OOP-Redefined)
-    12. [SOLID](#SOLID)
+    3. [Meaningful and Descriptive Names](#Meaningful-and-Descriptive-Names)
+        1. [Use intention revealing names](#Use-intention-revealing-names)
+        2. [Don't write comments when you can use a well named function or variable](#Don't-write-comments-when-you-can-use-a-well-named-function-or-variable)
+        3. [Do Not Name Abstractions After Constituent Parts](#Do-Not-Name-Abstractions-After-Constituent-Parts)
+    4. [Testing has Three Main Purposes](#Testing-has-Three-Main-Purposes)
+    5. [Keep Classes and Functions Smallish](#Keep-Classes-and-Functions-Smallish)
+    6. [Limit the Number of Function Arguments](#Limit-the-Number-of-Function-Arguments)
+    7. [Functions should do one thing](#Functions-should-do-one-thing)
+    8. [Code Should be Cohesive](#Code-Should-be-Cohesive)
+    9. [OOP Redefined](#OOP-Redefined)
+    10. [SOLID](#SOLID)
         1. [SRP](#SRP)
         2. [Open-Closed Principle](#Open-Closed-Principle)
-    13. [Pervasive Polymorphism](#Pervasive-Polymorphism)
-        1. [Inheritance should be explicitly designed-for](#Inheritance-should-be-explicitly-designed-for)
+    11. [Pervasive Polymorphism](#Pervasive-Polymorphism)
+        1. [Inheritance Should be Explicitly Designed-For](#Inheritance-Should-be-Explicitly-Designed-For)
         2. [Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Augment your Type-System With Shared Marker Types](#Avoid-Paying-too-much-Inheritance-Tax---Use-Parametric-Polymorphism-to-Augment-your-Type-System-With-Shared-Marker-Types)
         3. [Parametric Polymorphism for Existing Types](#Parametric-Polymorphism-for-Existing-Types)
-        4. [Extension Functions for Augmenting Existing Types](#Extension-Functions-for-Augmenting-Existing-Types)
+        4. [Extension for Augmenting Existing Types](#Extension-for-Augmenting-Existing-Types)
         5. [Structural Polymorphism and Duck Typing](#Structural-Polymorphism-and-Duck-Typing)
         6. [Sealing](#Sealing)
         7. [Composition / Delegation](#Composition-/-Delegation)
-    14. [Parametric Polymorphism Language Comparison](#Parametric-Polymorphism-Language-Comparison)  
+    12. [Parametric Polymorphism Language Comparison](#Parametric-Polymorphism-Language-Comparison)  
         1. [Rust Example](#Rust-Example)  
         1. [Kotlin Example](#Kotlin-Example)  
         1. [Java Example](#Java-Example)  
         1. [Go Example](#Go-Example)
-    15. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
-    16. [FP vs OOP - Choose Two](#FP-vs-OOP---Choose-Two)
-    17. [Dependency Inversion Principle](#Dependency-Inversion-Principle)
-    18. [Dependency Injection and Inversion of Control for Decreasing Code Coupling - IoC](#Dependency-Injection-and-Inversion-of-Control-for-Decreasing-Code-Coupling---IoC)
-    19. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
-    20. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
-    21. [Know Some Design Patterns](#Know-Some-Design-Patterns)
+    13. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
+    14. [FP vs OOP - Choose Two](#FP-vs-OOP---Choose-Two)
+    15. [Dependency Rule and Dependency Inversion Principle (DIP)](#Dependency-Rule-and-Dependency-Inversion-Principle-(DIP))
+        1. [A hearts and legs analogy](#A-hearts-and-legs-analogy)
+    16. [Dependency Injection and Inversion of Control for Decreasing Code Coupling - IoC](#Dependency-Injection-and-Inversion-of-Control-for-Decreasing-Code-Coupling---IoC)
+    17. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
+    18. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
+        1. [Throwing Exceptions from Constructors](#Throwing-Exceptions-from-Constructors)
+        2. [Use a Smart Constructor or Factory to Return a Smarter Return Type](#Use-a-Smart-Constructor-or-Factory-to-Return-a-Smarter-Return-Type)
+        3. [Use a Builder with a Smarter Return Type](#Use-a-Builder-with-a-Smarter-Return-Type)
+    19. [Know Some Design Patterns](#Know-Some-Design-Patterns)
         1. [The Strategy Pattern Example](#The-Strategy-Pattern-Example)
         2. [The Visitor Pattern](#The-Visitor-Pattern)
         3. [Builder Pattern for More Complex Object Creation Scenarios](#Builder-Pattern-for-More-Complex-Object-Creation-Scenarios)
-    22. [Information Hiding](#Information-Hiding)
-    23. [Keep it Simple Stupid KISS](#Keep-it-Simple-Stupid-KISS)
-    24. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
-    25. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
-    26. [Comment in line As You Go](#Comment-in-line-As-You-Go)
-    27. [The Boy Scout Rule](#The-Boy-Scout-Rule)
-    28. [Law of Demiter and Train Wrecks](#Law-of-Demiter-and-Train-Wrecks)
-    29. [Do not pollute Functional Code with Mutable State](#Do-not-pollute-Functional-Code-with-Mutable-State)
-    30. [Make Private your Default Class Level Visibility](#Make-Private-your-Default-Class-Level-Visibility)
-    31. [Make Immutability your Default](#Make-Immutability-your-Default)
-    32. [Interior Mutability](#Interior-Mutability)
-    33. [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
-    34. [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
-    35. [Error Handling](#Error-Handling)
-        1. [Error Handling - 4 Types of Problems](#Error-Handling---4-Types-of-Problems)
-        2. [Error Handling - Exceptions vs Errors-as-Values](#Error-Handling---Exceptions-vs-Errors-as-Values)
-        3. [Error Handling - Model Exceptions as Values with Algebraic Data Types](#Error-Handling---Model-Exceptions-as-Values-with-Algebraic-Data-Types)
-        4. [Error Handling - Exceptions should not be used for flow control - exceptional does not mean conditional](#Error-Handling---Exceptions-should-not-be-used-for-flow-control---exceptional-does-not-mean-conditional)
-        5. [Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected errors - exceptional does not mean conditional](#Error-Handling---Only-use-exceptions-for-exceptional-situations-such-as-coding-errors-and-unexpected-errors---exceptional-does-not-mean-conditional)
-        6. [Error Handling - Provide relevant exceptions for the abstraction layer](#Error-Handling---Provide-relevant-exceptions-for-the-abstraction-layer)
-        7. [Error Handling - Bubble exceptions upwards or trap at source](#Error-Handling---Bubble-exceptions-upwards-or-trap-at-source)
-        8. [Error Handling - Model the Absence of Values Explicitly](#Error-Handling---Model-the-Absence-of-Values-Explicitly)
-        9. [Error Handling in Functional Programming – Error Monads such as Either and Validated](#Error-Handling-in-Functional-Programming---Error-Monads-such-as-Either-and-Validated)
-            1. [What are Monads and Higher-Kinded Types in Functional Composition](#What-are-Monads-and-Higher-Kinded-Types-in-Functional-Composition)
-            2. [Sequential Computation Blocks with Typed Errors](#Sequential-Computation-Blocks-with-Typed-Errors)
-    36. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
-    37. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
-        1. [Know the difference between IO bound tasks and CPU bound tasks and their common solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-common-solution-patterns)
-    38. [Security Development Practices](#Security-Development-Practices)
+    20. [Information Hiding](#Information-Hiding)
+    21. [Keep it Simple Stupid KISS](#Keep-it-Simple-Stupid-KISS)
+    22. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
+    23. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
+    24. [Comment in line As You Go](#Comment-in-line-As-You-Go)
+    25. [The Boy Scout Rule](#The-Boy-Scout-Rule)
+    26. [Principal of Least Knowledge and Train Wrecks - The Law of Demeter](#Principal-of-Least-Knowledge-and-Train-Wrecks---The-Law-of-Demeter)
+    27. [Do not pollute Functional Code with Mutable State](#Do-not-pollute-Functional-Code-with-Mutable-State)
+    28. [Make Private your Default Class Level Visibility](#Make-Private-your-Default-Class-Level-Visibility)
+    29. [Make Immutability your Default](#Make-Immutability-your-Default)
+    30. [Interior Mutability](#Interior-Mutability)
+    31. [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
+    32. [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
+    33. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
+    34. [Error Handling](#Error-Handling)
+        1. [Error Handling - Four Types of Problems](#Error-Handling---Four-Types-of-Problems)
+        2. [Error Handling - Fail Early](#Error-Handling---Fail-Early)
+        3. [Error Handling - Be defensive at application boundaries, not within your inner domain logic](#Error-Handling---Be-defensive-at-application-boundaries,-not-within-your-inner-domain-logic)
+        4. [Error Handling - Model the Absence of Values Explicitly](#Error-Handling---Model-the-Absence-of-Values-Explicitly)
+            1. [Error Handling - Do Not Initialise with Null or Return Null](#Error-Handling---Do-Not-Initialise-with-Null-or-Return-Null)
+        5. [Error Handling - Exceptions vs Errors-as-Values](#Error-Handling---Exceptions-vs-Errors-as-Values)
+            1. [Proponents of errors-as-values](#Proponents-of-errors-as-values)
+            2. [Proponents of exceptions](#Proponents-of-exceptions)
+            3. [Can I use both styles in a hybrid approach](#Can-I-use-both-styles-in-a-hybrid-approach)
+        6. [Error Handling - Exceptions should not be used for flow control - exceptional does not mean conditional](#Error-Handling---Exceptions-should-not-be-used-for-flow-control---exceptional-does-not-mean-conditional)
+        7. [Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected errors](#Error-Handling---Only-use-exceptions-for-exceptional-situations-such-as-coding-errors-and-unexpected-errors)
+        8. [Error Handling - Provide relevant exceptions for the abstraction layer](#Error-Handling---Provide-relevant-exceptions-for-the-abstraction-layer)
+        9. [Error Handling - Bubble exceptions upwards or trap at source](#Error-Handling---Bubble-exceptions-upwards-or-trap-at-source)
+        10. [Error Handling - Model Exceptions as Values with Algebraic Data Types](#Error-Handling---Model-Exceptions-as-Values-with-Algebraic-Data-Types)
+        11. [Error Handling in the Functional Way - Returning Smarter Wrapper Types eg the Either Monad](#Error-Handling-in-the-Functional-Way---Returning-Smarter-Wrapper-Types-eg-the-Either-Monad)
+            1. [What are Monads aka Higher-Kinded Types](#What-are-Monads-aka-Higher-Kinded-Types)
+            2. [Example Type Safe Functional Composition by Short-Circuiting on Errors](#Example-Type-Safe-Functional-Composition-by-Short-Circuiting-on-Errors)
+            3. [Basic Monad implementation](#Basic-Monad-implementation)
+            4. [Can I combine Monads and ADTs to model multiple or error states](#Can-I-combine-Monads-and-ADTs-to-model-multiple-or-error-states)
+            5. [Other Error Monads such as Validated and Ior](#Other-Error-Monads-such-as-Validated-and-Ior)
+            6. [Inlining within a Computation Block to Avoid Nesting](#Inlining-within-a-Computation-Block-to-Avoid-Nesting)
+    35. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
+        1. [Know the difference between IO bound tasks and CPU bound tasks and their solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-solution-patterns)
+    36. [Security Development Practices](#Security-Development-Practices)
 4. [Agile Process Guide aka Feedback Driven Development](#Agile-Process-Guide-aka-Feedback-Driven-Development)
     1. [Design Thinking Workshops and Scoping Document](#Design-Thinking-Workshops-and-Scoping-Document)
     2. [Epics and Work Package Span Multiple Sprints](#Epics-and-Work-Package-Span-Multiple-Sprints)
@@ -294,30 +309,27 @@ As a centre, we should be using the right tools for the job, we all have our pre
 
 Have the customer in mind. For example, Haskell and other Lisps are great (I’ve played with Clojure), but don’t be smart and use this as an opportunity to explore your favourite pet-programmer project, it’s not going to be much use to the customer. It’s hard to hire Haskell programmers.
 
-![](attachments/Pasted%20image%2020240611091943.png)
+##### To Garbage Collect or Not To GC
 
-#### To Garbage Collect or Not To GC
+For certain types of programming, e.g. numerical algorithm development, HPC and when squeezing software into tight spaces such as embedded systems, a Garbage Collected (GC) language probably isn’t the best choice - a GC adds extra memory, disk, and CPU requirement. Therefore, venerable manual memory managed languages without a runtime such as C/C++/Fortran are still a good choice. Newer memory safe languages such as Zig, Rust, Mojo, Julia are interesting and relevant in this space, but I do not have enough hard-won experience in these languages to recommend them or not.
 
-For HPC and when squeezing software into tight spaces such as embedded systems, a Garbage Collected (GC) language probably isn’t the best choice as GC adds extra memory, disk, and CPU requirement. However, for most other types of software such as full-stack enterprise-applications, web services, mobile, and general-purpose programming, I recommend using a memory safe language probably having a GC – “A human garbage collector is just wasted effort” (Eckle & Ward, Happy Path Programming). Similarly, there is a recognised shift in industry away from memory unsafe languages as the vast majority Common Vulnerability Exploits (CVEs) stem from unsafe memory language exploits, causing organisations such as [Google](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html) (for Android), [NSA and Microsoft to urge the use of memory-safe languages](https://www.theregister.com/2022/11/11/nsa_urges_orgs_to_use/).
+ For most other types of software development such as full-stack, enterprise, web services, mobile, and general-purpose programming, I do recommend using a memory safe language and this implies having a GC for the majority of languages (apart from Rust).  There is a recognised shift in industry away from memory unsafe languages as the vast majority Common Vulnerability Exploits (CVEs) stem from unsafe memory language exploits, causing organisations such as [Google](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html) (for Android), [NSA and Microsoft to urge the use of memory-safe languages](https://www.theregister.com/2022/11/11/nsa_urges_orgs_to_use/), [DARPA through its 'TRACTOR' programme (Translating All C to Rust), and the US Gov](https://www.darpa.mil/research/programs/translating-all-c-to-rust) for all its  governmental projects to start all new projects in a memory safe language.
 
-Have the customer in mind. For example, Haskell and other Lisps are great (I’ve played with Clojure), but don’t be smart and use this as an opportunity to explore your favourite pet-programmer project, it’s not going to be much use to the customer. It’s hard to hire Haskell programmers.
-
-![](attachments/Pasted%20image%2020240611091943.png)
-
+> [!TIP]
+> “A human garbage collector is just wasted effort” (Eckle & Ward, Happy Path Programming). 
 ##### Monads and Green Threads need a GC
 
-At the time of writing, there doesn't seem to be a non-GC language that supports monads for functional composition coupled with a colourless async runtime eg green threads and coroutines. Note, I do not mean platform/kernel/OS threads, I mean virtual threads that are implemented by the runtime eg Go's Goroutines, Java's Project Loom, and Fibres in other languages. This appears to be a current open research topic in non-GC'd languages. According to this [Rust maintainer](https://www.youtube.com/watch?v=1zOd52_tUWg), async is possible with coloured approaches such as `async/await` (eg C++, Rust), but colourless approaches such as green threads and coroutines, and advanced functional programming with monads currently requires a GC. The GC handles memory clean-up for several low level complexities eg async task cancellation, how to implement memory clean up without higher-level approaches such as RAII and destructors, and providing a debugger that is usable for complex async code. I'm currently monitoring what Zig does in future - [here is an interesting summary](https://github.com/ziglang/zig/wiki/FAQ#what-is-the-status-of-async-in-zig), and apparently Zig's `defer/errdefer` becomes impractical in an async context. 
+At the time of writing, there doesn't seem to be a non-GC language that supports monads for functional composition coupled with a colourless async runtime eg green threads and coroutines. Note, I do not mean platform/kernel/OS threads, I mean virtual or 'green' threads that are implemented by the runtime eg Go's Goroutines, Java's Project Loom, Fibres PHP and Ruby.  This appears to be a current open research topic in non-GC'd languages. According to this [Rust maintainer](https://www.youtube.com/watch?v=1zOd52_tUWg), async is possible with coloured approaches such as `async/await` (eg C++, Rust), but colourless approaches such as green threads and coroutines, and advanced functional programming with monads currently requires a GC. The GC handles memory clean-up for several low level complexities eg async task cancellation, how to implement memory clean up without higher-level approaches such as RAII and destructors, and providing a debugger that is usable for complex async code. I'm currently monitoring what Zig does in future - [here is an interesting summary](https://github.com/ziglang/zig/wiki/FAQ#what-is-the-status-of-async-in-zig), and apparently Zig's `defer/errdefer` becomes impractical in an async context. 
 
-> [!INFO]
+> [!NOTE]
 For me, the increased productivity, and availability of a colourless async runtime with the ability to implement monads for functional composition is (currently) worth the cost of using a GC language, especially for application programming.
 
 [top](#Table-Of-Contents)
 
-##### Should I Use Rust for Everything
+##### What about Rust or Zig
 
 TODO I don't have enough hard-won experience to confidently make this call, so I'll have to defer to the opinion of of others. According to Lars Bergstrom, Director of Engineering for Android at Google, 
-
-
+[top](#Table-Of-Contents)
 #### Kanban - Jira and Confluence
 
 Keep all project documents and the Decision Point Review templates in a single repo such as Confluence so the client has full visibility. Its best if the client creates the (free) Jira instance and invites us as admins on their Kanban/Jira/Confluence. This way, the client has ownership of the project after the project completes. Make sure you export and download a copy of the Jira archive file so we can restore it within our own Jira instances if needed in future or for follow on projects.
@@ -386,37 +398,80 @@ Code needs to achieve its purpose under certain parameters, but assuming that it
 
 ### Quality is the best shortcut - Fowler Design Stamina Hypothesis
 
-- Think carefully about compromising the quality of your code for delivery speed; high quality code quickly becomes easier and faster to develop and overtakes hastily hacked together code. This is evidence based, see Martin Fowler's [Design Stamina Hypothesis]([https://martinfowler.com/bliki/DesignStaminaHypothesis.html](https://martinfowler.com/bliki/DesignStaminaHypothesis.html)) which describes how the velocity of software development declines with time due to poor design. We have also experienced this before in actual projects – the hypothesis has played out in practice at Hartree.
+- Think carefully about compromising the quality of your code for delivery speed; high quality code quickly becomes easier and faster to develop and overtakes hastily hacked together code. This is evidence based, see Martin Fowler's [Design Stamina Hypothesis](https://martinfowler.com/bliki/DesignStaminaHypothesis.html)) which describes how the velocity of software development declines with time due to poor design. We have also experienced this before in actual projects – the hypothesis has played out in practice at Hartree.
 
 ![](attachments/Pasted%20image%2020240611092227.png)
 
 [top](#Table-Of-Contents)
 
-### Do Not Name Abstractions After Constituent Parts
-
-- Do not name abstractions after their constituent parts using a 'bottom up' approach. By definition, an abstraction should use a higher level vocabulary and shield you from the lower level details. Gregor Hohpe from Enterprise Application Integration book fame provides a great example: If software engineers had named the automobile, it would have been something like: `PistonCrankshaftGearWheelAssemblyFactorySingleton` - not a useful name (this reminds me of some Spring Framework classes).  Another simple example from Gregor: Q. consider the `GasPedal` of the car, is that a good abstraction? A. no, the car might not use gas, a more suitable name is the `Accelerator.`     
-
-[top](#Table-Of-Contents)
-
-### Naming with Meaningful and Descriptive Names 
+### Meaningful and Descriptive Names 
 
 - “There are only two hard things in computer science, invalidation and naming things” (P.Karlton), see: [https://martinfowler.com/bliki/TwoHardThings.html](https://martinfowler.com/bliki/TwoHardThings.html)
-- Use intention revealing names for your abstractions, classes, functions & variables, and don’t use single character variable names (single chars for implicit loops etc are OK, but for global/module/class members, please use sensible names).  For example, `process_model` is too generic, what does it mean? `execute_nlp_training_model` is better, its more self-documenting.
-- Class names should have noun phrases e.g., Customer, WikiPage, Account, AccountParser.
-- Don’t use a comment when you can use a well named function or variable:
-  
 
-![](attachments/Pasted%20image%2020240611092516.png)
+> [!TIP]
+> - Use intention revealing names for your abstractions, classes, functions & variables. 
+>     - For example, `process_model` is too generic, what does it mean? `execute_nlp_training_model` is better, its more self-documenting.  
+> - Don't use single character variable names
+>     - Single chars for implicit loops etc are OK, but for global/module/class members, please use sensible names.  
+> - Class names should have noun phrases e.g., Customer, WikiPage, Account, AccountParser.
+> - Don't name abstractions after constituent parts.
+> - API comments should describe the intention, not the implementation or how (internal comments ok) 
+> - Don’t write comments when you can use a well named function or variable.
+
+The following two examples are taken from Uncle Bob's 'Clean Code' book:
+
+#### Use intention revealing names
+Which is easier to read? 
+```Java
+// check to see if the employee is elibible for full benefits
+
+// This
+if((employee.flags & HOURLY_FLAG) && employee.age > 65) {
+   ...
+}
+
+// Or this?
+if(employee.isEligibleForFullPension()){ 
+  ...
+}
+```
+
+#### Don't write comments when you can use a well named function or variable 
+
+I love this bit of advice from Bob "Every time you express yourself in code, you should pat yourself on the back. Every time you write a comment, you should grimace and feel the failure of your [lack] of ability of expression."
+
+```Java
+if(getDependentSystems().contains(subSystems.getCurrentSubsystem())){ 
+   ...
+}
+
+// this is better, even if we have to introduce a few var
+List allSubSystems = getDependentSystems();
+String ourSystem = subSystems.getCurrentSubsystem();
+if(allSubSystems.contains(ourSystem)){
+  ...
+}
+```
 
 [top](#Table-Of-Contents)
 
+#### Do Not Name Abstractions After Constituent Parts
+
+- Do not name abstractions after their constituent parts using a 'bottom up' approach. By definition, an abstraction should use a higher level vocabulary and shield you from the lower level details. Gregor Hohpe from 'Enterprise Application Integration' book fame provides a great example: If software engineers had named the automobile, it would have been something like: `PistonCrankshaftGearWheelAssemblyFactorySingleton` - not a useful name (this reminds me of some Spring Framework classes).  Another simple example from Gregor: Q. consider the `GasPedal` of the car, is that a good abstraction? A. no, the car might not use gas, a more suitable name is the `Accelerator.`     
+
+[top](#Table-Of-Contents)
 ### Testing has Three Main Purposes
 
-a)     **To assert the correctness of your code**. Sometimes you might counter “well, it’s not always possible to know the result of a calculation to assert because the result is non-deterministic”.  In this scenario, the following reasons to test still hold true!
+> [!TIP]
+> Testing has 3 main purposes: 
+> 1) To assert the correctness of your code.
+> 2) To prevent regressions.
+> 3) To encourage good design.
 
-b)     **To prevent regressions.** It really does build confidence in your code if you can quickly run a test suite to make sure you haven’t unexpectedly broken something.
 
-c)     **To encourage good design.**  It _really_ does actually - there’s lots of supporting research that shows this. When you write tests, you put yourself in the caller perspective, so you really do think about design such as loose coupling, separation of concerns, modularity, simplicity of API, and so on. If your code is hard to test, it’s likely too strongly coupled, and here Dependency Injection with abstractions can help you.  Test Driven Development (TDD) is the ultimate testing practice, where you write tests first using an imaginary API, and then you fill in the details.
+- 1) **To assert the correctness of your code**. Sometimes you might counter “well, it’s not always possible to know the result of a calculation to assert because the result is non-deterministic”.  In this scenario, the following reasons to test still hold true!
+- 2) **To prevent regressions.** It really does build confidence in your code if you can quickly run a test suite to make sure you haven’t unexpectedly broken something.
+- 3) **To encourage good design.**  It _really_ does actually - there’s lots of supporting research that shows this. When you write tests, you put yourself in the caller's perspective, so you really do think about design such as loose coupling, separation of concerns, modularity, simplicity of API, and so on. If your code is hard to test, it’s likely too strongly coupled, and here Dependency Injection with abstractions can help you.  Test Driven Development (TDD) is the ultimate testing practice, where you write tests first using an imaginary API, and then you fill in the details.
 
 [top](#Table-Of-Contents)
 
@@ -428,16 +483,47 @@ General rule – not much bigger than your screen’s viewport. I don't subscrib
 
 ### Limit the Number of Function Arguments
 
-Consider using immutable Data Transfer Objects (aka DTOs / Data Objects / Records) if your function has more than ~4 arguments.
+>[!TIP]
+>Consider using immutable Data Transfer Objects (aka DTOs / Data Objects / Records) if your function has more than ~4 arguments.
 
-### Functions should do one thing and do it well
+### Functions should do one thing 
 
-Separation of concerns at the function level.
+Separation of concerns at the function level. The following example is from 'Modern Software engineering' (Dave Farley): There are three implementations of an `add_to_cart` method that performs three tasks (please ignore the function suffixes which are just to illustrate this example): 
+- 1) adding an item to the cart, 
+- 2) persisting the card to a DB, and 
+- 3) calculating the total cost of the cart. 
 
-### Classes and Code Should be Cohesive
+Example 1 is very poor, it mixes all three concerns directly and you need to understand the low-level details to understand what is happening. Example 2 is much better - logic is abstracted into private methods with descriptive names that 'reads the logic,' this is far easier to follow. Example 3 is even more loosely coupled - is this an improvement over version two, probably not for this simple example, but you can see how this further decouples concerns. Example 3 is a nice pattern for complex systems - it is easy to add new event listeners to react accordingly without having to change the logic of the function. 
+
+```Python
+def add_to_cart_poor(self, item):
+    self.cart.add(item)
+    
+    conn = sqlite3.connect('my_db.sqlite')
+    cur = conn.cursor()
+    cur.execute('INSERT INTO cart (name, price) values (item.name, item.price)')
+    conn.commit()
+    conn.close 
+
+    return self.calculate_cart_total(); 
+
+
+def add_to_cart_good(self, item):
+    self.cart.add(item)
+    self.store.persist_item(item)
+    return self.calculate_cart_total(); 
+
+
+def add_to_cart_extensible(self, item, listener):
+    self.cart.add(item)
+    listener.on_item_added(self, item)
+```
+[top](#Table-Of-Contents)
+
+### Code Should be Cohesive
 
 > [!TIP]
-Classes should be cohesive which is related to the Single Responsibility Principle. High cohesion means the methods and variables of  a class are co-dependent and often change together. This can be paraphrased as "Changes to the code over here should not affect code over there" and "Code that changes together stays together." Another useful interpretation: "When you want to add something, you intuitively know which class should be modified."
+Code should be cohesive which is related to the Single Responsibility Principle. High cohesion means the methods and variables of  a class are co-dependent and often change together. This can be paraphrased as "Changes to the code over here should not affect code over there" and "Code that changes together stays together." Another useful interpretation: "When you want to add something, you intuitively know which class should be modified."
 
 Here’s the authoritative view from the famous [Kent Beck from Nov (2022) and his ‘Tidy First’ approach to software development:](https://twitter.com/KentBeck/status/1587825849755049984)
 
@@ -445,28 +531,25 @@ Here’s the authoritative view from the famous [Kent Beck from Nov (2022) and h
 
 Examples of patterns that support cohesion include the State Pattern.
 
-- In the State pattern, consider code that is widespread across many files that has exhaustive 'switch' or 'when' statements that reference a centrally declared enum set. The exhaustive switch/when statements execute different behaviours based on the current enum state value. If you add or remove a state enum option, you will need to update the exhaustive switch/when statements spread across your code-base. This is not a problem for small projects, but for large code bases it can require significant refactoring. The state pattern co-locates the state enum values with the dependent behaviour i.e., "things that change together, stay together." As an example, the central enum set could be replaced with a corresponding set of state objects, where each state object collects and implements the relevant state-dependent behaviour itself. There are several ways to implement this depending on you language of choice.  
+- In the State pattern, consider code that is widespread across many files with each file having 'switch' or 'when' statements that reference a centrally declared enum set. The switch/when statements execute different behaviours based on the current enum state value. If you add or remove a state enum option, you will need to update the all switch/when statements that are spread across your code-base. This is not a problem for small projects, but for large code bases it can require significant refactoring. The state pattern co-locates the state enum values with the associated behaviour. To do this, the central enum set could be replaced with a corresponding set of state objects, where each state object collects and implements the relevant state-dependent behaviour itself. 
+
+TODO - provide an example 
 
 [top](#Table-Of-Contents)
-
-### Classes should have only one reason to change and do one thing and do it well
-
-- Separation of concerns at the class level.
-
 ### OOP Redefined 
 
-OPP is about "Program organsiation" (Bjarne Stroustroup). 
+OPP is about "Program organisation" (Bjarne Stroustroup). 
 
 The OOP data model of class inheritance hierarchies and interface implementations has, undoubtedly, proven to be highly effective in modelling real-word data, largely due to its frequent natural fit for representing real-world objects, and also due to its expressiveness. OOP still dominates compared to other programming paradigms such as functional and procedural. OPP helps you to organise programs around data and the actions that are intended to operate on that data. From my perspective, what I like about OOP is that it is really clear how to organise my program around classes - locating the data alongside the functions that operate on that data is very common and often feels natural. Without classes, you can lose some of this clarity, especially in large programs. However, OPP is not the only option. Other paradigms such as Functional, Procedural, and Data Orientated Programming exist. I'm not a purist - I believe you can and should apply all these paradigms when it is most convenient to do so. Most general purpose programming languages allow you to mix paradigms to some extent. 
 
 OOP bashing appears to be popular these days, but this is mostly because of the problems associated with hierarchical inheritance (see section on Don't Pay Too Much Inheritance Tax), and I agree that hierarchical inheritance should be applied judiciously. However, I believe that most of the other OOP principles are tried, tested, and proven. You can’t argue against three of the four 'pillars' of OPP: Abstraction, Encapsulation, and Polymorphism. These are good design principles largely available across all modern programming languages.  Arguably, what pure OOP can over-emphasise is deep & brittle inheritance hierarchies, but instead you can favour composition instead in the right scenarios.
 
-| Pillar | Implementations|
-| -------------- | --------------- |
-| Abstraction | Interfaces, Traits, Service Facade, Closures |
-| Encapsulation | Classes, Records/struts/nested-structs, Closures, Modules, Public/Private/Protected visiblity|
-| Polymorphism | Inheritance, Type-classes, Generics & Parametric Polymorphism, Interfaces/Traits, Dynamic-Dispatch |
-| Inhertiance| Arguably, this should be replaced with 'Code Sharing' with implementations including Compostion/Delegation, Traits, Default Interfaces  |
+| Pillar                       | Implementations                                                                                          |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Abstraction                  | Interfaces, Traits, Service Facade                                                                       |
+| Encapsulation                | Classes, Records/struts/nested-structs, Closures, Modules, Public/Private/Protected visibility           |
+| Polymorphism                 | Inheritance, ADTs, Type-classes, Generics & Parametric Polymorphism, Interfaces/Traits, Dynamic-Dispatch |
+| ~~Inheritance~~ Code Sharing | Composition / Delegation, Traits, Default Interfaces, Inheritance                                        |
 
 I believe inheritance should be replaced with 'Code Sharing': the other pillars are generic to accommodate multiple implementations and inheritance is not the only way of sharing code across types. Other ways to share code include Composition (available any language), traits (Scala, Rust), interfaces with default implementations and attributes (Java, Go, Py), and type-classes (Scala), to name a few. I agree that inheritance can be overdone, but it does have it place (see section on 'Don't pay too much inheritance tax').  
 
@@ -478,12 +561,12 @@ For OPP, understand the principles of SOLID:
 | Single Responsibility Principle (SRP) | A module (you can assume 'class' here too) should be reponsible to one, and only one, ACTOR (Bob Martin's reinterpretation) |
 | Open-Closed Principle |  Classes should be explicitly designed for extension and can't be unintentionally modified.|
 | Liskov’s Substitution principle (Barbara Liskov) |  A subclass can substitute for a parent, this mostly surfaces when chaining function calls.|
-| Interface Segregation Principle|  Seprate interfaces so they do not cross multiple concerns.|
+| Interface Segregation Principle|  Separate interfaces so they do not cross multiple concerns.|
 | Dependency Inversion |  High-level modules shouldn't depend on low-level modules, and Abstractions shouldn't depend on details, but details should depend on abstractions. To do this, an abstraction layer (interface) is extracted to separate the high and low level modules. |
 
 #### SRP
 
-A common misinterpretation of SRP is "One function/class should only do one thing." While I don't disagree with this advice, its not actually what the SRP was getting at. The formal interpretation is "A module should have one, and only one, reason to change." This is a touch ambiguous, I prefer Uncle Bob Martin's reinterpretation "A module/class should be responsible to one, and only one, ACTOR" because the reason to change comes from the actor, a useful clarification in my opinion. In Bob's great book, Clean Architecture: A Craftman's Guide to Software Structure and Design, Bob illustrates a violation with an Employee class that mixes three business rule methods, where each is required by a different actor: `calculatePay()` for the Finance team, `reportHours()` for HR and `save()` for Operations. Under the hood, these methods could refer to some common private logic eg `regularHours()`, however, this de-duplication can often become a source of bugs, especially for complex code which spans different dev teams which requires merging of different branches. SRP says don't do this, separate the code that different actors depend on, even at the expense of some intentional duplication.
+A common misinterpretation of SRP is "One function/class should only do one thing." While I don't disagree with this advice, its not actually what the SRP was getting at. The formal interpretation is "A module should have one, and only one, reason to change." This is a touch ambiguous, I prefer Uncle Bob Martin's reinterpretation "A module/class should be responsible to one, and only one, ACTOR" (because the reason to change comes from the actor, a useful clarification in my opinion). In Bob's great book, Clean Architecture: A Craftman's Guide to Software Structure and Design, Bob illustrates a violation with an Employee class that mixes three business rule methods, where each is required by a different actor: `calculatePay()` for the Finance team, `reportHours()` for HR and `save()` for Operations. Under the hood, these methods could refer to some common private logic eg `regularHours()`, however, this type of de-duplication by consolidating common code into a shared function can often become a source of bugs, especially for complex code which spans different dev teams which requires merging of different VCS branches. SRP says don't do this, instead separate the code that different actors depend on, even at the expense of some intentional duplication.
 
 > [!TIP]
 SRP is closely related to cohesion: "Code that changes together stays together" and when you want to implement SRP think "It should be easy to identify which class should be modified if I want to change something."
@@ -491,8 +574,10 @@ SRP is closely related to cohesion: "Code that changes together stays together" 
 A solution to the Employee class violation example would be to use a data object that holds nothing but the employee data (no methods) and move the behaviour into separate facade(s) for processing business rules, one for each actor for example (`PayCalculator` `HourReporter` and `EmployeePersistor`). Notice that this solution is the end of a spectrum of possible solutions - Bob does explain that some developers or in some scenarios you may prefer to keep the most important business rules close to the data. In this case, the original `Employee` class can still contain the three business rule methods, but these methods are very short and simply delegate to the appropriate business rule calculator facades under the hood (Composition).  
 
 > [!TIP]
-It is silly to have to define a data type (class) solely as a container for a *single* function to do something. This is overkill - just write functions in a facade and call them. 
+Don't define a new data type (class) solely as a container for a *single* function to do something. This is overkill - just write functions and call them. 
 
+Don't do this: 
+![[Pasted image 20250117170601.png]]
 [top](#Table-Of-Contents)
 
 #### Open-Closed Principle
@@ -515,7 +600,7 @@ If we acknowledge this interpretation, then polymorphism can include:
 | Structural Typing / Protocols | A type is ***compatible*** if has methods that correspond to an interface protocol, with compile-time checks (eg Go)  |
 | Duck Typing | Same as Structrual Typing with dynamic-dispatch (eg Python)|
  
-#### Inheritance should be explicitly designed-for
+#### Inheritance Should be Explicitly Designed-For
 
 By default, in some languages you can extend a class by default, unless you explicitly disallow it e.g., using the `final` keyword in Java or through Sealing. In modern languages, classes are typically closed to extension by default.  For example, in Kotlin you have to explicitly enable class extension using the `open` keyword to make it explicit that this class is designed to be extended. This makes SOLID’s 'Open Closed Principle' best-practice explicit in the language.  
 
@@ -536,37 +621,69 @@ Rather than pay too much inheritance tax, consider using 'Parametric Polymorphis
 The mechanism for sharing code varies across languages and includes Interfaces (eg Java), Traits (eg Rust), Mixins (eg Python), and Type-Classes (eg Scala). Often, composition is used under the hood to share behaviour.
 
 > [!TIP]
-I say "don't pay too much inheritance tax" intentionally because it can be argued that inheritance does still have its place, especially in building frameworks and for strong/natural "Is a" relationships e.g. "type A is a type of B."
+I say "don't pay too much inheritance tax" intentionally because inheritance does still have its place in certain scenarios such as in building frameworks, libraries, and for strong/natural "Is a" relationships e.g. "type A is a type of B."
 
 - Several modern languages don’t even support inheritance (Rust, Zig, Go), relying instead on parametric polymorphism.
 
-| Parametric Polymorphism                                               | Inheritance                                              |
-| --------------------------------------------------------------------- | -------------------------------------------------------- |
-| Interface segregation is finer grained - you choose what to implement | You may need to inherit everything from all ancestors    |
-| More loosley coupled, changes to an attached trait does not affect other traits.| Tightly coupled - changes in the parent hierarchy can vertically affect all sub-types |
-| More flexible - attach multiple marker types                          | Single inheritance in some languages is more restrictive |
+| Parametric Polymorphism                                                          | Inheritance                                                                           |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Interface segregation is finer grained - you choose what to implement            | You may need to inherit everything from all ancestors                                 |
+| More loosley coupled, changes to an attached trait does not affect other traits. | Tightly coupled - changes in the parent hierarchy can vertically affect all sub-types |
+| More flexible - attach multiple marker types                                     | Single inheritance in some languages is more restrictive                              |
 
 ![](Pasted%20image%2020241220110926.png)
 
 #### Parametric Polymorphism for Existing Types
 
-The mechanism for attaching marker types varies across languages. Some languages allow you to attach the marker type onto existing types without having to modify the original type. This is very convenient and powerful for easily creating '*blanket implementations*,' and when you don't have access to the src code of those types e.g., types defined in external packages. Rust and Scala lexically split their type definitions from the definition of the attached marker type using an additional 'referencing-layer.' Conversely, Kotlin and C# provide extension functions to extend the behaviour of existing (or custom) types, which is a subtly different approach. 
+The mechanism for attaching marker types varies across languages. Some languages allow you to attach the marker type onto existing types without having to modify the original type. This is very convenient and powerful for easily creating '*blanket implementations*,' and when you don't have access to the src code of those types e.g., types defined in external packages. Rust and Scala lexically split their type definitions from the definition of the attached marker type using an additional 'referencing-layer.' Conversely, Kotlin and C# provide extension functions to extend the behaviour of existing (or custom) types, which is a subtly different approach that achieves a similar outcome (you can still also define your own custom interface and use extension-functions and composition to achieve the same result as Rust traits). 
 
 > [!TIP]
 Lexically splitting a type from a marker type via an extra 'referencing layer' is elegant and powerful compared to implementing the marker directly on the original type definition itself, such as implementing an interface directly on a class declaration. This is because you don't need to modify the existing type which facilitates simple blanket implementations, and when you do not have access to the src code of the original type. If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
 
-Rust
-![](attachments/Pasted%20image%2020241216191248.png)
+```Rust
+use externalcrate::SomeStruct;    // here is our existing type
+
+trait Length {                    // A marker trait for shared behaviour
+  fn get_length(&self) -> u32;
+}
+
+impl Length for SomeStruct {      // A referencing layer that attaches Length to SomeStruct
+  fn get_length(&self) -> u32 {
+    self.to_string().len() as u32
+  }
+}
+```
 
 [top](#Table-Of-Contents)
 
-#### Extension Functions for Augmenting Existing Types
+#### Extension for Augmenting Existing Types
 
-Some languages allow you to extend the functionality of existing types using extension functions e.g., C# and Kotlin. Extension functions can be grafted onto existing types even if you don't have access to the src code for those types. Notice that in the example below, the `method` is grafted onto the `GenericTrait` interface, outside of the class declaration, so that all other implementations of `GenericTrait` can call `method` (a 'blanket implementation). 
+Some languages allow you to extend the existing types using extension functions and properties e.g., C# and Kotlin (the latter learning from the former). Extension functions and properties can be grafted onto existing types even if you don't have access to the source code for those types. 
 
-Kotlin
-![](attachments/Pasted%20image%2020241027144154.png)
+>[!TIP]
+>One of the primary intentions of extensions is to keep core abstractions small by not polluting them with your own customisations, this way the original abstraction keeps their original behaviour (Andrey Breslav, original Kotlin language designer).
 
+Notice that in the example below, `swap` is grafted onto the existing `MutableList` interface. All other references to `MutableList` can call `swap` creating a blanket implementation without polluting the original. Similarly, all list implementations can access the `lastIndex` extension property.
+
+```Kotlin
+// Extension property on Kotlin's existing List Interface to store a custom description
+var <T> List<T>.description: String   
+    get() = this.description  
+    set(newDescription): Unit { this.description = newDescription }  
+  
+// Extension function on kotlin's existing MutableList Interface to swap specified elements 
+fun <E> MutableList<E>.swap(index1: Int, index2: Int): Unit {  
+    val tmp = this[index1] // 'this' corresponds to the list  
+    this[index1] = this[index2]  
+    this[index2] = tmp  
+}  
+  
+fun <E> consumer(mutableList: MutableList<E>, index1: Int, index2: Int) {  
+    mutableList.swap(index1, index2)  
+    mutableList.description = "My cool new list to store bikes"  
+    println(mutableList.description)  
+}
+```
 [top](#Table-Of-Contents)
 
 #### Structural Polymorphism and Duck Typing
@@ -591,7 +708,8 @@ As a simple example, consider a sealed result class that has a fixed number of s
 
 #### Composition / Delegation
 
-A complex term that in practice simply means that one class contains or is passed an instance of another to use its capabilities. Different languages do this in slightly different ways. 
+>[!TIP] 
+>A complex term that in practice simply means that one class contains or is passed an instance of another to use its capabilities. 
 
 > [!WARNING]
 Unless your language supports duck-typing, composition alone may not establish a polymorphic type without the addition of additional scaffolding code such as an interface or trait. 
@@ -817,7 +935,7 @@ import org.example.ValidationResult.Failure
 
 // Kotlin Parametric Polymorphism
 
-// Rust-like trait implemented with a Kotlin interface using default & extension methods
+// Rust-like trait implemented with a Kotlin interface using default methods on interfaces & extension methods
 interface Printable {
     // Default method implementation similar to Rust trait methods
     fun prettyPrint(): String {
@@ -847,7 +965,7 @@ fun String.wordCount(): Int {
     return trim().split("\\s+".toRegex()).size
 }
 
-// Sealed class to demonstrate exhaustive trait-like behavior (see section on Sealing)
+// Sealed class to demonstrate exhaustive behavior (see section on Sealing)
 sealed class ValidationResult {
     data class Success(val message: String) : ValidationResult()
     data class Failure(val error: String) : ValidationResult()
@@ -860,6 +978,7 @@ interface InventoryManager {
 
 data class Product(val name: String, val price: Float, var quantity: Int) :
     Printable, Serializable, InventoryManager {
+
     override fun format(): String {
         return "$name (Price: $price Quantity: $quantity)"
     }
@@ -1298,19 +1417,32 @@ There is no need to extract logic such as data validation and invariant checking
 
 To quote Eric Evans, an expert in both OOP and Functional paradigms and of 'Domain Driven Design' book fame: "At times, I found FP an awkward fit. The problem would have fit OOP better. I'm happy that it is easier than it used to be to move between both those ways of thinking." 
 
-I completely agree with Eric - if the language permits, combining functional approaches with OOP is convenient in the right scenario. Within the same code base, the recommendations are: 
-- Use a naming convention to identify pure functions (see below on 'Calculations to limit side effects')
-- Push out side effects to the out boundaries of your code (see the Dependency Rule / Bullseye) so they become 'intended effects’ and not nasty interleaved ‘side effects’.
-- Aim for a core of pure functions.
+I completely agree with Eric - if the language permits, combining functional approaches with OOP is powerful in the right scenario. In fact, modern languages are more of a hybrid mix of OOP, Procedural & FP e.g. Rust, Kotlin, modern Java (others languages too). Hybrid approaches borrow concepts from FP such as ADTs, default immutability, functional composition such as `map` `filter` `collect`. 
 
-Well worth a watch: [https://www.youtube.com/watch?v=HSk5fdKbd3o&t=543s](https://www.youtube.com/watch?v=HSk5fdKbd3o&t=543s)
+For the majority of developers, myself included, I also believe that adopting a pure functional language is a stretch - their popularity are still low representing ~5% of mind share according to IEEE, Tiobe.  I think the primary reason is that people just comprehend the world more readily in terms of objects, state and procedures, compared to purely functional/mathematical ways of thinking such as recursion and 'higher order functions'.  To boil it down further, basically loops are difficult or even unavailable in pure FP, and I think allowing some interior mutability is often a small price to pay for simplicity.      
+
+![](attachments/Pasted%20image%2020240611091943.png)
+
+Therefore, if your language, my recommendations are to mix some functional concepts when appropriate: 
+
+> [!TIP]
+>  * Use a naming convention to identify pure functions, see using 'Calculations to limit side effects'
+>  * Push out side effects to the out boundaries of your code (see the Dependency Rule / Bullseye) so they become 'intended effects’ and not nasty interleaved ‘side effects’.
+> * Aim for a core of pure functions.
+> * Aim for immutability as your default.
+
+[Well worth a watch](https://www.youtube.com/watch?v=HSk5fdKbd3o&t=543s)
 
 [top](#Table-Of-Contents)
 
-### Dependency Inversion Principle
+### Dependency Rule and Dependency Inversion Principle (DIP)
 
-See the next two slides below. If this does not make sense, please refer to the texts above, but in short it says, ‘don’t depend on implementation details, depend on abstractions between boundaries in your code’.
+The Dependency Rule states that: "Source code dependencies must point only inwards." This is illustrated in the following diagram.  
 
+On the right side of the diagram below ('Crossing Boundaries' and 'DI'), remember the following:
+- Interpret the grey 'Flow of control & invocation' arrows as: The side with the arrow-foot calls a method on the arrow-head side. The arrow-foot side must therefore have access to the object on which to call the method. To do this without a dependency injection framework like Spring, the standard pattern is to have a globally declared abstract factory which can be used from any bit of code to get an instance of the required object (FYI Spring calls this the ApplicationContext). The abstract factory returns that object as as an implementation of interface.     
+- The grey 'Flow of control & invocation' arrows are 'wiggly' because they touch each box in the general flow of control.
+- Blue arrows represent UML source code relationships such as 'implements' and 'has a reference' for composition.  
 ![](attachments/Pasted%20image%2020240611093615.png)
 
 [top](#Table-Of-Contents)
@@ -1319,9 +1451,19 @@ See the next two slides below. If this does not make sense, please refer to the 
 
 [top](#Table-Of-Contents)
 
+#### A hearts and legs analogy 
+ Here's a simple example to help build a mental model:  
+- We have a `Heart` interface at the centre of our architecture with a `BigHeart` implementation and outer layers such as `Legs` and `Arms` which call `Heart.excercise()` to inform the heart we're are-wrestling or have gone for a bike ride. Straight forward - `Legs` and `Arms` have a reference to `Heart`. This does not break DIP - our outer layers depend on our inner layer in terms of source code dependencies (imports & includes).
+- However, what if the Heart needs to broadcast to our Legs its response to exercise such as an increasing heart beat as we do more exercise? We do not want Heart implementations to import Legs as that breaks DIP. 
+- To resolve this, we define the `FeelsHeartBeat` interface that defines the `heartBeat()` function within the inner source code package i.e. the one that owns `Heart` (this is where the term 'dependency inversion' comes from - we invert the dependency direction). 
+- `Legs`, and other outer layers such as `Arms`, can then implement the `FeelsHeartBeat` interface and the corresponding `heartBeat()` function to register notifications for an increased heart beat. 
+- So, in terms of source code dependencies (imports/includes), our heart does not depend on arms and legs, great.
+- However, how does `Heart` acquire references to its `FeelsHeartBeat` implementations?     
+- This is typically done using a globally declared abstract factory that serves up implementations of body parts; Heart, Legs and Arms. The abstract factory manages creation and serving of our body parts in one place and ensures we do not serve too many body parts. Solved. 
+- If you don't like the idea of sprinkling your domain objects with references to abstract factories, this is where Dependency Injection (DI) comes into play. Basically, a DI framework takes the role of our abstract factories. Instead of having a reference to our factories, our objects declare dependencies on the objects it needs - as constructor arguments for required dependencies, and setter methods for optional dependencies. The DI framework then ensures the dependent objects are injected with the required object(s). This can be done a runtime using some fancy extra behind the scenes functional code typically auto-generated by our framework that effectively wraps/proxies our domain objects, or at compile time using techniques such as reflection if you need late/dynamic binding.     
 ### Dependency Injection and Inversion of Control for Decreasing Code Coupling - IoC
 
-Basically, this means that your application code does not itself create instances of classes directly. Instead, these objects are created separately by 'wiring logic' that sits outside of your immediate business/domain code. As a result, business and domain objects are then automatically injected into other business/domain objects. Injection occurs via class-constructors for required dependencies, or setter methods for optional dependencies. The wiring code can be implemented manually using the *Factory Pattern* or using an *Inversion of Control* containers such as [Spring.io](https://stfc365.sharepoint.com/sites/HartreeRSEPublic/Shared%20Documents/General/spring.io). 
+Basically, this means that your application code does not itself create instances of business objects directly. Instead, these objects are created separately by 'wiring logic' that sits outside of your immediate business/domain code. As a result, business and domain objects are then automatically injected into other business/domain objects. Injection occurs via class-constructors for required dependencies, or setter methods for optional dependencies. The wiring code can be implemented manually using the *Factory Pattern* or using an *Inversion of Control* containers such as [Spring.io](https://stfc365.sharepoint.com/sites/HartreeRSEPublic/Shared%20Documents/General/spring.io). 
 
 For the most part, the lifetime of a class is typically either singleton-scoped a.k.a., ‘application scoped’, where a single instance is created and managed (which means it must be thread-safe), or ‘prototype-scoped,’ where a new instance is always created & injected. However, there are several other specialised lifetimes such as ‘session-scope’ or 'transaction-scope' depending on your requirement.
 
@@ -1338,11 +1480,54 @@ So, what is the benefit of IoC? 
 
 [top](#Table-Of-Contents)
 
-![](attachments/Pasted%20image%2020240611093717.png)
+```Java
+// Two versions of Car and BetterCar, 
+// after Dave Farley's Modern Software Engineering Book. 
+// BetterCar has constructor injected engine which is easier to test.
+
+class Car {
+    private final Engine engine = new PetrolEngine();
+    
+    public void start() {
+        applyBrakes();
+        putIntoPark();
+        this.engine.start();
+    }
+
+    private void applyBrakes(){ /*...*/ }
+    private void putIntoPark() { /*...*/ }
+}
+
+class BetterCar {
+    private final Engine engine; 
+
+    public BetterCar(Engine engine) { 
+        this.engine = engine;
+    } 
+
+    public void start() {
+        applyBrakes();
+        putIntoPark();
+        this.engine.start();
+    }
+
+    private void applyBrakes(){ /*...*/ }
+    private void putIntoPark() { /*...*/ }
+}
+
+```
 
 For the `Car` class, unless we decide to break encapsulation and make `engine` public, you can’t test the engine separately.  Our `BetterCar` allows you to mock or create a different engine implementation and test that separately as shown below:
 
-![](attachments/Pasted%20image%2020240611093737.png)
+```Java
+@Test
+public void shouldStartBetterCarEngine() {
+    FakeEngine engine = new FakeEngine();
+    BetterCar car = new BetterCar(engine);
+    car.start();
+    assertTrue(engine.startedSuccessfully());
+}
+```
 
 [top](#Table-Of-Contents)
 
@@ -1370,11 +1555,39 @@ Classic examples of dynamic applications include:
 
 ### It Should Not be Possible to Create an Object in an Invalid State
 
-Nuff said. Just to be clear, you should not be able to construct an object in a partially valid state. 
+Nuff said. Just to be clear, you should not be able to construct an object in an invalid state. There are several ways to prevent invalid object creation, including the following approaches (I'm sure there are others too): 
+
+#### Throwing Exceptions from Constructors
+
+For example, you could throw an `IllegalArgumentException` runtime exception from within a constructor. However, remember that exceptions should be reserved for truly exceptional circumstances and often it is better to model invalid states explicitly in your type system as potential domain errors. In this case, consider the following approaches.  
+
+#### Use a Smart Constructor or Factory to Return a Smarter Return Type
+
+In the example below, we use a Kotlin smart constructor to hide the primary constructor and model an invalid author name explicitly in our type system. This way, we create an `Author` object using a familiar constructor call syntax and is clear that a potential outcome is an `InvalidAuthorName`. You can of course apply the same approach in the standard factory pattern. 
+
+```Kotlin
+object InvalidAuthorName
+
+data class Author private constructor(val name: String) {
+  companion object {
+    operator fun invoke(name: String): Either<InvalidAuthorName, Author> = TODO()
+  }
+}
+
+val authorResult = Author('Homer')
+author = when (authorResult) {
+  InvalidAuthorName -> TODO()
+  Author -> authorResult.value
+} 
+```
+
+#### Use a Builder with a Smarter Return Type
+
+See the builder pattern, the final `build()` function could return a smarter return type such as an `Either` or an ADT. 
 
 ### Know Some Design Patterns
 
-There might be a tried & tested design pattern for the problem you’re tackling. Some patterns are probably overkill, but some genuinely useful patterns include Factory, DTO, Observer, Strategy, Singleton, Repository, Stateless Façade, Visitor. Have a look at the recommended texts in the appendix. GoF is kinda regarded as old school these days.
+There might be a tried & tested design pattern for the problem you’re tackling. Some patterns are probably overkill, but some genuinely useful patterns include Factory, DTO, Observer, Strategy, Singleton, Repository, Stateless Façade, Visitor. Have a look at the recommended texts in the appendix. Gang of Four (GoF) is kinda regarded as old school these days.
 
 ![](attachments/Pasted%20image%2020240611094028.png)
 
@@ -1446,7 +1659,13 @@ type Visitor interface {
 
 #### Builder Pattern for More Complex Object Creation Scenarios
 
-Builders are especially useful if the dependencies of your class have complex invariants. Basically, this means that if you class can only be constructed with a particularly complex combination of dependencies such as ‘my object requires A and B and either C, D, or E and F, but never G if D is present’ (I’m sure you get the idea), then the Builder pattern can help you. How to implement this in your chosen language varies of course e.g., in Go check out the [Functional Options Pattern](https://www.youtube.com/watch?v=MDy7JQN5MN4) where you pass functions to modify the state of a struct. This is a nicely explained example, but it has some issues, first it lacks a `build()` function that is typically used to validate invariants before returning a valid 'built' instance. Second, having a bunch of standalone functions in the Functional Options pattern gives poor discoverability, it can make more sense to use a Builder type bunch of setter functions to set invariants - this means you can easily discover and chain setters using dot notation and code-completion e.g. with pseudo code: `configOps = NewConfigOptionsBuilder().id("someId").maxConnections(10).prefix("somePrefix").build()` e.g. [builder pattern in Golang]( https://dev.to/kittipat1413/understanding-the-builder-pattern-in-go-gp9) 
+Builders are especially useful if the dependencies of your class have complex invariants. Basically, this means that if you class can only be constructed with a particularly complex combination of dependencies such as ‘my object requires A and B and either C, D, or E and F, but never G if D is present’ (I’m sure you get the idea), then the Builder pattern can help you. How to implement this in your chosen language varies of course e.g., in Go check out the [Functional Options Pattern](https://www.youtube.com/watch?v=MDy7JQN5MN4) where you pass functions to modify the state of a struct. This is a nicely explained example, but it has some issues, first it lacks a `build()` function that is typically used to validate invariants before returning a valid 'built' instance. Second, having a bunch of standalone functions in the Functional Options pattern gives poor discoverability, it can make more sense to use a Builder type bunch of setter functions to set invariants - this means you can easily discover and chain setters using dot notation and code-completion e.g. with pseudo code: 
+
+```
+configOps = NewConfigOptionsBuilder().id("someId").maxConnections(10).prefix("somePrefix").build();
+```
+
+e.g. [builder pattern in Golang]( https://dev.to/kittipat1413/understanding-the-builder-pattern-in-go-gp9) 
 
 [top](#Table-Of-Contents)
 
@@ -1476,7 +1695,7 @@ You don’t retrospectively comment your code, you just don’t. Using sensible 
 
 Leave code in a better state than you found it & don’t comment bad code, re-write it with good descriptive names.
 
-### Law of Demiter and Train Wrecks
+### Principal of Least Knowledge and Train Wrecks - The Law of Demeter
 
 A module should not know about the innards of the objects it manipulates (by ‘objects’, I don’t mean immutable DTOs / records / data objects, structs, I mean genuine objects that have behaviour that works on their state). [https://en.wikipedia.org/wiki/Law_of_Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter)
 
@@ -1527,40 +1746,118 @@ See prior bullet. Functions should either do something such as create side effec
 
 [top](#Table-Of-Contents)
 
-### Error Handling
+### Data Orientated Programming with Algebraic Data Types - ADTs
 
-#### Error Handling - 4 Types of Problems
+ADTs combine ‘Product Types’ for modelling aggregation such as a C/Golang/Rust ‘structs’ or Java's Record type with ‘Sum Types’ for modelling choice, also known as ‘Union Types’ or ‘Tagged Unions’. This simple combination of aggregation and choice is deceptively powerful and shows up in many programming languages to model domains, return types and function arguments:
 
-1.     Unrecoverable problems: Is the error recoverable? If not, then let the program crash. For example, a FileNotFound exception/error/panic should crash if that file is the application's mandatory config file - you can't continue without it.
+- Product Types are great for modelling aggregation, and include immutable data classes such as records, data objects, and structs. They are called ‘Product Types’ because their state ‘when considered as a whole’ is the Cartesian product of their data.
 
-2.     Recoverable problems: For example, if a remote service is temporarily unavailable, you could introduce a retry before showing an error to the user.
-
-3.     Errors that need to propagate to the user:  An error-as-value would be suitable if you are building a file-explorer GUI - you don’t want your program to crash if a file gets deleted by another process. In this scenario use a value-error or catch the exception and convey a sensible message to the user.
-
-4.     Programming mistakes:  Let the program crash, you’ll be motivated to fix the problem quickly. These are typically runtime errors/exceptions/panics.
+- Sum Types can be used to represent choice and are polymorphic - an abstraction such as a marker/type interface with a fixed set of implementing subtypes (e.g., ‘sealed’ classes or interfaces in Kotlin/Java, ‘enum’ in Rust, ‘Union’ types in Python). They are called Sum Types because the set of possible types is the sum (union) of the total allowable set.
 
 [top](#Table-Of-Contents)
 
+In some modern languages (e.g Rust, modern Java, others), ADTs can be efficiently processed using de-structuring and exhaustive pattern matching with `when` & `switch` statements. Exhaustive matching means the compiler will generate a compilation error if not all types are explicitly handled. As highlighted by Gavin Bierman in his Devoxx talk, you can spot many 'lightly disguised abstractions such as JSON' and model them as ADTs as shown in the following diagram: 
+
+![](attachments/Pasted%20image%2020241103131635.png)
+
+From Gavin Bierman's Devoxx talk, Java Language Futures: https://www.youtube.com/watch?v=NNPN5tvjzqA&t  Using the sealed interface, it would be simple to permit a range of additional custom types that implement `JsonValue` such as `MyCustomString` and `ThingArray` for example.  
+
+[top](#Table-Of-Contents)
+
+### Error Handling
+
+#### Error Handling - Four Types of Problems
+
+1. Unrecoverable problems: Is the error recoverable? If not, then let the program crash. For example, a FileNotFoundException/error should crash if that file is the application's mandatory config file - you can't continue without it.
+
+2. Recoverable problems: For example, if a remote service is temporarily unavailable, you could introduce a retry before showing an error to the user.
+
+3. Errors that need to propagate to the user:  An error-as-value would be suitable if you are building a file-explorer GUI - you don’t want your program to crash if a file gets deleted by another process. In this scenario use a value-error or catch the exception and convey a sensible message to the user.
+
+4. Programming mistakes:  Let the program crash, you’ll be motivated to fix the problem quickly. 
+
+[top](#Table-Of-Contents)
+
+#### Error Handling - Fail Early
+
+> [!TIP]
+> Guard clauses should be defined early - do not define lengthy conditional success blocks when you have can have short fail blocks defined early.  
+
+```
+fun badGuardClauseExample(val arg1)
+    if(valid(arg1)){ 
+        ...success path...
+    } else {
+       ... error handling...
+    }  
+}
+
+// better
+fun betterGuardClauseExample(val arg1)
+    if(!valid(arg1)){  
+       // ... error handling ...  
+    }  
+    ... success path...
+}
+```
+
+#### Error Handling - Be defensive at application boundaries, not within your inner domain logic 
+
+> [!TIP]
+> - Polluting your 'inner' business logic with defensive checks is unnecessary and can obfuscate genuine bugs. 
+> - Validate at the edge of your application:  Postel's Law really only applies at the edge of your application, at the boundary when receiving incoming data: "be liberal in what you accept and conservative in what you return."  
+> - Being defensive when using 3rd party libs is ok.  
+
+Note, the application boundaries are illustrated in the application bullseye diagram, and in the classic 'Hexagonal Architecture'.  
+
+#### Error Handling - Model the Absence of Values Explicitly
+
+> [!TIP]
+>If a value can legitimately have no value, ensure safe nullability by modelling null explicitly in your type system (if not already handled by your language) e.g. use approaches such as known zero values, Optionals, ADTs, and monads. 
+
+Handling null depends on the language and programming style you are using:
+
+- Nullable languages (C/C++/Java): Dereferencing a null pointer causes bad things to happen. This is known as ‘the billion-dollar mistake’ coined by Tony Hoare, in 1965. In your code, be sure to make it clear when null is meant to represent the ‘absence of value’ (e.g., with @Nullable annotations for example). At the boundary between layers of your code and when using a 3rd party library for example, it is ok to be ‘defensive’ and check for nulls.
+
+- Many argue null is an acceptable way to represent the absence of value, it’s just a fact and is too fundamental in many layers.  They argue the real billion-dollar mistake is not null itself, but in the failure of the language to do type-safe handling of null.
+
+- Some languages e.g., Kotlin, Rust & Python have ‘safe nullability’ baked into their type-systems e.g., None to mean no value and optional ‘?’ on variables (‘var?’) to indicate this variable might be null.
+
+- Functional languages commonly use `Either` monads to wrap errors and `Optional` for the absence of value. With these monads, the programmer is forced to handle the occurrence of no value or an error, they can’t be ignored, mistakenly or otherwise.
+
+- Various modern languages use Algebraic Data Types (an extension of the [Special Case pattern](https://martinfowler.com/eaaCatalog/specialCase.html](https://martinfowler.com/eaaCatalog/specialCase.html)) and return types that wrap either a successful result or an error (Go, Rust, Kotlin, modern Java).
+
+- ADTs combine ‘Sum Types’ and ‘Product Types’ and are excellent for representing multiple special cases, including multiple error states.
+
+[top](#Table-Of-Contents)
+##### Error Handling - Do Not Initialise with Null or Return Null
+
+> [!TIP]
+> Don't initialise struct values with null or return null from functions.
 #### Error Handling - Exceptions vs Errors-as-Values
 
+> [!TIP]
+> Quite simply: use errors-as-values to model known business errors, and runtime exceptions only for genuine exceptional conditions and programming bugs. 
+ 
 Errors as values vs exceptions is a hotly debated topic in programming communities:
+##### Proponents of errors-as-values
 
-_**Proponents of errors-as-values:**_
-
-- Fans of errors-as-values argue that function return types that wrap either a success OR failure value is the more reliable approach to error handling because you are explicitly forced to handle errors immediately, typically using a conditional to test for error or success. This ensures error handling is not an afterthought.
-- Supporters also argue that there is less uncertainty compared to throwing exceptions because it can be challenging to determine all the exception types that can be thrown by a deep call stack. Also recognise because unhandled unchecked exceptions do not create compilation errors, the compiler can't help you discover all of the different types of unchecked exception that could be thrown, unless you dig and read all the docs.
+- Fans of errors-as-values argue that functions should return either a success value OR a failure value for known business errors. In doing this, the potential for failure is made explicit in a function signature.  I agree - it is is commonly regarded as the more reliable approach to handling known business errors because you are explicitly forced to handle errors immediately, typically using a conditional to test for error or success. This ensures error handling is not an afterthought. 
+- Supporters also argue that there is less uncertainty compared to throwing exceptions because it can be challenging to determine all the exception types that can be thrown by a deep call stack. Also recognise that unhandled unchecked exceptions do not create compilation errors, meaning the compiler can't help you discover all of the different types of unchecked exception that could be thrown. You often need to dig and read all the docs.
 - Another issue of a specific type of exception known as a 'checked' exception is that they prevent functional composition. This is because the compiler forces you to handle checked exceptions wherever they can be thrown, but they are not considered as part of a function's return signature and type system. Instead, exceptions invoke orthogonal flows that 'break out' of your regular functional flow. Checked exceptions therefore breaks 'referential transparency' (see discussion below on Error Monads such as `Either` & `Validated`). Checked exceptions are generally not recommended these days, except for certain special use-cases where they still have their supporters.
 
 [top](#Table-Of-Contents)
-
-**Proponents of exceptions:**
+##### Proponents of exceptions
 
 - Fans of exceptions argue that by forcing you to interleave error checking at function call sites throughout your code obscures the code's happy path and readability.  
 - Exception fans also argue that exceptions centralise your error handling code which gives a clean separation of concerns.
 - For low-level code, exceptions are largely considered an effective strategy for surfacing underlying issues such as low level operating system issues which may be mistakenly obscured by the errors-as-values pattern (although the same could be said by mindlessly catching all exceptions).
-- When used correctly and with discipline, exceptions can also be more performant than pervasive and interleaved error-value checking. This is because languages like C++ and Java have 'zero cost exception handling.' I think this is a misleading term, what it actually means is 'zero cost to the happy path code provided no exceptions are thrown.' Assuming no exceptions are thrown, quite simply, there is less for your code to do as there are no interleaved conditional error checks. While any performance hit from interleaved result checking is likely to be marginal for the majority of use-cases, it may become more pronounced in deeply nested code or tight compute loops. However, this can be mitigated with good code structuring by moving error checks out of and before any performance critical-sections.
+- When used correctly and with discipline, exceptions can also be more performant than interleaved error-value checking. This is because languages like C++ and Java have 'zero cost exception handling.' I think this is a misleading term, what it actually means is 'zero cost to the happy path code provided no exceptions are thrown.' Assuming no exceptions are thrown, quite simply, there is less for your code to do as there are no interleaved conditional error checks. While any performance hit from interleaved result checking is likely to be marginal for the majority of use-cases, it may become more pronounced in deeply nested code or tight compute loops. However, this can be mitigated with good code structuring by moving error checks out of and before any performance critical-sections.
 
-A key difference between `try/catch` and `panic/recover` is the resulting control flow following their activation. In a try/catch, unless you re-throw, code coming after the catch/finally block will still execute. This does not happen with panic/recover - a function that is aborted begins to unwind the stack, running deferred blocks/functions as it encounters them (in Go, this is the only place recover takes affect, although use of recover is not widespread in Go and panic is typically used to end the program). Thus, panic/recover is very different to try/catch stemming out of the fact that it is built around deferred logic as a recovery mechanism (e.g. Go & Zig).
+> [!TIP]
+> `try/catch` and `panic/recover` are very different strategies, a key difference is the resulting control flow after they are triggered.
+
+In a `try/catch/finally` block, unless you re-throw or return from within the catch or finally block, code coming after the `try/catch/finally` block *will still execute*. This does not happen with `panic/recover` - a function that is aborted via panic begins to unwind the stack, running deferred blocks/functions as it encounters them (in Go, this is the only place recovery takes affect, although use of recover is not widespread in Go and `panic` is typically used to end a program). Thus, panic/recover is very different to try/catch stemming out of the fact that it is built around deferred logic as a recovery mechanism (e.g. Go & Zig).
 
 [top](#Table-Of-Contents)
 
@@ -1568,36 +1865,15 @@ Whether to use exceptions has profound implications on your API design and perfo
 
 Of course, choice between exceptions or errors-as-values depends on the language and environment - you don't get exceptions support on every architecture and platform. The result pattern is much more flexible especially on embedded systems.
 
-_**Can I use both:**_
+##### Can I use both styles in a hybrid approach
 
 - Yes, depending on your language of choice and what is considered idiomatic. Some modern languages support both approaches. For example, to support interoperability with Java, the Kotlin language supports unchecked exceptions as well as its own `Result` type which is intended for low-level code rather than for modelling business errors. For modelling business errors, they recommend using sealed class hierarchies that introduce exhaustive pattern matching to handle errors (see discussion on data oriented programming).
 
 - At the time of writing, a dedicated union type for capturing a result OR one or more errors is on the Kotlin roadmap.
 
-[top](#Table-Of-Contents)
-
-_**Hybrid Approach:**_
-
 - Languages may also support more advanced error handling strategies. For example, the Kotlin Arrow2 library simplifies the use of OOP and Functional error handling within the same code base (Functional vs OOP? - choose both). For example, lower level code or existing code can apply `try/catch/finally` blocks for localised exception handling and recovery if needed, while higher level calling code can provide a wrapping `error context` that can be used at the boundary; Rather than throwing exceptions at the boundary between different layers of code, exceptions can be _raised_ into the higher level error context. Raising rather than (re)throwing this allows the functions that raise to be composed within functional compositional call chains because raising does not break referential transparency. In the top layer of your code, such as in a top-level service facade or global error handler in a webapp, you would then need to handle the exceptions raised within the error context, such as performing a transaction roll back or performing a retry.  For a great presentation with examples, see this great talk from Simon Vergauwen from [Kotlin Conf 2023](https://youtu.be/JcFEI8_af3g?si=vH5OG86JTQWFrGnw) (note that context receivers as used in the talk will be replaced by context parameters in the future).
 
 [top](#Table-Of-Contents)
-
-#### Error Handling - Model Exceptions as Values with Algebraic Data Types 
-
-With ADTs, for any single function, you can replace any thrown exceptions and return values using a single generic abstract data type. Using a sealed interface hierarchy, all possible success and error variations can then be modelled using ad-hoc polymorphism. This means the _abstract_ data type becomes an _algebraic_ data type (ADT), also known as a 'nominal' or  'named' union type (an ADT provides the combination of aggregation *and* choice to model all possible variants). The ADT replaces exceptions with 'errors-as-values,' and multiple optional success types, if required. 
-
-This is super-powerful because you can add new success and/or error/exception return types through ad-hoc polymorphism, and also intentionally restrict all calling clients to a single permissible enum set. This is invaluable for developers of libraries for example where you explicitly want to limit the return types of your library functions and prevent clients overriding with their own implementations.  
-
-[top](#Table-Of-Contents)
-
-To process the function's abstract return type with very little boilerplate, exhaustive pattern matching with switch ensures all possible variants are handled - the compiler will produce an error if any are unhandled. There is a lot to unpack here, but the example given below from Gavin Bierman clearly demonstrates this approach using modern Java (2024). The use of ADTs with pattern matching is being coined in the Java community as 'Data Orientated Programming,' and can be applied for modelling any data type hierarchies such as converting JSON to Java types, but Java certainly wasn't the first language to implement this approach. I suspect that this approach will become very popular in the Java community in the future, moving away from exceptions in higher level application code (note, as discussed above, exceptions will still have their place in lower level library and framework code). 
-
-![](attachments/Pasted%20image%2020241103122918.png)
-
-Using ADTs to model better return types. After Gavin Bierman's Devoxx talk, Java Language Futures: https://www.youtube.com/watch?v=NNPN5tvjzqA&t=2651s
-
-[top](#Table-Of-Contents)
-
 
 #### Error Handling - Exceptions should not be used for flow control - exceptional does not mean conditional
 
@@ -1605,7 +1881,7 @@ Passing around a deeply nested stack trace within conditional and control logic 
 
 [top](#Table-Of-Contents)
 
-#### Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected errors - exceptional does not mean conditional
+#### Error Handling - Only use exceptions for exceptional situations such as coding errors and unexpected errors 
 
 For example, an invalid object posted to your API is not exceptional, this should be handled as a potential business error. In the situation where some code throws an exception such as a parse error, catch it locally, extract the useful information, and return an error-value. In general, the result-as-value pattern is appropriate where the problem is the fault of the caller and not a programming mistake e.g., invalid input / form data.
 
@@ -1619,115 +1895,214 @@ If you use exceptions (not all languages have exceptions e.g., Rust, Go), define
 
 #### Error Handling - Bubble exceptions upwards or trap at source
 
-Generally, pushing exception handling code up to the ‘outer layers’ of your code toward the boundaries is usually a good approach. It also helps cleanly separate the ‘happy path’ from interleaving error handling code.  However, this is not a hard rule, in some situations you may need to try/catch/finally at the source of the error to take important corrective actions such as closing an IO resource or rolling-back a DB transaction.
+Generally, pushing genuine runtime exception handling code (for unexpected problems) up to the ‘outer layers’ of your code toward the boundaries is usually a good approach. It also helps cleanly separate the ‘happy path’ from interleaving error handling code.  However, this is not a hard rule, in some situations you may need to try/catch/finally at the source of the error to take important corrective actions such as closing an IO resource or rolling-back a DB transaction.
 
 [top](#Table-Of-Contents)
 
-#### Error Handling - Model the Absence of Values Explicitly
+#### Error Handling - Model Exceptions as Values with Algebraic Data Types 
 
-This largely depends on the language you are using:
+With ADTs, for any single function, you can replace any thrown exceptions and return values using a single generic abstract data type. Using a sealed interface, all possible success and error variations can then be modelled using ad-hoc polymorphism. This means the _abstract_ data type becomes an _algebraic_ data type (ADT), also known as a 'nominal' or  'named' union type (an ADT provides the combination of aggregation *and* choice to model all possible variants). The ADT replaces exceptions with 'errors-as-values,' and multiple optional success types, if required. 
 
-- Nullable languages (C/C++/Java): Dereferencing a null pointer causes bad things to happen. This is known as ‘the billion-dollar mistake’ coined by Tony Hoare, in 1965.  In your code, be sure to make it clear when null is meant to represent the ‘absence of value’ (e.g., with @Nullable annotations for example). If you must, when using a 3rd party library for example, be ‘defensive’ such as checking for nulls using if statements where appropriate.
-
-- Side Note: polluting your code with defensive checks is often considered dirty, but sometimes you just have to it if no other approach is available.
-
-- Side Note: many argue null is an acceptable way to represent the absence of value, it’s just a fact and is too fundamental in many layers.  They argue the real billion-dollar mistake is not null itself, but in the failure of the language to do type-safe handling of null.
-
-- Some languages e.g., Kotlin, Rust & Python have ‘safe nullability’ baked into their type-systems e.g., None to mean no value and optional ‘?’ on variables (‘var?’) to indicate this variable might be null.
-
-- Functional languages commonly use ‘Either’ monads to wrap errors and the absence of value. With this pattern, the programmer is forced to handle the occurrence of no value, it can’t be ignored, mistakenly or otherwise, as with defensive programming. See below.
-
-- Various modern languages use Algebraic Data Types (an extension of the ‘Special Case’ pattern) and return types that wrap either a successful result or an error/null (Go, Rust, Kotlin, modern Java):
-
-·       [https://martinfowler.com/eaaCatalog/specialCase.html](https://martinfowler.com/eaaCatalog/specialCase.html)
-
-- ADTs include ‘Sum Types’ or ‘Product Types’ and are excellent for representing multiple special cases, including multiple error states.
+This is super-powerful because you can add new success and/or error/exception return types through polymorphism, and also intentionally restrict all calling clients to a single permissible enum set. This is invaluable for developers of libraries for example where you explicitly want to limit the return types of your library functions and prevent clients overriding with their own implementations.  
 
 [top](#Table-Of-Contents)
 
-#### Error Handling in Functional Programming - Error Monads such as Either and Validated
+To process the function's abstract return type with very little boilerplate, exhaustive pattern matching with switch ensures all possible variants are handled - the compiler will produce an error if any are unhandled. There is a lot to unpack here, but the example given below from Gavin Bierman clearly demonstrates this approach using modern Java (2024). The use of ADTs with pattern matching is being coined in the Java community as 'Data Orientated Programming,' and can be applied for modelling any data type hierarchies such as converting JSON to Java types, but Java certainly wasn't the first language to implement this approach. I suspect that this approach will become very popular in the Java community in the future, moving away from exceptions in higher level application code (note, as discussed above, exceptions will still have their place in lower level library and framework code). 
 
-Before I get to error monads such as `Either` and `Validated,` I'll try to briefly explain Monads and functional composition. 
+![](attachments/Pasted%20image%2020241103122918.png)
 
-##### What are Monads and Higher-Kinded Types in Functional Composition
-
-A monad is a virtual burrito 🌯 or bento-box 🍱. If you've looked into functional programming, you'll understand this joke: Monads are a notoriously difficult concept to explain, and there is a common aphorism that a monad is basically like a burrito because it is a wrapper (the taco) around a type (the filling) with additional helper methods that map given functions to the monad's wrapped type. I prefer the bento-box analogy, because there are a more moving parts to a bento-box which better describes a monad (opinion only).
-
-With those analogies in mind, a monad is more formally described as: 
-- A parameterised 'wrapper' type which typically wraps either a successful result or some type of failure resulting from a given/passed-in function. An example is the Either monad: `Either<LeftError, RightSuccess>` (note that Rust is opposite, where left is success and right is error). A `Validated` monad aggregates multiple errors or exceptions within a functional call chain. The purpose is to capture all the errors rather than short-circuiting on the first. A simple example would be capturing all the errors on a form, rather than returning early on the first erroneous form entry.
-- A monad has higher-order methods that accept computations/functions/lambdas that 'map over' the monad's wrapped type to generate and return a new monad result. These higher order methods include 'map,' 'flatMap' and 'bind.' 
-- A monad may generate optional side effects when applying a given function.
-- Monads are designed so that they can be composed ('mix & matched') into a chain of operations, passing monadic-typed results from left to right to achieve an end result. This is commonly also known as ‘functional composition’ or 'chaining'.
-- If a mapper returns an error type, e.g. a `LeftError` wrapped within the `Either`, subsequent calls in the chain will short-circuit and will simply return the erroneous `Either`. This continues until the end of the call chain.
-- Custom monads exist for several common computation patterns - you've likely used monads and have not even realised.
-- A core tenant of the functional paradigm is to produce a more declarative and expressive 'happy path' over imperative approaches, which usually interleave error handling logic polluting the happy path. In functional approaches, you define ‘what to do’ by chaining monads to achieve an end result, not ‘how to do it’ as in imperative approaches where computation logic is typically more exposed.
-- Most likely you may not need to build your own monads, but it is useful to understand them if needed.
-
-Monads are also known as 'Higher-Kinded types,' this is a fancy term to simply describe the fact that a monad wraps a more complex, constructed type. The core abstractions are given below: 
- - A monad wraps a type `<A>`. This is not a primitive type (int, string etc), but a type that requires its own constructor, hence 'higher-kinded' type.
- - A monad also has a standard set of helper methods. These helper methods include 'of' 'map' and 'flatMap':
-   - The 'of' method, also known as the 'unit' method, initialises a monad `F` by wrapping the given type `<A>` within the monadic context and has the form: `F<A>.of(A)`.
-   - The 'flatMap' method, also known as 'bind,' accepts a function/lambda that itself returns a new monad `F<B>`. This function is applied i.e. 'mapped' to the monad's wrapped type and its return value is directly/'flatly' returned by flatMap (I think a more accurate name for 'flatMap' is 'mapAndFlatReturn').  FlatMap has the following form, notice the 'next' function's return type is the same as flatMap's return type: `F<A>.flatMap(next: (A) -> F<B>): F<B>`.
-   - Unlike flatMap, the 'map' method accepts a function that returns a plain type `<B>`.  Before returning this value, map wraps this plain value within a newly created monad instance and returns that, so the return type is the same as flatMap, i.e. `F<B>` (I think a more accurate name for 'map' is 'mapWrapAndReturn'). Map has the form: `F<A>.map(next: (A) -> <B>): F<B>`.
-
-Regarding exceptions in functional composition: If your language uses ‘Checked Exceptions’ (e.g., old-style Java or when using other JVM languages that call out to underlying old-style Java libs), you can’t throw checked exceptions during functional composition as they force you to handle the error and break the call chain with try/catch or throws statements. In this scenario, wrap the exception in the monadic context and return a LeftError. Note that throwing _unchecked_ exceptions is OK in a functional call chain as they don’t pollute the happy path with try/catch or throws, but you likely still want to wrap the error in a monad to return an error-as-value e.g., if that error is not a programming error or an exceptional circumstance.
+Using ADTs to model better return types. After [Gavin Bierman's Devoxx talk, Java Language Futures](https://www.youtube.com/watch?v=NNPN5tvjzqA)
 
 [top](#Table-Of-Contents)
 
-##### Sequential Computation Blocks with Typed Errors
+#### Error Handling in the Functional Way - Returning Smarter Wrapper Types eg the Either Monad
 
-As described above, monads are designed to be chained together in a sequential call chain to produce a final result. For example, this includes [Scala's for comprehension](https://docs.scala-lang.org/tour/for-comprehensions.html), [Haskell's do notation](https://en.wikibooks.org/wiki/Haskell/do_notation) and the [Arrow2 Raise DSL in Kotlin](https://arrow-kt.io/learn/typed-errors/from-either-to-raise/). 
+Before I get to error monads such as `Either` and `Validated`, I'll try to briefly explain what Monads are. Monads are notoriously difficult concept to grasp, but once you have, its pretty easy to hold onto and it is a very useful concept (opinion) that can be implemented in most programming language, not just in FP.  
 
-I'm going to use some of Arrow2's excellent documentation as an example in Kotlin. Let's assume the following functions, where 'f, g, h' all return an Either monad, and `Thing.summarize` returns a plain String. 
+> [!TIP]
+Error monads aren't strictly necessary if use ADTs as return types or if your language has its own approach to 'errors-as-values,' however, monads add some extra smarts to facilitate happy-path functional composition. Please read on. 
+
+##### What are Monads aka Higher-Kinded Types
+
+A monad is a burrito 🌯 or a bento-box 🍱 😊. If you've looked into functional programming, you'll understand this aphorism because monads are a notoriously difficult concept to explain: Like a burrito, a monad is a wrapper object (the tortilla) around a type (the filling). This sounds like ADTs right? yes, but monads also add additional 'mapper' methods that are used to apply passed-in computations to the monad's wrapped type in order to transform the type (or produce a wrapped error). I prefer the bento-box analogy, because there are more moving parts to a bento-box which better describes a monad (opinion). You may come across error monads and in my opinion, its a useful concept to grasp. 
+
+A core tenant of the functional paradigm is to produce a more declarative and expressive 'happy path' of composed computations that isn't polluted with interleaved error handling logic. In a monadic call chain, you define ‘what to do’ by chaining functions that return monads to achieve an end result, not ‘how to do it’ as in more imperative approaches. The happy path self-documents, it screams what the business logic does. In more imperative approaches, you often see that each result is checked using a conditional before continuing with the next computation. Some devs like this approach, ok cool, but others argue that polluting the happy path leads to unreadable code, especially for large call chains.  
+
+Here are some features of a monad: 
+- A monad is concept - you can implement monads in almost any language, not just for pure functional languages. 
+- A monad can be used as a return type for your functions and goes beyond errors-as-values to add type-safe functional composition.
+- A monad is a parametrised 'wrapper' type that is typically implemented with generics.
+- An 'Either' monad is a very common monad, its wrapped type is either a successful result OR some form of failure result that is returned from a passed-in computation. 
+- The computation is passed-in using a standard mapper method - 'map' or 'flatMap'. 
+- The *simple choice between error and success is essential for enabling functional composition in a consistent way*, this is a core distinction from ADTs alone that can have multiple success and multiple error states.  
+- An example of an Either monad is: `Either<LeftErrorValue, RightSuccessValue>` (note that Rust is opposite, where left is success and right is error). 
+- The passed-in function to the mapper methods is often named 'next' to indicate that it is the next bit of computation to apply in the chain.
+- The passed-in 'next' computation operates on the monad's existing wrapped type to create the next result. 
+- The passed-in 'next' computation can optionally generate custom side-effects.
+- The passed-in 'next' function can be a normal function that returns a plain type, it does not have to be 'monad aware.' Alternatively, it can also be a function that itself returns another monad.
+- Monads are designed to enable functional composition in a standard and consistent way from left to right, transforming each monad's wrapped success type along the way to achieve a final end result.
+    - To do this in a consistent way, a monad must have two 'bind' methods called `map` and `flatMap` that each accept a computation (typically a function-reference or a lambda - map/flatMap are 'higher-order' functions). The given computation 'maps over' the monad's wrapped type to transform and return a new success type wrapped in a new monad (or a new error type wrapped in a new monad).
+    - Optionally, a monad may also generate some custom side effects when the passed-in computation is executed e.g., calling out to another system or writing a file to disk for example.
+- If a mapper function returns an error type subsequent calls in the chain will short-circuit the computation and will simply return the erroneous `Either`. Short-circuiting continues until the end of the call chain.
+- Monads exist for several common patterns of computation - you've likely used monads in several libraries and have not even realised.
+
+[top](#Table-Of-Contents)
+
+##### Example Type Safe Functional Composition by Short-Circuiting on Errors
+
+ An example of a call chain that uses the Either monad as a return type can look like: 
 
 ```Kotlin
-fun f(n: Int): Either<Error, String>
-fun g(s: String): Either<Error, Thing>
-fun h(s: String): Either<Boo, Thing>
-fun Thing.summarize(): String
+    // Global helper functions, the first two return Either monads, the last returns a custom data object
+    // to show how to map calls that return plain types. 
+    // Our Either implementation is shown below. 
+    fun validateIngredients(ingredients: List<String>): Either<BakingServiceError, OkVal> { }
+    fun cook(ingredients: List<String> , temperature: Int): Either<BakingServiceError, OkVal> { }
+    fun pack(pie: String, isFragile : Boolean): Either<BakingServiceError, OkVal> { }
+    fun deliver(pie: String): Boolean { } // note, plain return type is not 'monad aware'
+
+    @Test  
+    fun `demo happy path and check last result`(){  
+        val pie = "baked cherry pie"  
+        val ingredients = listOf("sugar", "water", "flower", "cherries")  
+    
+        // Compose our call chain. Map and flatMap will short-circuit if a previous result produced an error. 
+        // The return type of each mapper method is a concreate instance of Either  
+        val bakePrepped = validateIngredients(ingredients)  
+        val cookResult = bakePrepped.flatMap {  cook(ingredients, temperature = 180) }  
+        val packResult = cookResult.flatMap {  pack(pie, isFragile = false) }  
+        val deliverResult = packResult.map { deliver(pie) }  
+    
+        // We only need to extract the final result - remember map/flatMap will short-circuit on an error so you 
+        // can focus on composing the 'happy path' as shown above
+        when(deliverResult) {  
+            is Left<BakingServiceError> -> fail("unexpected left error")  
+            is Right<Boolean> -> assert(deliverResult.value == true)  
+        }  
+    }
 ```
 
-Our first attempt at functional composition looks like the following, note that we can mix `flatMap` and `map` as required - we use `map` when our computation (i.e. the summarize function) does not itself return a monad, and flatMap when the computation does return a monad: 
+The above example can be shortened to the following. For this to compile, we need to use a consistent ErrVal type, however, this type can be polymorphic such as a custom ADT or an abstract base class. In doing this, you can model multiple success and/or error types. For example, the wrapped Left instance could be anything that extends Throwable, for example.
+
+```Kotlin
+    val deliverResult = validateIngredients(ingredients)
+        .flatMap {  cook(ingredients, temperature = 180) }
+        .flatMap {  pack(pie, isFragile = false) }
+        .map { deliver(pie) }
+
+    // Extract our final result, same as above
+```
+
+##### Basic Monad implementation 
+
+Here is a very basic sample implementation of `Either` in Kotlin (inspired by Arrow2): 
+
+```kotlin
+// A rather naive implementation of Either 
+sealed class Either<out A, out B> {
+    data class Left<A>(val value: A) : Either<A, Nothing>()   // left for error
+    data class Right<B>(val value: B) : Either<Nothing, B>()  // right for ok 
+
+    fun <C> map(fn: (B) -> C): Either<A, C> = flatMap { Right(fn(it)) }
+
+    fun <A, C> flatMap(fn: (B) -> Either<A, C>): Either<A, C> = when (this) {
+        is Right -> fn(this.value)
+        is Left -> this as Either<A, C>
+    }
+}
+```
+
+ - A monad wraps a type `<A>`. Typically this is not a primitive type (int, float etc), but a type that requires its own constructor, hence 'higher-kinded' type.
+ - A monad has a standard set of 'mapper' methods, also known as 'bind' methods  ('map' and 'flatMap'), and 'unit' methods sometimes called 'of' or name after 'of' e.g. 'ofLeft()' and 'ofRight()':
+
+     - 1) The 'unit' methods initialise a monad `F` by wrapping the given type `<A>` within the monadic context and has the form: 
+        - `F<A>.of(A)`
+
+     - 2) The 'flatMap' method accepts a computation, typically a function-reference or lambda, which transforms `<A>` to `<B>`. This given function argument is often named 'next'. This passed-in 'next' function itself wraps `<B>` in a new monad result `F<B>`. The return value is directly (i.e. 'flatly') returned by flatMap, so I think a more accurate name for flatMap is 'mapAndFlatReturn'. FlatMap has the following form, notice the 'next' function's return type is the same as map's return type:
+        - `F<A>.flatMap(next: (A) -> F<B>): F<B>`
+
+     - 3) The 'map' method accepts a function/lambda that transforms `<A>` to `<B>`. This passed-in 'next' function returns the plain type `<B>`, not a monad as in flatMap.  Therefore, before returning this value, map wraps this plain value within a newly created monad instance meaning the return type is consistent with flatMap, i.e. `F<B>` (I think a more accurate name for map is 'mapWrapAndReturn'). Map has the form: 
+        - `F<A>.map(next: (A) -> <B>): F<B>`
+
+
+It is important to remember that you can use monads as smart return types for your functions whenever you need to. In the example above, the processing functions are globally declared for the sake of simplicity. You could easily create custom business objects that declare their own monadic functions, rather than limiting yourself to global functions. This is a more hybrid approach that span both OPP and FP, and is especially useful for encapsulating more complex stateful business logic.
+
+Regarding exceptions in functional composition: If your language uses ‘Checked Exceptions’ (e.g., old-style Java or when using other JVM languages that call out to underlying old-style Java libs), you can’t throw checked exceptions during functional composition as they force you to handle the error and break the call chain with try/catch or throws statements. In this scenario, wrap the exception in the monadic context and return a left error. Note that throwing _unchecked_ exceptions is OK in a functional call chain as they don’t force you to pollute the happy path with try/catch or throws, but you likely still want to wrap the error in a monad to return an error-as-value e.g., if that error is not a programming error or an exceptional circumstance.
+
+[top](#Table-Of-Contents)
+
+##### Can I combine Monads and ADTs to model multiple or error states 
+
+Yes. Our parameterised error can wrap a polymorphic type such as an ADT used to model all possible error variations. In our Example we define a simple `BakingServiceError` with multiple variations. 
+
+```Kotlin
+sealed class BakingServiceError {  
+    object BadIngredients: BakingServiceError()  
+    object TemperatureTooLow: BakingServiceError()  
+    object PackingFailed: BakingServiceError()  
+    // If we encounter a PoorRating Error, optionally provide the minimum required score
+    data class PoorRating(val minRequiredScore: Int = 3): BakingServiceError(){
+        companion object
+    }
+}  
+  
+data class OkVal(val message: String)
+```
+
+A pattern I've seen before is to specify an abstract base class such as 'Throwable' so that any Exception type can be returned (not thrown) by a business function wrapped in a Left e.g. 
+
+```Kotlin
+fun someBusinessFunction(): Either<OkVal, Throwable> {
+    try{
+         ... processing logic detects an error or throwns an exception 
+    } catch(ex: SomeException) {
+      return Left(ex)
+    }
+}
+```
+
+##### Other Error Monads such as Validated and Ior 
+
+Monads exist for several standard patterns of computation. For example, we've already seen the `Either` monad for describing a success or failure result (see above), but others exist: 
+
+- Validated Monad: Unlike the Either monad, a Validated monad does not short-circuit on the first encountered error. Instead, the purpose is to capture all the possible errors encountered on the entire call chain. The error type is thus typically a non empty list. A validated monad can only be used if the computations are independent - input to the next computation does not depend on the successful output of the previous. A simple example is capturing all the errors on a form.
+
+- Ior Monad: Provides both a successful result and additional list of context messages collected along the way. An example would be a successful code compilation that has several deprecation warnings.  
+
+##### Inlining within a Computation Block to Avoid Nesting 
+
+As described above, monads are designed to be chained together. Depending on the logic you want to compose, this can sometimes require nesting of `flatMap` and `map` calls to achieve the desired result. Let's assume the following functions :
+
+```Kotlin
+fun intToString(n: Int): Either<Error, String> { /*... note String success val...*/ } 
+fun stringToThing(s: String): Either<Error, Thing> { /*... note Thing success val...*/ }
+fun Thing.summarize(): String { /*...simple extension function returns plain String...*/ }
+```
+To get the desired result, our first attempt at functional composition produces the following example. Note that we mix `flatMap` and `map` as required depending on the return types of the composed functions. We use `map` when our computation (`summarize`) does not itself return a monad, and `flatMap` when the computation does return a monad. The resulting composition requires some nesting, urgh: 
 
 ```Kotlin
 fun foo(n: Int): Either<Error, String> =
-  f(n).flatMap { s ->
-    g(s).map { t ->
-      t.summarize()
-    }
-  }
+  intToString(n).flatMap { s -> stringToThing(s).map { t -> t.summarize()  } }
 ```
-
-Pretty straight forward so far. A more idiomatic example is shown below using Arrow2's Raise DSL which includes the `either` builder:
+To address this, several languages have introduced sequential computation blocks that flatten the call chain.  For example, this includes [Scala's for comprehension](https://docs.scala-lang.org/tour/for-comprehensions.html), [Haskell's do notation](https://en.wikibooks.org/wiki/Haskell/do_notation) and [Kotlin's Arrow2 Raise DSL](https://arrow-kt.io/learn/typed-errors/from-either-to-raise/).  I use , an idiomatic Arrow2 example is shown below using the Raise DSL which includes the `either` block builder:
 
 ```Kotlin
 fun foo(n: Int): Either<Error, String> = either {
-  val s = f(n).bind()
-  val t = g(s).bind()
+  val s = intToString(n).bind() // you can use assignments within the call chain if you need to e.g. log something
+  log(s) 
+  val t = stringToThing(s).bind()
   t.summarize()
 }
 ```
-No nesting, much nicer, but where did those `bind()` methods come from, they aren't declared on Arrow2's Either type? Well, those bind functions are extension functions that are grafted onto `Either` from within the `either` context block. They are needed to short-circuit annd return early in the case of an error. Recall from our discussion on pervasive polymorphism above, that some languages (Kotlin, C#) use extension functions to allow you to extending existing types. This is an example of [extensions](https://kotlinlang.org/docs/extensions.html) with [extension receivers](https://kotlinlang.org/docs/extensions.html#declaring-extensions-as-members) and [function literals with receiver](https://kotlinlang.org/docs/lambdas.html#function-literals-with-receiver). It's quite complex with several variations, so please refer to the Kotlin and Arrow2 docs for more info and for tutorials. Hopefully however, this shows how errors are generally handled using monads in a functional call chain.
+No nesting, much nicer, but where did those `bind()` methods come from, they aren't declared on Arrow2's `Either` type and what do they do?  Well, those bind functions are extension functions that can be grafted onto `Either` if used within the scope of the `either` block. Recall from our discussion on pervasive polymorphism above, that some languages (Kotlin, C#) use extension functions to allow you to extend existing types. 
+
+- Q. So, how does this either block flatten the nested call chain? 
+- A. Within the `either` block, instead of potentially having to nest function calls like you would with map and flatMap, you just use `bind()` on monadic functions which does two things: 1) it short-circuits the `either` block in the case of an error, and 2) it returns the wrapped/regular type, not a monad. Returning the wrapped/regular type from `bind()` enables flattening, it allows you to inline optional variable assignments e.g., to interleave some logging as in the example above . If an error does not occur, the `either` block then wraps the result of `t.summarize()` within the returned `Either` as a success.  For this to compile, the monadic functions need to share the same Error type - this is because the `either` block needs to return a known type `Either<Error, String>` in our example above.  Remember though, Either's success and error types types can be polymorphic as in the baking examples above. 
+
+The Arrow2 implementation is an example of [extensions](https://kotlinlang.org/docs/extensions.html) with [extension receivers](https://kotlinlang.org/docs/extensions.html#declaring-extensions-as-members) and [function literals with receiver](https://kotlinlang.org/docs/lambdas.html#function-literals-with-receiver). It get quite complex with several variations, so please refer to the Kotlin and Arrow2 docs for more info and for tutorials. Hopefully however, this shows how errors are generally handled using monads in a functional call chain.  
 
 [top](#Table-Of-Contents)
 
-### Data Orientated Programming with Algebraic Data Types - ADTs
-
-The Special Case Pattern is one example for modelling your domain types in such a way that the absence of value is explicitly modelled in your domain making illegal program states and crashes more unlikely. However, you can go a lot further using Algebraic Data Types (ADTs). ADTs combine ‘Product Types’ for modelling aggregation such as a C/Golang/Rust ‘structs’ or Java's Record type with ‘Sum Types’ for modelling choice, also known as ‘Union Types’ or ‘Tagged Unions’. This simple combination of aggregation and choice is deceptively powerful and shows up in many programming languages to model domains, return types and function arguments:
-
-- Product Types are great for modelling aggregation, and include immutable data classes such as records, data objects, and structs. They are called ‘Product Types’ because their state ‘when considered as a whole’ is the Cartesian product of their data.
-
-- Sum Types can be used to represent choice and are polymorphic - an abstraction such as a marker/type interface with a fixed set of implementing subtypes (e.g., ‘sealed’ classes or interfaces in Kotlin/Java, ‘enum’ in Rust, ‘Union’ types in Python). They are called Sum Types because the set of possible types is the sum (union) of the total allowable set.
-
-[top](#Table-Of-Contents)
-
-In some modern languages (e.g Rust, modern Java, and others), ADTs can be efficiently processed using de-structuring and exhaustive pattern matching with `when` & `switch` statements. Exhaustive matching means the compiler will generate a compilation error if not all types are explicitly handled. As highlighted by Gavin Bierman in his Devoxx talk, you can spot many 'lightly disguised abstractions such as JSON' and model them as ADTs as shown in the following diagram: 
-
-![](attachments/Pasted%20image%2020241103131635.png)
-
-From Gavin Bierman's Devoxx talk, Java Language Futures: https://www.youtube.com/watch?v=NNPN5tvjzqA&t  Using the sealed interface, it would be simple to permit a range of additional custom types that implement `JsonValue` such as `MyCustomString` and `ThingArray` for example.  
-
-[top](#Table-Of-Contents)
 
 ### Concurrency and Parallelism
 
@@ -1765,13 +2140,13 @@ Some general recommendations:
 
 [top](#Table-Of-Contents)
 
-#### Know the difference between IO bound tasks and CPU bound tasks and their common solution patterns
+#### Know the difference between IO bound tasks and CPU bound tasks and their solution patterns
 
 *IO Bound Tasks* require asynchronous patterns to achieve concurrency. The solution patterns include:
 
-- **Async/Await and Coroutines** (e.g., Rust's async/await functions and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your functions are typically split into two types; 1) red functions for asynchronous code typically requiring special keyword modifiers to annotate functions and their call-sites e.g. `async` (function) and `await` (call-site) and; 2) blue functions for plain synchronous code having no modifiers. Here is the [original and now famous blog - What Color is Your Function](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)
-- **Colourless Coroutines** (e.g. Go's Goroutines). It could be argued that Go's Goroutines are not coloured because they only require the `go` keyword at the function call-site, there is no need to annotate a function as asynchronous which allows you to call regular functions in an asynchronous way (although you frequently need to pass in concurrency primitives to share data such as `Channels`). 
-- **Virtual-Threads / Fibres** such as the ‘colourless’ [Project Loom](https://wiki.openjdk.org/display/loom/Main) for the JDK where the virtual threads are implemented in user space using continuations. With the release of Loom, the venerable JVM platform arguably boasts the most advanced approach to concurrency. JVM languages can implement a truly colourless programming approach on top using a combination of platform and virtual threads and higher-level abstractions such as the streams API. 
+- **Async/Await** (e.g., Rust/C# async/await functions and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your functions are typically split into two types; 1) red functions for asynchronous code typically requiring special keyword modifiers to annotate functions and their call-sites e.g. `async` (function) and `await` (call-site) and; 2) blue functions for plain synchronous code having no modifiers. Here is the [original and now famous blog - What Color is Your Function](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)
+- **Colourless Coroutines** (e.g. Go's Goroutines). Go's Goroutines are not coloured because they only require the `go` keyword at the function call-site, there is no need to annotate a function as asynchronous which allows you to call regular functions in an asynchronous way (although you frequently need to pass in concurrency primitives to share data such as `Channels`). 
+- **Virtual-Threads / Green Threads / Fibres** such as the ‘colourless’ [Project Loom](https://wiki.openjdk.org/display/loom/Main) for the JDK where the virtual threads are implemented in user space using continuations. With the release of Loom, the venerable JVM platform arguably boasts the most advanced approach to concurrency. JVM languages can implement a truly colourless programming approach on top using a combination of platform and virtual threads and higher-level abstractions such as the streams API. 
 - **Continuations** are very low-level and are used to implement patterns such as coroutines & virtual threads. Continuations can be suspended, stored on the heap, and restarted. Typically, you would not directly use continuation APIs using a Continuation Passing Style (CPS) in your own application logic, although some languages do have public APIs for CPS.
 - **Async-Wrapper types such as Futures & Promises.** Note that these are really just higher-level synchronisation primitives, and the task that you await itself would need to be non-blocking to achieve high levels of concurrency.  
 - **Call-Back functions** (beware ‘call-back hell’ as often seen in JavaScript). In fact, more friendly ‘synchronous’ patterns such as Coroutines and Continuations simply abstract much of the lower-level call backs from the programmer.
