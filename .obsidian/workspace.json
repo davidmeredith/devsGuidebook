@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "81bc3b68b32167fd",
+        "id": "d85a68252f7202a4",
         "type": "tabs",
         "children": [
           {
-            "id": "852d94bd0d14a0bd",
+            "id": "92bba49fbd7c014f",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -154,7 +154,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "852d94bd0d14a0bd",
+  "active": "92bba49fbd7c014f",
   "lastOpenFiles": [
     "devGuidebook.md",
     "Pasted image 20250123155202.png",
