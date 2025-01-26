@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "51ddb4425811c4a6",
+        "id": "81bc3b68b32167fd",
         "type": "tabs",
         "children": [
           {
-            "id": "3e7e6ccd5d0ce022",
+            "id": "852d94bd0d14a0bd",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -73,8 +73,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "c1c8e1962adcc80f",
@@ -155,23 +154,23 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3e7e6ccd5d0ce022",
+  "active": "852d94bd0d14a0bd",
   "lastOpenFiles": [
-    "devGuidebook.md~",
     "devGuidebook.md",
-    "Pasted image 20250117170601.png",
-    "attachments/Pasted image 20241220110926.png",
+    "Pasted image 20250123155202.png",
+    "attachments/Pasted image 20250125114743.png",
+    "attachments/Pasted image 20250123161333.png",
+    "attachments/Pasted image 20250123090544.png",
+    "attachments/Pasted image 20250122164152.png",
+    "attachments/Pasted image 20250122163757.png",
+    "attachments/Pasted image 20250122163500.png",
+    "attachments/Pasted image 20250122162837.png",
+    "attachments/Pasted image 20250122162526.png",
+    "attachments/Pasted image 20250122160811.png",
+    "devGuidebook.md~",
     "consistency-report.md",
-    "Pasted image 20241216190846.png",
-    "attachments/Pasted image 20241216191248.png",
     "canvas/images.canvas",
-    "attachments/Pasted image 20241106152658.png",
-    "attachments/Pasted image 20241104173624.png",
-    "attachments/Pasted image 20241104173604.png",
     "canvas",
-    "attachments/Pasted image 20241103131635.png",
-    "attachments/Pasted image 20241103122918.png",
-    "Pasted image 20241103121956.png",
     "g.md",
     "README.md",
     "devGuidebook/Untitled.md",
