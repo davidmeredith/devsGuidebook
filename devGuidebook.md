@@ -77,7 +77,7 @@ dv.view('toc')
         1. [Go Example](#Go-Example)
     13. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
     14. [Dependency Rule and Dependency Inversion Principle](#Dependency-Rule-and-Dependency-Inversion-Principle)
-        1. [A hearts and minds analogy](#A-hearts-and-minds-analogy)
+        1. [A Hearts and Minds Analogy](#A-Hearts-and-Minds-Analogy)
     15. [Dependency Injection and Inversion of Control to Implement the Dependency Rule and DI](#Dependency-Injection-and-Inversion-of-Control-to-Implement-the-Dependency-Rule-and-DI)
     16. [Circular Dependencies via Setters and Lazy Initialisation](#Circular-Dependencies-via-Setters-and-Lazy-Initialisation)
     17. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
@@ -97,7 +97,7 @@ dv.view('toc')
     25. [The Boy Scout Rule](#The-Boy-Scout-Rule)
     26. [Principal of Least Knowledge and Train Wrecks - The Law of Demeter](#Principal-of-Least-Knowledge-and-Train-Wrecks---The-Law-of-Demeter)
     27. [FP vs OOP - Choose Two](#FP-vs-OOP---Choose-Two)
-        1. [Do not pollute Functional Code with Mutable State](#Do-not-pollute-Functional-Code-with-Mutable-State)
+        1. [Be Careful Not to Pollute Pure Functions with Hidden Mutable State](#Be-Careful-Not-to-Pollute-Pure-Functions-with-Hidden-Mutable-State)
         2. [Make Private your Default Class Level Visibility](#Make-Private-your-Default-Class-Level-Visibility)
         3. [Make Immutability your Default](#Make-Immutability-your-Default)
         4. [Interior Mutability](#Interior-Mutability)
@@ -1478,7 +1478,7 @@ On the right side of the diagram below ('Crossing Boundaries' and 'DI'), remembe
 >For Pythonistas and Go fans, DIP and DI are less obvious because of their duck typing - there are fewer frameworks compared to statically typed languages. Nonetheless, DIP and DI are still very valid principles to follow in these languages. 
 
 [top](#Table-Of-Contents)
-#### A hearts and minds analogy 
+#### A Hearts and Minds Analogy 
  Here's a simple example to help build a mental model ❤️  🧠
 - We have a `BigHeart` singleton at the centre of our architecture that implements `Heart`.  Outer layers such as `Legs` can call `Heart.excercise()` to inform the heart we're starting to exercise. To do this, our outer body parts can have a reference to `Heart` without breaking DIP - our outer layers only depend on our inner layer.
 - However, what if the Heart needs to broadcast out to our body parts its response to exercise?  We do not want our `Heart` to import specific body parts, that breaks DIP as our inner layer would depend on the outer layer. 
@@ -1960,9 +1960,9 @@ Therefore, if your language, my recommendations are to mix some functional conce
 
 [top](#Table-Of-Contents)
 
-#### Do not pollute Functional Code with Mutable State
+#### Be Careful Not to Pollute Pure Functions with Hidden Mutable State
 
-Importantly, keep functional call chains pure; you really don’t want to pollute your functional code with shared mutable state across threads. Consider the following example - one is broken, the other is ok, the difference is subtle.  So, while combing FN + OOP is powerful, be very careful.
+Pure functions need to remain pure; you really don’t want to pollute your pure functions with hidden shared mutable state across threads. Consider the following example - one is broken, the other is ok, the difference is subtle.  So, while combing FN + OOP is powerful, be very careful.
 
 ![](attachments/Pasted%20image%2020240611094242.png)
 
