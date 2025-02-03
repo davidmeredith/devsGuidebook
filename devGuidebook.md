@@ -46,11 +46,11 @@ dv.view('toc')
         7. [Containerisation for Portability](#Containerisation-for-Portability)
         8. [Workflows and Containerisation](#Workflows-and-Containerisation)
 4. [Coding Recommendations and Best Practices](#Coding-Recommendations-and-Best-Practices)
-    1. [High quality code is easy to change](#High-quality-code-is-easy-to-change)
+    1. [High Quality Code is Easy to Understand and Change](#High-Quality-Code-is-Easy-to-Understand-and-Change)
     2. [Quality is the best shortcut - Fowler Design Stamina Hypothesis](#Quality-is-the-best-shortcut---Fowler-Design-Stamina-Hypothesis)
     3. [Meaningful and Descriptive Names](#Meaningful-and-Descriptive-Names)
-        1. [Use intention revealing names](#Use-intention-revealing-names)
-        2. [Don't write comments when you can use a well named function or variable](#Don't-write-comments-when-you-can-use-a-well-named-function-or-variable)
+        1. [Use Intention Revealing Names](#Use-Intention-Revealing-Names)
+        2. [Considered Comments](#Considered-Comments)
         3. [Do Not Name Abstractions After Constituent Parts](#Do-Not-Name-Abstractions-After-Constituent-Parts)
     4. [Testing has Three Main Purposes](#Testing-has-Three-Main-Purposes)
     5. [Keep Classes and Functions Smallish](#Keep-Classes-and-Functions-Smallish)
@@ -84,7 +84,7 @@ dv.view('toc')
     18. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
         1. [Throwing Exceptions from Constructors](#Throwing-Exceptions-from-Constructors)
         2. [Use a Smart Constructor or Factory to Return a Smarter Return Type](#Use-a-Smart-Constructor-or-Factory-to-Return-a-Smarter-Return-Type)
-        3. [Use a Builder with a Smarter Return Type](#Use-a-Builder-with-a-Smarter-Return-Type)
+        3. [Use the Builder Pattern to Check Complex Invariants Before Building the Object](#Use-the-Builder-Pattern-to-Check-Complex-Invariants-Before-Building-the-Object)
     19. [Know Some Design Patterns](#Know-Some-Design-Patterns)
         1. [The Strategy Pattern Example](#The-Strategy-Pattern-Example)
         2. [The Visitor Pattern](#The-Visitor-Pattern)
@@ -123,8 +123,8 @@ dv.view('toc')
             1. [What are Monads aka Higher-Kinded Types](#What-are-Monads-aka-Higher-Kinded-Types)
             2. [Basic Monad implementation](#Basic-Monad-implementation)
             3. [Example Type Safe Functional Composition by Short-Circuiting on Errors](#Example-Type-Safe-Functional-Composition-by-Short-Circuiting-on-Errors)
-            4. [Can I combine Monads and ADTs to model multiple or error states](#Can-I-combine-Monads-and-ADTs-to-model-multiple-or-error-states)
-            5. [Other Error Monads such as Validated and Ior](#Other-Error-Monads-such-as-Validated-and-Ior)
+            4. [Can I Combine Monads and ADTs to Model Multiple Success or Error states](#Can-I-Combine-Monads-and-ADTs-to-Model-Multiple-Success-or-Error-states)
+            5. [Other Error Monads such as Validation and Ior](#Other-Error-Monads-such-as-Validation-and-Ior)
             6. [Inlining within a Computation Block to Avoid Nesting](#Inlining-within-a-Computation-Block-to-Avoid-Nesting)
     30. [Effect Orientated Programming](#Effect-Orientated-Programming)
     31. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
@@ -395,10 +395,18 @@ This is not an exhaustive list of coding recommendations. For more in-depth expl
 
 [top](#Table-Of-Contents)
 
-### High quality code is easy to change
+### High Quality Code is Easy to Understand and Change
 
-Code needs to achieve its purpose under certain parameters, but assuming that it does, what is high quality code?  There are many definitions, but I like "high quality code is easy to reason about and change."  It implies the code is readable, it has good abstractions with well named constructs (classes, functions, variables, packages etc), and overall it is maintainable.  
+Code needs to achieve its purpose under certain parameters, but assuming that it does, what is high quality code?  There are many definitions, but I like "High quality code is easy to understand and change."  It implies the code is readable, it has good abstractions with well named constructs (classes, functions, variables, packages etc), and overall it is maintainable.  Watch [this](https://www.youtube.com/watch?v=F9owUy1g_YE&list=TLPQMjYwMTIwMjWZeuDaeoTSkA&index=6). 
 
+- “Clean code does one thing well.”   (Bjarne Stroustrup)
+- “Clean code reads like well written prose.”  (Grady Booch)
+- “Clean code always looks like it was written by someone who cares.” (M. Feathers)
+- “Getting code to work is only half your job, and it’s the least important part. The most important part is that you write code that other people can maintain/use. If you hand me code that works that I can’t understand, it is useless as soon as the requirements change.”  (Uncle Bob Martin)
+
+Interestingly, The Primeagen seems to emphasise a slightly different point of view: "Not all code can be or needs to be made readable; it also depends on the skills of the programmer.” I believe this is only __partly__ true - I notice the big push-back in the first comment on his video:  
+
+![](attachments/Pasted%20image%2020250129141725.png)
 [top](#Table-Of-Contents)
 
 ### Quality is the best shortcut - Fowler Design Stamina Hypothesis
@@ -425,7 +433,7 @@ Code needs to achieve its purpose under certain parameters, but assuming that it
 
 The following two examples are taken from Uncle Bob's 'Clean Code' book:
 
-#### Use intention revealing names
+#### Use Intention Revealing Names
 Which is easier to read? 
 ```Java
 // check to see if the employee is elibible for full benefits
@@ -441,9 +449,9 @@ if(employee.isEligibleForFullPension()){
 }
 ```
 
-#### Don't write comments when you can use a well named function or variable 
+#### Considered Comments 
 
-I love this bit of advice from Bob "Every time you express yourself in code, you should pat yourself on the back. Every time you write a comment, you should grimace and feel the failure of your [lack] of ability of expression."
+I have mixed feelings about this piece of advice from Uncle Bob: "Every time you express yourself in code, you should pat yourself on the back. Every time you write a comment, you should grimace and feel the failure of your [lack] of ability of expression."  Bob goes on to explain that you should use well-named variables instead of comments, as shown in the example below (real-estate limits apply - imagine a much larger example). I understand the sentiment here, but I think it can be easily misinterpreted - I believe we do still need comments, and they should focus on the intention, not the 'how.'
 
 ```Java
 // For our system, we need to get all the depndent systems 
@@ -491,11 +499,11 @@ General rule – not much bigger than your screen’s viewport. I don't subscrib
 ### Limit the Number of Function Arguments
 
 >[!TIP]
->Consider using immutable Data Transfer Objects (aka DTOs / Data Objects / Records) if your function has more than ~4 arguments.
+>Consider using immutable Data Transfer Objects (aka DTOs / Data Objects / Records) if your function has more than ~4 arguments, and nesting these gives good structure.
 
 ### Separation of Concerns for Locality of Behaviour 
 
-I've heard that functions should do one thing - For some functions this is true, but I don't always agree: Higher level functions often compose multiple child functions to achieve an end result.  
+Functions should do one thing. For some functions this is true, especially low-level functions for example. However, I don't believe this is a unanimous rule. Higher-level functions (the outer layer in the dependency bullseye) often compose multiple child functions to achieve an end result. For example, consider a controller that composes multiple service facade calls to provide a final response.  
 
 >[!TIP]
 >I prefer: Functions should separate concerns to give Locality of Behaviour. LoB means that code is easily understood by looking at only a small portion of it (paraphrasing R. Gabriel)
@@ -556,14 +564,14 @@ The OOP data model of class inheritance hierarchies and interface implementation
 
 OOP bashing appears to be popular these days, but this is mostly because of the problems associated with hierarchical inheritance (see section on Don't Pay Too Much Inheritance Tax), and I agree that hierarchical inheritance should be applied judiciously. However, I believe that most of the other OOP principles are tried, tested, and proven. You can’t argue against three of the four 'pillars' of OPP: Abstraction, Encapsulation, and Polymorphism. These are good design principles largely available across all modern programming languages.  Arguably, what pure OOP can over-emphasise is deep & brittle inheritance hierarchies, but instead you can favour composition instead in the right scenarios.
 
-| Pillar                       | Implementations                                                                                                            |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Abstraction                  | Interfaces, Traits, Service Facade                                                                                         |
-| Encapsulation                | Classes, Records/struts/nested-structs, Closures, Modules, Public/Private/Protected visibility, monads (wrap side-effects) |
-| Polymorphism                 | Inheritance, ADTs, Type-classes, Generics & Parametric Polymorphism, Interfaces/Traits, Dynamic-Dispatch                   |
-| ~~Inheritance~~ Code Sharing | Composition / Delegation, Traits, Default Interfaces, Inheritance                                                          |
+| Pillar                            | Implementations                                                                                                            |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Abstraction                       | Interfaces, Traits, Service Facade                                                                                         |
+| Encapsulation                     | Classes, Records/struts/nested-structs, Closures, Modules, Public/Private/Protected visibility, monads (wrap side-effects) |
+| Polymorphism                      | Inheritance, ADTs, Type-classes, Generics & Parametric Polymorphism, Interfaces/Traits, Dynamic-Dispatch                   |
+| ~~Inheritance~~ Sharing Behaviour | Composition / Delegation, Traits, Default Interfaces, Inheritance                                                          |
 
-I believe inheritance should be replaced with 'Code Sharing': the other pillars are generic to accommodate multiple implementations and inheritance is not the only way of sharing code across types. Other ways to share code include Composition (available any language), traits (Scala, Rust), interfaces with default implementations and attributes (Java, Go, Py), and type-classes (Scala), to name a few. I agree that inheritance can be overdone, but it does have it place (see section on 'Don't pay too much inheritance tax').  
+I believe inheritance should be replaced with 'Sharing Behaviour': the other pillars are generic to accommodate multiple implementations and inheritance is not the only way of sharing code across types. Other ways to share code include Composition (available any language), traits (Scala, Rust), interfaces with default implementations and attributes (Java, Go, Py), and type-classes (Scala), to name a few. I agree that inheritance can be overdone, but it does have it place (see section on 'Don't pay too much inheritance tax').  
 
 ### SOLID
 
@@ -1457,9 +1465,9 @@ On the right side of the diagram below ('Crossing Boundaries' and 'DI'), remembe
 - For inner to call outer, use dependency inversion. 
 
 >[!TIP] 
->_"For inner to call outer, use DI -  Make outer implement methods owned by inner."_  Uncle DaveM.
+>_"For inner to call outer, use DI -  Make the outer implement methods owned by the inner."_  Uncle DaveM.
 
-![](attachments/Pasted%20image%2020250123090544.png)
+![[Pasted image 20250129143004.png]]
 [top](#Table-Of-Contents)
 ![](attachments/Pasted%20image%2020250122162526.png)
  - If you are confused by the direction of the arrows, remember that they point in the direction of source dependencies (imports, includes, composition), not in the direction of data flow. 
@@ -1799,9 +1807,9 @@ var? author = when (authorResult) {
 } 
 ```
 
-#### Use a Builder with a Smarter Return Type
+#### Use the Builder Pattern to Check Complex Invariants Before Building the Object
 
-See the builder pattern, the final `build()` function could return a smarter return type such as an `Either` or an ADT. 
+See the builder pattern. The final `build()` function should be used to check complex invariants and can return a smarter return type such as an `Either` or an ADT. An invariant is a condition that must hold true typically across multiple state variables.
 
 ### Know Some Design Patterns
 
@@ -1915,7 +1923,7 @@ Leave code in a better state than you found it & don’t comment bad code, re-wr
 
 ### Principal of Least Knowledge and Train Wrecks - The Law of Demeter
 
-🚃-🚃-🚃-🚃-🚃-🚃   👎
+🚃💥🚃💥🚃💥🚃  
 
 A module should not know about the innards of the objects it manipulates. Important: by ‘objects’, I mean objects that have state and methods that operate on that state.  It is quite normal to have deeply nested data objects/structs/records call methods to access data - for these types of data carrying objects, the Law does not apply. [https://en.wikipedia.org/wiki/Law_of_Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter)
 
@@ -2173,7 +2181,7 @@ Of course, choice between exceptions or errors-as-values depends on the language
 
 - Yes, depending on your language of choice and what is considered idiomatic. Some modern languages support both approaches. For example, to support interoperability with Java, the Kotlin language supports unchecked exceptions as well as its own `Result` type which is intended for low-level code rather than for modelling business errors. For modelling business errors, they recommend using sealed class hierarchies that introduce exhaustive pattern matching to handle errors (see discussion on data oriented programming).
 
-- At the time of writing, a dedicated union type for capturing a result OR one or more errors is on the Kotlin roadmap.
+- At the time of writing, a dedicated union type for capturing a result OR one or more errors is on the [Kotlin roadmap](https://www.youtube.com/watch?v=B-DoVr12fK0).
 
 - Languages may also support more advanced error handling strategies. For example, the Kotlin Arrow2 library simplifies the use of OOP and Functional error handling within the same code base (Functional vs OOP? - choose both). For example, lower level code or existing code can apply `try/catch/finally` blocks for localised exception handling and recovery if needed, while higher level calling code can provide a wrapping `error context` that can be used at the boundary; Rather than throwing exceptions at the boundary between different layers of code, exceptions can be _raised_ into the higher level error context. Raising rather than (re)throwing this allows the functions that raise to be composed within functional compositional call chains because raising does not break referential transparency. In the top layer of your code, such as in a top-level service facade or global error handler in a webapp, you would then need to handle the exceptions raised within the error context, such as performing a transaction roll back or performing a retry.  For a great presentation with examples, see this great talk from Simon Vergauwen from [Kotlin Conf 2023](https://youtu.be/JcFEI8_af3g?si=vH5OG86JTQWFrGnw) (note that context receivers as used in the talk will be replaced by context parameters in the future).
 
@@ -2213,7 +2221,43 @@ This is super-powerful because you can add new success and/or error/exception re
 
 To process the function's abstract return type with very little boilerplate, exhaustive pattern matching with switch ensures all possible variants are handled - the compiler will produce an error if any are unhandled. There is a lot to unpack here, but the example given below from Gavin Bierman clearly demonstrates this approach using modern Java (2024). The use of ADTs with pattern matching is being coined in the Java community as 'Data Orientated Programming,' and can be applied for modelling any data type hierarchies such as converting JSON to Java types, but Java certainly wasn't the first language to implement this approach. I suspect that this approach will become very popular in the Java community in the future, moving away from exceptions in higher level application code (note, as discussed above, exceptions will still have their place in lower level library and framework code). 
 
-![](attachments/Pasted%20image%2020241103122918.png)
+```java
+public class Main {
+    public static <V> void main(String[] args) {
+
+        // Switch uses exhaustive pattern matching and deconstruction. 
+        // A compile time error is generated if not all variations are handled.
+        Result<V> result = updatedLegacyFunction(4L);
+        switch (result) {
+            case Failure<V>(Throwable cause) -> println("Throwable "+cause);
+            case Interrupted<V> v -> println("TODO");
+            case Success<V> v  -> println("val is "+v);
+            case Timeout<V> v -> println("TODO");
+        }
+ .  } 
+
+    // legacy function that throws exceptions
+    static long legacyFunction(long timeout)
+            throws InterruptedException, ExecutionException, TimeoutException {
+       // ...elided... 
+    }
+
+    // can be re-written to return an ADT
+    static <V> Result<V> updatedLegacyFunction(long timeout){
+        if (timeout < 5) return (Result<V>) new Success<>("All good");
+        return new Failure<>(new TimeoutException());
+    }
+}
+
+// Result<V> is an Algebraic Data Type.  
+// ADTs combine power of union/sum types for modelling choice with 
+// product types to model custom wrapped errors. 
+sealed interface Result<V> permits Success, Failure, Timeout, Interrupted { }
+record Success<V>(V result) implements Result<V> {}
+record Failure<V>(Throwable result) implements Result<V> {}
+record Timeout<V>() implements Result<V> {}
+record Interrupted<V>() implements Result<V> {}
+```
 
 Using ADTs to model better return types. After [Gavin Bierman's Devoxx talk, Java Language Futures](https://www.youtube.com/watch?v=NNPN5tvjzqA)
 
@@ -2306,13 +2350,11 @@ We use an ADT to model our errors - BakingServiceError with sub-types:
         object BadIngredients: BakingServiceError()
         object TemperatureTooLow: BakingServiceError()
         object PackingFailed: BakingServiceError()
-        // If we encounter a PoorRating, we can optionally provide the minimum required score
         data class PoorRating(val minRequiredScore: Int = 3): BakingServiceError(){
-            companion object
+          companion object
         }
     }
 
-    // Basic success type
     data class OkVal(val message: String)
 ```
 
@@ -2320,7 +2362,7 @@ We use an ADT to model our errors - BakingServiceError with sub-types:
 
 ```Kotlin
     @Test
-    fun `demo happy path with interleaved result checking`(){
+    fun `demo interleaved result checking`(){
         val ingredients = listOf("sugar", "water", "flower")
         val pie : String = "baked cherry pie"
 
@@ -2396,9 +2438,9 @@ We use an ADT to model our errors - BakingServiceError with sub-types:
     // Extract our final result, or pattern match the error, same as above
 ```
 
-##### Can I combine Monads and ADTs to model multiple or error states 
+##### Can I Combine Monads and ADTs to Model Multiple Success or Error states 
 
-Yes. Our parameterised error can wrap a polymorphic type such as an ADT used to model all possible error variations. To continue our example, we add a new `PoorRating` data object to our ADT to return the minimum required rating should the pie receive a poor rating:  
+Yes. Our parameterised Left error and Right success types can each wrap a polymorphic type such as an ADT used to model all possible error and success variations. To continue our example, we add a new `PoorRating` data object to our ADT to return the minimum required rating should the pie receive a poor rating:  
 
 ```Kotlin
 sealed class BakingServiceError {  
@@ -2426,13 +2468,13 @@ fun someBusinessFunction(): Either<OkVal, Throwable> {
 }
 ```
 
-##### Other Error Monads such as Validated and Ior 
+##### Other Error Monads such as Validation and Ior 
 
 Monads exist for several standard patterns of computation. For example, we've already seen the `Either` monad for describing a success or failure result (see above), but others exist: 
 
-- Validated Monad: Unlike the Either monad, a Validated monad does not short-circuit on the first encountered error. Instead, the purpose is to capture all the possible errors encountered on the entire call chain. The error type is thus typically a non empty list. A validated monad can only be used if the computations are independent - input to the next computation does not depend on the successful output of the previous. A simple example is capturing all the errors on a form.
+- Validation Monad: Unlike the Either monad, a Validated monad does not short-circuit on the first encountered error. Instead, the purpose is to capture all the possible errors encountered in the entire call chain. The error type is thus typically a non empty list. A validated monad can only be used if the computations are independent where input to the next computation does not depend on the successful output of the previous. A simple example is capturing all the errors on a form. In fancy functional speak, the Validator is an _applicative functor_. 
 
-- Ior Monad: Provides both a successful result and additional list of context messages collected along the way. An example would be a successful code compilation that has several deprecation warnings.  
+- Ior Monad: Provides both a successful result and additional list of context messages collected along the way. An example would be a successful code compilation that has several deprecation warnings. Overall the routine was successful, but you also want to collect the additional context.  
 
 ##### Inlining within a Computation Block to Avoid Nesting 
 
@@ -2453,7 +2495,7 @@ To address this, several languages have introduced sequential computation blocks
 
 ```Kotlin
 fun foo(n: Int): Either<Error, String> = either {
-  val s = intToString(n).bind() // you can use assignments within the call chain if you need to e.g. log something
+  val s = intToString(n).bind() // use assignments in the call chain if needed 
   log(s) 
   val t = stringToThing(s).bind()
   t.summarize()
@@ -2462,7 +2504,7 @@ fun foo(n: Int): Either<Error, String> = either {
 No nesting, much nicer, but where did those `bind()` methods come from, they aren't declared on Arrow2's `Either` type and what do they do?  Well, those bind functions are extension functions that can be grafted onto `Either` if used within the scope of the `either` block. Recall from our discussion on pervasive polymorphism above, that some languages (Kotlin, C#) use extension functions to allow you to extend existing types. 
 
 - Q. So, how does this either block flatten the nested call chain? 
-- A. Within the `either` block, instead of potentially having to nest function calls like you would with map and flatMap, you just use `bind()` on monadic functions which does two things: 1) it short-circuits the `either` block in the case of an error, and 2) it returns the wrapped/regular type, not a monad. Returning the wrapped/regular type from `bind()` enables flattening, it allows you to inline optional variable assignments e.g., to interleave some logging as in the example above . If an error does not occur, the `either` block then wraps the result of `t.summarize()` within the returned `Either` as a success.  For this to compile, the monadic functions need to share the same Error type - this is because the `either` block needs to return a known type `Either<Error, String>` in our example above.  Remember though, Either's success and error types types can be polymorphic as in the baking examples above. 
+- A. Within the `either` block, instead of potentially having to nest function calls like you would with `map` and `flatMap`, you just use `bind()` on monadic functions which does two things: 1) it short-circuits the `either` block in the case of an error, and 2) it returns the wrapped/regular type, not a monad. Returning the wrapped/regular type from `bind()` enables flattening, it allows you to inline optional variable assignments e.g., to interleave some logging as in the example above . If an error does not occur, the `either` block then wraps the result of `t.summarize()` within the returned `Either` as a success.  For this to compile, the monadic functions need to share the same Error type - this is because the `either` block needs to return a known type `Either<Error, String>` in our example above.  Remember though, Either's success and error types types can be polymorphic as in the baking examples above. 
 
 The Arrow2 implementation is an example of [extensions](https://kotlinlang.org/docs/extensions.html) with [extension receivers](https://kotlinlang.org/docs/extensions.html#declaring-extensions-as-members) and [function literals with receiver](https://kotlinlang.org/docs/lambdas.html#function-literals-with-receiver). It get quite complex with several variations, so please refer to the Kotlin and Arrow2 docs for more info and for tutorials. Hopefully however, this shows how errors are generally handled using monads in a functional call chain.  
 
@@ -2470,10 +2512,10 @@ The Arrow2 implementation is an example of [extensions](https://kotlinlang.org/d
 
 ### Effect Orientated Programming
 
-In the functional error handling examples above, we use the `Either` monad as a smarter return type to bring back our happy path by allowing us to compose a selection of global functions. It is important to remember that we can apply the monad API in custom business objects to encapsulate custom related operations that have controlled side-effects: 
+In the functional error handling examples above, we use the `Either` monad as a smarter return type to bring back our happy path by allowing us to compose a selection of global functions. It is important to remember that we can apply the monad API in custom business objects to encapsulate custom operations with controlled side-effects: 
 
 >[!TIP]
-Recognise that the monad API can be used to build your own custom business logic as monads that have controlled side-effects. We refer to this monadic custom business logic as a 'Higher Kinded' type. 
+Recognise that the monad API (mainly `map()` and `flatMap()`) can be used to build your own smart custom types that have controlled side-effects. We refer to this monadic custom business logic as a 'Higher Kinded' type. 
 
 >[!TIP]
 >"Monads allow you to write happy path code within the context of a monad. A monad wraps all the errors that could possibly go wrong, groups them all up, and lets you deal with that failure outside of the monad's business logic. It basically encapsulates all the side-effects and possible errors. The net result is more reliable and readable higher-level happy-path code."  Paraphrasing Kris Jenkins (who hosts the Developer Voices podcast) in this episode of [Happy Path Programming podcast](https://pod.link/1531666706/episode/710a605d605fda251f2e83b8858615b8) 

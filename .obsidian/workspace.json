@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "d85a68252f7202a4",
+        "id": "017b9d786349b7c2",
         "type": "tabs",
         "children": [
           {
-            "id": "92bba49fbd7c014f",
+            "id": "afa039df06a48643",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -154,9 +154,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "92bba49fbd7c014f",
+  "active": "afa039df06a48643",
   "lastOpenFiles": [
     "devGuidebook.md",
+    "Pasted image 20250129143004.png",
+    "attachments/Pasted image 20250129141725.png",
+    "devGuidebook.md~",
     "Pasted image 20250123155202.png",
     "attachments/Pasted image 20250125114743.png",
     "attachments/Pasted image 20250123161333.png",
@@ -165,9 +168,6 @@
     "attachments/Pasted image 20250122163757.png",
     "attachments/Pasted image 20250122163500.png",
     "attachments/Pasted image 20250122162837.png",
-    "attachments/Pasted image 20250122162526.png",
-    "attachments/Pasted image 20250122160811.png",
-    "devGuidebook.md~",
     "consistency-report.md",
     "canvas/images.canvas",
     "canvas",
