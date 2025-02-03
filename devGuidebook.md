@@ -76,7 +76,7 @@ dv.view('toc')
         1. [Java Example](#Java-Example)  
         1. [Go Example](#Go-Example)
     13. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
-    14. [Dependency Rule and Dependency Inversion Principle (DIP)](#Dependency-Rule-and-Dependency-Inversion-Principle-(DIP))
+    14. [Dependency Rule and Dependency Inversion Principle](#Dependency-Rule-and-Dependency-Inversion-Principle)
         1. [A hearts and minds analogy](#A-hearts-and-minds-analogy)
     15. [Dependency Injection and Inversion of Control to Implement the Dependency Rule and DI](#Dependency-Injection-and-Inversion-of-Control-to-Implement-the-Dependency-Rule-and-DI)
     16. [Circular Dependencies via Setters and Lazy Initialisation](#Circular-Dependencies-via-Setters-and-Lazy-Initialisation)
@@ -1453,7 +1453,7 @@ If you can do OOP, you can do DOP: DOP advocates for cleanly separating data fro
 >[!TIP]
 There is no need to extract logic such as data validation and invariant checking into utility functions, this logic should be co-located with your data types, in class/record constructors for example.
 
-### Dependency Rule and Dependency Inversion Principle (DIP)
+### Dependency Rule and Dependency Inversion Principle
 
 The Dependency Rule states that: "Source code dependencies must point only inwards." This is illustrated in the following diagram.  
 
