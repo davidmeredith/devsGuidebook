@@ -1467,7 +1467,7 @@ On the right side of the diagram below ('Crossing Boundaries' and 'DI'), remembe
 >[!TIP] 
 >_"For inner to call outer, use DI -  Make the outer implement methods owned by the inner."_  Uncle DaveM.
 
-![[Pasted image 20250129143004.png]]
+![](attachments/Pasted%20image%2020250129143004.png)
 [top](#Table-Of-Contents)
 ![](attachments/Pasted%20image%2020250122162526.png)
  - If you are confused by the direction of the arrows, remember that they point in the direction of source dependencies (imports, includes, composition), not in the direction of data flow. 
