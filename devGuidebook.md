@@ -515,7 +515,7 @@ The following example is from 'Modern Software engineering' (Dave Farley): There
 Example 1 is very poor, it mixes all three concerns directly and you need to understand the low-level details to understand what is happening. Example 2 is much better - logic is abstracted into private methods with descriptive names that 'reads the logic,' this is far easier to follow. Example 3 is even more loosely coupled - is this an improvement over version two, probably not for this simple example, but you can see how this further decouples concerns. Example 3 is a nice pattern for complex systems - it is easy to add new event listeners to react accordingly without having to change the logic of the function. 
 
 ```Python
-// Python
+# Python
 def add_to_cart_poor(self, item):
     self.cart.add(item)
     
