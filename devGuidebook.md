@@ -328,7 +328,7 @@ For me, the increased productivity, and availability of a colourless async runti
 
 ##### What about Rust or Zig
 
-TODO I don't have enough hard-won experience to confidently make this call, so I'll have to defer to the opinion of of others. According to Lars Bergstrom, Director of Engineering for Android at Google, 
+TODO I don't have enough hard-won experience to confidently make this call, so I'll have to defer to the opinion of of others. According to Lars Bergstrom, Director of Engineering for Android at Google, coming soon.... 
 [top](#Table-Of-Contents)
 #### Kanban - Jira and Confluence
 
