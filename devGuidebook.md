@@ -1,6 +1,6 @@
 # Dave's Dev Guidebook
 
-Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre but now I maintain an updated version here. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. There is nothing truly original here, but what I do hope to add is a balanced and informed opinion based on many years hard won experience. Many of the published practices out there I agree with and have personally encountered, others I disagree with. Happy reading. DaveM
+Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre but now I maintain an updated version here. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. There is nothing truly original here, but what I do hope to add is a balanced and informed opinion based on many years hard won experience. Many of the published practices out there I agree with and have personally encountered or applied on projects, others I'm not so sure about. Happy reading. DaveM
 
 Last Updated 03/02/25.  Enjoy.
 
