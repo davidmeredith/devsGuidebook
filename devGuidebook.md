@@ -433,6 +433,7 @@ The following two examples are taken from Uncle Bob's 'Clean Code' book:
 #### Use Intention Revealing Names
 Which is easier to read? 
 ```Java
+// Java
 // check to see if the employee is elibible for full benefits
 
 // This
@@ -451,6 +452,7 @@ if(employee.isEligibleForFullPension()){
 I have mixed feelings about this piece of advice from Uncle Bob: "Every time you express yourself in code, you should pat yourself on the back. Every time you write a comment, you should grimace and feel the failure of your [lack] of ability of expression."  Bob goes on to explain that you should use well-named variables instead of comments, as shown in the example below (real-estate limits apply - imagine a much larger example). I understand the sentiment here, but I think it can be easily misinterpreted - I believe we do still need comments, and they should focus on the intention, not the 'how.'
 
 ```Java
+// Java
 // For our system, we need to get all the depndent systems 
 // and see if our sub-system is dependent on it. 
 if(this.getSystems().contains(this.subSystems.current())){ 
@@ -513,6 +515,7 @@ The following example is from 'Modern Software engineering' (Dave Farley): There
 Example 1 is very poor, it mixes all three concerns directly and you need to understand the low-level details to understand what is happening. Example 2 is much better - logic is abstracted into private methods with descriptive names that 'reads the logic,' this is far easier to follow. Example 3 is even more loosely coupled - is this an improvement over version two, probably not for this simple example, but you can see how this further decouples concerns. Example 3 is a nice pattern for complex systems - it is easy to add new event listeners to react accordingly without having to change the logic of the function. 
 
 ```Python
+// Python
 def add_to_cart_poor(self, item):
     self.cart.add(item)
     
@@ -682,6 +685,7 @@ The mechanism for attaching marker types varies across languages. Some languages
 Lexically splitting a type from a marker type via an extra 'referencing layer' is elegant and powerful compared to implementing the marker directly on the original type definition itself, such as implementing an interface directly on a class declaration. This is because you don't need to modify the existing type which facilitates simple blanket implementations, and when you do not have access to the src code of the original type. If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
 
 ```Rust
+// Rust
 use externalcrate::SomeStruct;    // here is our existing type
 
 trait Length {                    // A marker trait for shared behaviour
@@ -707,6 +711,7 @@ Some languages allow you to extend the existing types using extension functions 
 Notice that in the example below, `swap` is grafted onto the existing `MutableList` interface. All other references to `MutableList` can call `swap` creating a blanket implementation without polluting the original. Similarly, all list implementations can access the `lastIndex` extension property.
 
 ```Kotlin
+// Kotlin
 // Extension property on Kotlin's existing List Interface to store a custom description
 var <T> List<T>.description: String   
     get() = this.description  
@@ -1495,6 +1500,7 @@ On the right side of the diagram below ('Crossing Boundaries' and 'DI'), remembe
 
 Here is our inner `heart` package, notice we have no dependencies on our outer `bodyparts` package - this doesn't break DIP.
 ```Java
+// Java
 package heart;
 
 import java.util.List;
@@ -1680,6 +1686,7 @@ So, what is the benefit of IoC? 
 [top](#Table-Of-Contents)
 
 ```Java
+// Java
 // Two versions of Car and BetterCar, 
 // after Dave Farley's Modern Software Engineering Book. 
 // BetterCar has constructor injected engine which is easier to test.
@@ -1740,6 +1747,7 @@ In the example above, lets assume we remove the interfaces so that we deal just 
 5) __Lazy Initialisation via Lazy metadata/annotations__: if you are using an Inversion of Control container for dependency injection, the IoC container likely provides annotations to indicate the order of initialisation. For example, Spring provides the `@Lazy` annotation that can be used on dependencies declared on the consumer side to delay their creation until they are needed. This can be very effective, you don't then introduce static methods which some consider as being a dirty approach.  
 
 ```Java
+// Java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -1792,6 +1800,7 @@ For example, you could throw an `IllegalArgumentException` runtime exception fro
 In the example below, we use a Kotlin smart constructor to hide the primary constructor and model an invalid author name explicitly in our type system. This way, we create an `Author` object using a familiar constructor call syntax and is clear that a potential outcome is an `InvalidAuthorName`. You can of course apply the same approach in the standard factory pattern. 
 
 ```Kotlin
+// Kotlin
 object InvalidAuthorName
 
 data class Author private constructor(val name: String) {
@@ -1853,6 +1862,7 @@ The visitor pattern is used to separate business logic from objects on which the
 The visitor pattern is typically invoked for large cascading / nested object trees; an `accept` method can pass the visitor instance to all its member objects that also define an accept method, for example:
 
 ```c#
+// C#
 public class Addition : Expression {
   public Addidtion(Expression left, Expression right){
     Left = left;
@@ -1874,6 +1884,7 @@ public class Addition : Expression {
 Languages implement the visitor differently. For strongly typed polymorphic languages that support method overloading (Java, C#, Kotlin), interfaces can be used simplify the double dispatch logic where `accept` and `visit` methods can be overloaded using different argument types.  Languages that do not support polymorphic overrides e.g., Go and Python, typically need to define different visit-method names e.g.
 
 ```Go
+// Go
 type Visitor interface {
  visitWheel(wheel Wheel) string
  visitEngine(engine Engine) string
@@ -2040,6 +2051,7 @@ From Gavin Bierman's Devoxx talk, Java Language Futures: https://www.youtube.com
 > Guard clauses should be defined early - do not define lengthy conditional success blocks when you have can have short fail blocks defined early.  
 
 ```Kotlin
+// Kotlin
 fun badGuardClauseExample(val arg1)
     if(valid(arg1)){ 
         ...success path...
@@ -2096,6 +2108,7 @@ Errors as values vs exceptions is a hotly debated topic in programming communiti
 
 Errors-as-Values
 ```go
+// Go
 package main
 
 import (
@@ -2123,6 +2136,7 @@ func main() {
 
 Throw runtime exception:
 ```Java
+// Java
 import java.util.Arrays;  
 import java.util.List;  
   
@@ -2223,6 +2237,7 @@ This is super-powerful because you can add new success and/or error/exception re
 To process the function's abstract return type with very little boilerplate, exhaustive pattern matching with switch ensures all possible variants are handled - the compiler will produce an error if any are unhandled. There is a lot to unpack here, but the example given below from Gavin Bierman clearly demonstrates this approach using modern Java (2024). The use of ADTs with pattern matching is being coined in the Java community as 'Data Orientated Programming,' and can be applied for modelling any data type hierarchies such as converting JSON to Java types, but Java certainly wasn't the first language to implement this approach. I suspect that this approach will become very popular in the Java community in the future, moving away from exceptions in higher level application code (note, as discussed above, exceptions will still have their place in lower level library and framework code). 
 
 ```java
+// Java (java 23 with previews enabled)
 public class Main {
     public static <V> void main(String[] args) {
 
@@ -2300,6 +2315,7 @@ Here are some features of a monad:
 Here is a very basic sample implementation of `Either` in Kotlin, inspired by the Arrow2 library: 
 
 ```kotlin
+// Kotlin
 // A basic implementation of Either 
 sealed class Either<out A, out B> {
     data class Left<A>(val value: A) : Either<A, Nothing>()   // left for error
@@ -2337,6 +2353,7 @@ Regarding exceptions in functional composition: If your language uses ‘Checked
 In the following examples, we will use monads to simplify a functional call chain. The functions that we will compose include monad aware functions and basic functions that return plain types:
 
 ```Kotlin
+    // Kotlin
     // Global helper functions, the first two return Either monads, the last returns a plain type 
     fun validateIngredients(ingredients: List<String>): Either<BakingServiceError, OkVal> { }
     fun cook(ingredients: List<String> , temperature: Int): Either<BakingServiceError, OkVal> { }
@@ -2347,6 +2364,7 @@ In the following examples, we will use monads to simplify a functional call chai
 We use an ADT to model our errors - BakingServiceError with sub-types:
 
 ```Kotlin
+    // Kotlin
     sealed class BakingServiceError {
         object BadIngredients: BakingServiceError()
         object TemperatureTooLow: BakingServiceError()
@@ -2362,6 +2380,8 @@ We use an ADT to model our errors - BakingServiceError with sub-types:
 1) *Check as we go* - In the first example test, we check for success or failure for each step as we go. We don't need to use a consistent error type in this example:
 
 ```Kotlin
+    // Kotlin
+
     @Test
     fun `demo interleaved result checking`(){
         val ingredients = listOf("sugar", "water", "flower")
@@ -2400,6 +2420,8 @@ We use an ADT to model our errors - BakingServiceError with sub-types:
 - __If you need to extract the error sub-type to perform different error handling behaviour, you can drill down and extract the error sub-type as shown below.__  
 
 ```Kotlin
+    // Kotlin
+
     @Test  
     fun `demo happy path and check last result`(){  
         val pie = "baked cherry pie"  
@@ -2432,6 +2454,7 @@ We use an ADT to model our errors - BakingServiceError with sub-types:
 3) *Condensed happy path* - The above example can be shortened further:   
 
 ```Kotlin
+    // Kotlin
     val deliverResult = validateIngredients(ingredients)
         .flatMap {  cook(ingredients, temperature = 180) }
         .flatMap {  pack(pie, isFragile = false) }
@@ -2444,6 +2467,7 @@ We use an ADT to model our errors - BakingServiceError with sub-types:
 Yes. Our parameterised Left error and Right success types can each wrap a polymorphic type such as an ADT used to model all possible error and success variations. To continue our example, we add a new `PoorRating` data object to our ADT to return the minimum required rating should the pie receive a poor rating:  
 
 ```Kotlin
+// Kotlin
 sealed class BakingServiceError {  
     object BadIngredients: BakingServiceError()  
     object TemperatureTooLow: BakingServiceError()  
@@ -2460,6 +2484,7 @@ data class OkVal(val message: String)
 A pattern I've seen before is to specify an abstract base class such as `Throwable` so that any exception type can be returned (not thrown) by a business function wrapped in a Left e.g. 
 
 ```Kotlin
+// Kotlin
 fun someBusinessFunction(): Either<OkVal, Throwable> {
     try{
          ... processing logic detects an error or throwns an exception 
@@ -2530,6 +2555,7 @@ I'm not going to use Haskell, I don't know enough, but I do recognise the elegan
 - The `transferMoney` static method which can fail due to a flaky network. If the transfer fails, we catch the offending `IOException` and return a `AccountError.TransactionFailed(ex)` and wrap the original cause. 
 
 ```Kotlin
+// Kotlin
 sealed class AccountError {
     object NegativeAmount : AccountError()
     object NotEnoughFunds : AccountError()
@@ -2593,6 +2619,7 @@ data class Account private constructor(val balance: BigDecimal) {
 Here are some corresponding tests that show Account usage:
 
 ```Kotlin
+    // Kotlin
     @Test  
     fun `should fail creating an account with a negative amount`() {  
         assert(Account.create((-100).toBigDecimal()) == Left(NegativeAmount))  
@@ -2626,7 +2653,10 @@ Here are some corresponding tests that show Account usage:
         assert(result == Right(Pair(buildAccountViaReflectionForTestsOnly(50.toBigDecimal()), buildAccountViaReflectionForTestsOnly(150.toBigDecimal())) ))
     }
 ```
-Bento-box is better analogy for describing higher kinded types.  
+A bento-box is better analogy for describing higher kinded types - why? coming soon (TODO).  
+
+[top](#Table-Of-Contents)
+
 ### Concurrency and Parallelism
 
 In computing, concurrency is not parallelism, despite the two terms having very similar dictionary definitions. *Concurrency is a software concern* involving context switching of a process on a single CPU core via a ‘kernel thread’ (these types of thread are also commonly referred to as process thread, carrier thread, and platform thread) . Context switching gives the illusion that multiple things are happening at once because the time slicing is so small. *True parallelism is both a software and hardware concern* which requires increasingly more hardware to do more things at once. This can range from multiple cores on one CPU, multiple CPUs, multiple nodes, remote actors, remote VMs, cloud functions such as Lambda and more. 
