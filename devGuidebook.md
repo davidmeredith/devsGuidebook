@@ -1,8 +1,8 @@
 # Dave's Dev Guidebook
 
-Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre but now I maintain an updated version here. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. Happy reading. DaveM
+Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre but now I maintain an updated version here. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. There is nothing truly original here, but what I do hope to add is a balanced and informed opinion based on many years hard won experience. Many of the published practices out there I agree with and have personally encountered, others I disagree with. Happy reading. DaveM
 
-Last Updated 26/01/25.  Enjoy.
+Last Updated 03/02/25.  Enjoy.
 
 ## Table Of Contents
 
@@ -148,7 +148,7 @@ dv.view('toc')
 
 ## Why Software Dev Guidebook
 
-To help everyone in the Centre build great software, I've put together a collection of development guidelines to help you build scalable, maintainable, reliable, performant, and usable code. Like all guidelines, these are not strict rules, and knowing when and where to apply these guidelines largely comes down to practice and experience.  This is not an exhaustive list. For more in-depth analysis, please see the list of recommended texts in the appendix. Not going to repeat all that good advice here, that’s what the books are for, but I have tried to distil a range of key recommendations.
+To help everyone in the Centre build great software, I've put together a collection of development guidelines to help you build scalable, maintainable, reliable, performant, and usable code. Like all guidelines, these are not strict rules, and knowing when and where to apply these guidelines largely comes down to practice and experience.  This is not an exhaustive list. For more in-depth analysis, please see the list of recommended texts in the appendix. I'm not going to repeat all that good advice here, that’s what the books are for, but I have tried to distil a range of key recommendations.
 
 > [!TIP]
 > Recognise that code is navigated and read far more than it is written, and that code is a form of expression designed for humans (machine code is for the machines).
@@ -156,16 +156,11 @@ To help everyone in the Centre build great software, I've put together a collect
 
 _"Programs must be written for people to read, and only incidentally for machines to execute" Harold Abelson, the author of Structure and Interpretation of Computer Programs
 
-> [!TIP]
-Good quality code should read well, with details abstracted so that higher-level code reads almost like a form of ‘self-documenting’ story which is expressive of its intent.
-
 ### Target Audience
 
-This guide is intended for folks who read and write code. However, it is not possible to produce a ‘one size fits all’ set of guidelines for everyone.
+This guide is intended for folks who read and write code, mostly for the full-stack application/infrastructure domain. It is not possible to produce a ‘one size fits all’ set of guidelines for everyone. If you predominantly use Python/R via Jupyter Notebooks for example, much of this advice might be overkill, and for that reason, there is separate section for notebooks in the original guidebook. Recognise there are ways to bring more good software practices into Notebooks, see [https://nbdev.fast.ai/](https://nbdev.fast.ai/) which includes good stuff such as Git-friendly notebooks, built in support for CI/CD, support for tests as regular notebook cells and more.
 
-If you predominantly use Python/R via Jupyter Notebooks for example, much of this advice might be overkill, and for that reason, there is separate section for notebooks. Recognise there are ways to bring more good software practices into Notebooks, see [https://nbdev.fast.ai/](https://nbdev.fast.ai/) which includes good stuff such as Git-friendly notebooks, built in support for CI/CD, support for tests as regular notebook cells and more.
-
-Similarly, if you’re using low-level C/C++ or Fortran, many of the guidelines might simply be unavailable to you. Please bear this in mind, these are not rules, interpret them judiciously for your scenario, and as ever, the real answer is always “it depends”. We’ll keep evolving this document and welcome any comments.
+Similarly, if you’re focussing on numerical computation in HPC using C/C++ or Fortran (formula translator), many of the guidelines are simply not appropriate; computational science is a very different domain to full-stack application development, each optimising for different priorities. Please bear this in mind, these are not rules, interpret them judiciously for your scenario, and as ever, the real answer is always “it depends”. I'll keep evolving this document and welcome any comments.
 
 ## High Level Recommendations 
 ### If it is not in Git it does not exist
@@ -402,9 +397,11 @@ Code needs to achieve its purpose under certain parameters, but assuming that it
 - “Clean code does one thing well.”   (Bjarne Stroustrup)
 - “Clean code reads like well written prose.”  (Grady Booch)
 - “Clean code always looks like it was written by someone who cares.” (M. Feathers)
-- “Getting code to work is only half your job, and it’s the least important part. The most important part is that you write code that other people can maintain/use. If you hand me code that works that I can’t understand, it is useless as soon as the requirements change.”  (Uncle Bob Martin)
+- “Getting code to work is only half your job, and it’s the least important part. The most important part is that you write code that other people can maintain/use. If you hand me code that works that I can’t understand, it is useless as soon as the requirements change.”  (Uncle Bob Martin). 
 
-Interestingly, The Primeagen seems to emphasise a slightly different point of view: "Not all code can be or needs to be made readable; it also depends on the skills of the programmer.” I believe this is only __partly__ true - I notice the big push-back in the first comment on his video:  
+I'm not sure I agree with Uncle Bob on this one. Getting the code to 'work' first, especially for proofs of concept or blue-sky research code, is probably the higher prioirty.
+
+Interestingly, The Primeagen seems to emphasise a slightly different point of view: "Not all code can be or needs to be made readable; it also depends on the skills of the programmer.” I believe this is __partly__ true, I acknowledge his point when applied to deeply numerical code or reactive JS for example, these types of code-bases are tricky to refactor for readability, but I als notice the push-back in the first comment on his video:  
 
 ![](attachments/Pasted%20image%2020250129141725.png)
 [top](#Table-Of-Contents)
@@ -539,6 +536,10 @@ def add_to_cart_extensible(self, item, listener):
     listener.on_item_added(self, item)
 ```
 [top](#Table-Of-Contents)
+
+### Information Hiding - Deep Rather than Shallow Interfaces 
+
+TODO. 
 
 ### Code Should be Cohesive
 
