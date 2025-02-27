@@ -409,8 +409,11 @@ Interestingly, The Primeagen seems to emphasise a slightly different point of vi
 ### Quality is the best shortcut - Fowler Design Stamina Hypothesis
 
 - Think carefully about compromising the quality of your code for delivery speed; high quality code quickly becomes easier and faster to develop and overtakes hastily hacked together code. This is evidence based, see Martin Fowler's [Design Stamina Hypothesis](https://martinfowler.com/bliki/DesignStaminaHypothesis.html)) which describes how the velocity of software development declines with time due to poor design. We have also experienced this before in actual projects – the hypothesis has played out in practice at Hartree.
-
-![](attachments/Pasted%20image%2020240611092227.png)
+![](attachments/Pasted%20image%2020250221105113.png)
+>[!TIP]
+> - High quality code is easier to maintain. 
+> - High quality code increases developer productivity (post design pay off line)
+> - High quality code can thus reduce cost (time is money) 
 
 [top](#Table-Of-Contents)
 
@@ -437,7 +440,7 @@ Which is easier to read?
 // check to see if the employee is elibible for full benefits
 
 // This
-if((employee.flags & HOURLY_FLAG) && employee.age > 65) {
+if((employee.flags & HOURLY_FLAG) && employee.age > 65) { // 🤯
    ...
 }
 
@@ -449,7 +452,7 @@ if(employee.isEligibleForFullPension()){
 
 #### Considered Comments 
 
-I have mixed feelings about this piece of advice from Uncle Bob: "Every time you express yourself in code, you should pat yourself on the back. Every time you write a comment, you should grimace and feel the failure of your [lack] of ability of expression."  Bob goes on to explain that you should use well-named variables instead of comments, as shown in the example below (real-estate limits apply - imagine a much larger example). I understand the sentiment here, but I think it can be easily misinterpreted - I believe we do still need comments, and they should focus on the intention, not the 'how.'
+I have mixed feelings about this piece of advice from Uncle Bob: "Every time you express yourself in code, you should pat yourself on the back. Every time you write a comment, you should grimace and feel the failure of your [lack] of ability of expression."  Bob goes on to explain that you should use well-named variables instead of comments, as shown in the example below (real-estate limits apply - imagine a much larger example). I understand the sentiment here, but I think it can be easily misinterpreted - I believe we do still need comments, and public api-doc should focus on the intention, not the 'how' (reserve 'how' comments for internal-function comments).
 
 ```Java
 // Java
@@ -472,6 +475,16 @@ if(allSubSystems.contains(ourSystem)){
 #### Do Not Name Abstractions After Constituent Parts
 
 - Do not name abstractions after their constituent parts using a 'bottom up' approach. By definition, an abstraction should use a higher level vocabulary and shield you from the lower level details. Gregor Hohpe from 'Enterprise Application Integration' book fame provides a great example: If software engineers had named the automobile, it would have been something like: `PistonCrankshaftGearWheelAssemblyFactorySingleton` - not a useful name (this reminds me of some Spring Framework classes).  Another simple example from Gregor: Q. consider the `GasPedal` of the car, is that a good abstraction? A. no, the car might not use gas, a more suitable name is the `Accelerator.`     
+
+[top](#Table-Of-Contents)
+
+#### Abstractions - Finding a Balance
+Abstractions give us freedom and protect us from more volatile concrete implementation changes. However, adding abstractions does make code more complex and it can be overdone - take a look at the [FizzBuzz parody](https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition) for an example. 
+
+>[!TIP]
+> You do not need to add abstractions to everything by default. 
+> Hide _core_ classes behind interfaces.
+> Use abstractions when crossing _core boundaries_ in your application code.  
 
 [top](#Table-Of-Contents)
 ### Testing has Three Main Purposes
@@ -507,12 +520,12 @@ Functions should do one thing. For some functions this is true, especially low-l
 >[!TIP]
 >I prefer: Functions should separate concerns to give Locality of Behaviour. LoB means that code is easily understood by looking at only a small portion of it (paraphrasing R. Gabriel)
 
-The following example is from 'Modern Software engineering' (Dave Farley): There are three implementations of an `add_to_cart` method that performs three tasks (please ignore the function suffixes which are just to illustrate this example): 
+The following example is from 'Modern Software engineering' (Dave Farley): There are three implementations of an `add_to_cart` method that performs three tasks: 
 - 1) adding an item to the cart, 
 - 2) persisting the card to a DB, and 
 - 3) calculating the total cost of the cart. 
 
-Example 1 is very poor, it mixes all three concerns directly and you need to understand the low-level details to understand what is happening. Example 2 is much better - logic is abstracted into private methods with descriptive names that 'reads the logic,' this is far easier to follow. Example 3 is even more loosely coupled - is this an improvement over version two, probably not for this simple example, but you can see how this further decouples concerns. Example 3 is a nice pattern for complex systems - it is easy to add new event listeners to react accordingly without having to change the logic of the function. 
+Bear in mind that that the examples are intentionally short, imagine much longer functions. Example 1 is poor, it mixes all three concerns directly and you need to understand the low-level details which would be better located in a different persistence-focussed package. Example 2 is much better - logic is abstracted into private methods with descriptive names that 'reads the logic,' this is far easier to follow. Example 3 is even more loosely coupled - is this an improvement over version two, probably not for this simple example, but you can see how this further decouples concerns. Example 3 is a nice pattern for complex systems - it is easy to add new event listeners to react accordingly without having to change the logic of the function. 
 
 ```Python
 # Python
@@ -590,7 +603,7 @@ For OPP, understand the principles of SOLID:
 
 #### SRP
 
-A common misinterpretation of SRP is "One function/class should only do one thing." While I don't disagree with this advice, its not actually what the SRP was getting at. The formal interpretation is "A module should have one, and only one, reason to change." This is a touch ambiguous, I prefer Uncle Bob Martin's reinterpretation "A module/class should be responsible to one, and only one, ACTOR" (because the reason to change comes from the actor, a useful clarification in my opinion). In Bob's great book, Clean Architecture: A Craftman's Guide to Software Structure and Design, Bob illustrates a violation with an Employee class that mixes three business rule methods, where each is required by a different actor: `calculatePay()` for the Finance team, `reportHours()` for HR and `save()` for Operations. Under the hood, these methods could refer to some common private logic eg `regularHours()`, however, this type of de-duplication by consolidating common code into a shared function can often become a source of bugs, especially for complex code which spans different dev teams which requires merging of different VCS branches. SRP says don't do this, instead separate the code that different actors depend on, even at the expense of some intentional duplication.
+A common misinterpretation of SRP is "One function/class should only do one thing." While I don't disagree with this advice, its not actually what the SRP was getting at. The formal interpretation is "A module should have one, and only one, reason to change." This is a touch ambiguous, I prefer Uncle Bob Martin's reinterpretation "A module/class should be responsible to one, and only one, ACTOR" (because the reason to change comes from the actor, a useful clarification in my opinion). In Bob's great book, Clean Architecture: A Craftsman's Guide to Software Structure and Design, Bob illustrates a violation with an Employee class that mixes three business rule methods, where each is required by a different actor: `calculatePay()` for the Finance team, `reportHours()` for HR and `save()` for Operations. Under the hood, these methods could refer to some common private logic eg `regularHours()`, however, this type of de-duplication by consolidating common code into a shared function can often become a source of bugs, especially for complex code which spans different dev teams which requires merging of different VCS branches. SRP says don't do this, instead separate the code that different actors depend on, even at the expense of some intentional duplication.
 
 > [!TIP]
 SRP is closely related to cohesion: "Code that changes together stays together" and when you want to implement SRP think "It should be easy to identify which class should be modified if I want to change something."
@@ -1361,7 +1374,7 @@ func (es ExtendedString) Truncate(maxLength int) string {
 	return s[:maxLength] + "..."
 }
 
-// --------- 2. Inteface based extension---------
+// --------- 2. Interface based extension---------
 type Capitializer interface {
 	Caps() string
 }
@@ -1432,8 +1445,8 @@ func main() {
 
 	// -------- Demonstrate 2. Interface-based Extension--------
 	capitalized := CapitalizeString{original: longString}
-	// You can verify that capitalized type implements Capitializer
-	// with the folllowing trick, compiler errors if not:
+	// You can verify that capitalized type implements Capitalizer
+	// with the following trick, compiler errors if not:
 	var _ Capitializer = capitalized
 	fmt.Println("Caps:", capitalized.Caps())
 
@@ -1739,12 +1752,12 @@ public void shouldStartBetterCarEngine() {
 
 ### Circular Dependencies via Setters and Lazy Initialisation 
 
-In the example above, lets assume we remove the interfaces so that we deal just with concrete types, we could then define a circular dependency; body part implementations depend on the heart implementation and vice-versa.  This raises the question, our heart implementation needs to be given a list of concrete body parts, and our body parts need to be given a reference to our heart. If we use constructors for dependency injection, we can't create create one without creating the other because our dependency graph has a circular dependency, it is not acyclic.  So, assuming we do need a circular dependency, how can this be done? There are a few ways: 
-1) __Remove circular dependencies__: Use Dependency Inversion. I also agree with most of what [Rob Pike](https://github.com/golang/go/issues/30247) recommends in his justification for not supporting circular dependencies in Go, but I also think accommodating circular dependencies sometimes does crop up in certain use-cases, most commonly at the class level within a single layer.
-2) __Setter Injection__: Body part implementations could receive a heart through a setter method rather than through their constructors. This enables us to create our body parts first, our heart can be created second, and third we pass our heart to each body part. This is ok in some scenarios if the dependency is optional. However, the heart is required and we do not want to create a body part in a partially complete state. 
+In the example above, lets assume we remove the interfaces so that we deal just with concrete types, we could then define a circular dependency; body part implementations depend on the heart implementation and vice-versa.  This raises the question; how do we give our heart implementation a list of concrete body parts, and how can our body parts be given a reference to our heart. If we use constructors for dependency injection, we can't create create one without creating the other because our dependency graph has a circular dependency, it is not acyclic.  So, how can we address circular dependencies: 
+1) __Remove circular dependencies__: I agree with most of what [Rob Pike](https://github.com/golang/go/issues/30247) recommends in his justification for not supporting circular dependencies, but I also think accommodating circular dependencies sometimes does crop up in certain use-cases, most commonly at the class level within a single layer.
+2) __Setter Injection__: Body part implementations could receive a heart through a setter method rather than through their constructors. This enables us to create our body parts first, our heart can be created second, and third we pass our heart to each body part. This is OK in some scenarios if the dependency is optional. However, the heart is required and we do not want to create a body part in a partially complete state. 
 3) __Lazy Initialisation via the Static Method Pattern__: Body Parts can request a reference to a heart through a static factory method. This allows us to create body parts and heart independently; the heart is created lazily the first time a reference is requested. Static methods are sometimes considered as being dirty because they can break encapsulation, create tight coupling between classes, and make code harder to test and maintain. https://www.baeldung.com/cs/factory-method-vs-factory-vs-abstract-factory
 4) __Lazy Initialisation via Static Factory Pattern and Abstract Factory__: Creation of objects and aggregates of objects is managed by a factory service. 
-5) __Lazy Initialisation via Lazy metadata/annotations__: if you are using an Inversion of Control container for dependency injection, the IoC container likely provides annotations to indicate the order of initialisation. For example, Spring provides the `@Lazy` annotation that can be used on dependencies declared on the consumer side to delay their creation until they are needed. This can be very effective, you don't then introduce static methods which some consider as being a dirty approach.  
+5) __Lazy Initialisation via Lazy Metadata/Annotations__: If you are using an Inversion of Control container for dependency injection, the IoC container likely provides annotations to indicate the order of initialisation. For example, Spring provides the `@Lazy` annotation that can be used on dependencies declared at the injection site to delay their creation until they are needed. This can be very effective, you don't then introduce static methods which some consider as being a dirty approach.  
 
 ```Java
 // Java
@@ -1765,6 +1778,7 @@ public class BeanA {
 
 >[!TIP]
 One situation where I find separate Factory classes appropriate is for returning an aggregate (see DDD) when the final object you are creating relies on several other objects as dependencies. 
+
 ### Dynamic Late Binding vs Static Binding 
 This is a big topic, but as ever, there are trade-offs between the different approaches which ultimately depends on your use-case:
 
@@ -1974,7 +1988,7 @@ Therefore, if your language, my recommendations are to mix some functional conce
 
 #### Be Careful Not to Pollute Pure Functions with Hidden Mutable State
 
-Pure functions need to remain pure; you really don’t want to pollute your pure functions with hidden shared mutable state across threads. Consider the following example - one is broken, the other is ok, the difference is subtle.  So, while combing FN + OOP is powerful, be very careful.
+Pure functions need to remain pure; you really don’t want to pollute your pure functions with hidden shared mutable state across threads. Consider the following example - one is broken, the other is OK, the difference is subtle.  So, while combing FN + OOP is powerful, be very careful.
 
 ![](attachments/Pasted%20image%2020240611094242.png)
 
@@ -2073,8 +2087,8 @@ fun betterGuardClauseExample(val arg1)
 
 > [!TIP]
 > - Polluting your 'inner' business logic with defensive checks is unnecessary and can obfuscate genuine bugs. 
-> - Validate at the edge of your application:  Postel's Law really only applies at the edge of your application, at the boundary when receiving incoming data: "be liberal in what you accept and conservative in what you return."  
-> - Being defensive when using 3rd party libs is ok.  
+> - Validate at the edge of your application:  Postel's Law applies at the edge of your application, at the boundary when receiving incoming data: "be liberal in what you accept and conservative in what you return."  
+> - Being defensive when using 3rd party libs is also OK.  
 
 Note, the application boundaries are illustrated in the application bullseye diagram, and in the classic 'Hexagonal Architecture'.  
 
@@ -2085,7 +2099,7 @@ Note, the application boundaries are illustrated in the application bullseye dia
 
 Handling null depends on the language and programming style you are using:
 
-- Nullable languages (C/C++/Java): Dereferencing a null pointer causes bad things to happen. This is known as ‘the billion-dollar mistake’ coined by Tony Hoare, in 1965. In your code, be sure to make it clear when null is meant to represent the ‘absence of value’ (e.g., with @Nullable annotations for example). At the boundary between layers of your code and when using a 3rd party library for example, it is ok to be ‘defensive’ and check for nulls.
+- Nullable languages (C/C++/Java): Dereferencing a null pointer causes bad things to happen. This is known as ‘the billion-dollar mistake’ coined by Tony Hoare, in 1965. In your code, be sure to make it clear when null is meant to represent the ‘absence of value’ (e.g., with @Nullable annotations for example). At the boundary between layers of your code and when using a 3rd party library for example, it is OK to be ‘defensive’ and check for nulls.
 
 - Many argue null is an acceptable way to represent the absence of value, it’s just a fact and is too fundamental in many layers.  They argue the real billion-dollar mistake is not null itself, but in the failure of the language to do type-safe handling of null.
 
@@ -2772,6 +2786,12 @@ Epics are like Work Packages. Typically, they require multiple tasks and span mu
 - _“As userType [X], I need a way to do [what?] so that I can [what’s the benefit]”._
 
 - _Who, What Why_
+
+>[!TiP]
+Break up large stories into smaller stories. 
+
+>[!TiP]
+Don't define technical task as stories - stories should be written using a user-friendly vocabulary.
 
 - INVEST:
  	- Independent - this means we try to design stories that do not need to be implemented in a particular order (a soft rule as there may well be stories that need to be prioritised).

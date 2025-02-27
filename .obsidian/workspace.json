@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "378397b85ee449b7",
+        "id": "2c65a30e888264c6",
         "type": "tabs",
         "children": [
           {
-            "id": "29b944ffc9294f46",
+            "id": "957202c52d0b0972",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -36,7 +36,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -154,10 +155,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "29b944ffc9294f46",
+  "active": "957202c52d0b0972",
   "lastOpenFiles": [
-    "devGuidebook.md~",
     "devGuidebook.md",
+    "devGuidebook.md~",
+    "attachments/Pasted image 20250221105113.png",
     "attachments/Pasted image 20250129143004.png",
     "attachments/Pasted image 20250129141725.png",
     "Pasted image 20250123155202.png",
@@ -167,7 +169,6 @@
     "attachments/Pasted image 20250122164152.png",
     "attachments/Pasted image 20250122163757.png",
     "attachments/Pasted image 20250122163500.png",
-    "attachments/Pasted image 20250122162837.png",
     "consistency-report.md",
     "canvas/images.canvas",
     "canvas",
