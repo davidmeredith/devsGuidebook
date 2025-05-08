@@ -1,6 +1,6 @@
 # Dave's Dev Guidebook
 
-Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre but now I maintain an updated version here. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. There is nothing truly original here, but what I do hope to add is a balanced and informed opinion based on many years hard won experience. Many of the published practices out there I agree with and have personally encountered or applied on projects, others I'm not so sure about. Happy reading. DaveM
+Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre where I still work as the Research Software Engineering Group leader. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. There is nothing truly original here, but what I do hope to add is a balanced and informed opinion based on many years of hard won experience. Many of the published practices out there I agree with and have personally encountered or applied on projects, others I'm not so sure about. Happy reading. DaveM
 
 Last Updated 03/02/25.  Enjoy.
 
@@ -2029,7 +2029,14 @@ See prior bullet. Functions should either do something such as create side effec
 
 ### Data Orientated Programming with Algebraic Data Types - ADTs
 
-ADTs combine ‘Product Types’ for modelling aggregation such as a C/Golang/Rust ‘structs’ or Java's Record type with ‘Sum Types’ for modelling choice, also known as ‘Union Types’ or ‘Tagged Unions’. This simple combination of aggregation and choice is deceptively powerful and shows up in many programming languages to model domains, return types and function arguments:
+#### Stringly typed functions are bad - use stronger types to model your arguments and return types 
+
+Functions that only have string arguments and string return types aren't great, please try to avoid them, they are just too loosely typed - a string can literally describe anything. I concede that string input parameters are sometimes necessary, but often you can constrain input parameters and return types beyond strings. One great tool used to describe types are Algebraic Data Types. Please read on.   
+
+
+#### Use ADTs to Describe Types 
+
+ADTs combine ‘Product Types’ for modelling aggregation such as a C/Golang/Rust ‘structs’ or Java's Record type with ‘Sum Types’ for modelling choice, also known as ‘Union Types’ or ‘Tagged Unions’. This simple combination of aggregation and choice is deceptively powerful and shows up in many programming languages to model data i.e., domains, return types and function arguments:
 
 - Product Types are great for modelling aggregation, and include immutable data classes such as records, data objects, and structs. They are called ‘Product Types’ because their state ‘when considered as a whole’ is the Cartesian product of their data.
 
@@ -2049,13 +2056,23 @@ From Gavin Bierman's Devoxx talk, Java Language Futures: https://www.youtube.com
 
 #### Error Handling - Four Types of Problems
 
-1. Unrecoverable problems: Is the error recoverable? If not, then let the program crash/panic/throw (runtime exception). For example, a `FileNotFoundException` should crash if that file is the application's mandatory config file - you can't continue without it, but for a file browser application, probably not.
+1. Unrecoverable / Fatal: Is the error recoverable? If not, then let the program crash/panic/throw (runtime exception). For example, a `FileNotFoundException` should crash if that file is the application's mandatory config file - you can't continue without it, but for a file browser application, probably not.
 
 2. Recoverable problems: For example, if a remote service is temporarily unavailable, you could introduce a retry before showing an error to the user.
 
 3. Errors that need to propagate to the user:  An error-as-value would be suitable if you are building a file-explorer GUI - you don’t want your program to crash if a file gets deleted by another process. In this scenario use a value-error or catch the exception and convey a sensible message to the user.
 
-4. Programming mistakes:  Let the program crash/panic/throw (runtime exception), you’ll be motivated to fix the problem quickly. 
+4. Programming Mistakes / Boneheaded Exceptions:  Let the program crash/panic/throw (runtime exception), you’ll be motivated to fix the problem quickly. 
+
+These problems are similar to Eric Lippert's [Four exceptions of the Apocalypse](https://ericlippert.com/2008/09/10/vexing-exceptions) (former designer of original C# compiler and language designer):
+
+1. Fatal Exceptions RIP (e.g. OOM, rare, don't catch these)
+
+2. Boneheaded Exceptions & Coding bugs (don't catch these either)
+
+3. Vexing Exceptions - Those exceptions that aren't really exceptional and result from unfortunate/poor design choices. Advice is to always handle these i.e. catch close to cause and handle/contain or re-throw something more appropriate to your application layer. 
+
+4. Exogenous ie External Exceptions - These are external exceptions that are beyond your control, e.g. from interacting with an external system. Advice is to catch and handle these, potentially wrapping them and add extra context for re-throwing.  
 
 [top](#Table-Of-Contents)
 
@@ -2065,7 +2082,7 @@ From Gavin Bierman's Devoxx talk, Java Language Futures: https://www.youtube.com
 > Guard clauses should be defined early - do not define lengthy conditional success blocks when you have can have short fail blocks defined early.  
 
 ```Kotlin
-// Kotlin
+// bad ❌
 fun badGuardClauseExample(val arg1)
     if(valid(arg1)){ 
         ...success path...
@@ -2074,7 +2091,7 @@ fun badGuardClauseExample(val arg1)
     }  
 }
 
-// better
+// better ✅
 fun betterGuardClauseExample(val arg1)
     if(notValid(arg1)){  
        // ... error handling ...  
@@ -2085,6 +2102,8 @@ fun betterGuardClauseExample(val arg1)
 
 #### Error Handling - Be defensive at application boundaries, not within your inner domain logic 
 
+Consider the following scenario: Within your application boundary, null is passed as function parameter when a list is expected. Within the function, defensive checking and converting from null to an empty list might seem an appropriate strategy. Nope, this can potentially hide higher level bugs. You have to ask yourself Q. 'what is the intention of declaring a list object as a parameter?' A. It is not to accept null. Throwing an `IllegalArgumentException` with a good contextual message is appropriate in this scenario. 
+
 > [!TIP]
 > - Polluting your 'inner' business logic with defensive checks is unnecessary and can obfuscate genuine bugs. 
 > - Validate at the edge of your application:  Postel's Law applies at the edge of your application, at the boundary when receiving incoming data: "be liberal in what you accept and conservative in what you return."  
@@ -2092,10 +2111,37 @@ fun betterGuardClauseExample(val arg1)
 
 Note, the application boundaries are illustrated in the application bullseye diagram, and in the classic 'Hexagonal Architecture'.  
 
-#### Error Handling - Model the Absence of Values Explicitly
 
-> [!TIP]
->If a value can legitimately have no value, ensure safe nullability by modelling null explicitly in your type system (if not already handled by your language) e.g. use approaches such as known zero values, Optionals, ADTs, and monads. 
+#### Error Handling - Beware Flaky Defensive If-Checks such as TOCTOU
+
+Don't assume you can if-check your way out of all scenarios. A good example is the TOCTOU scenario (time of check time of use) when checking if a file exists before doing something with the file - its better to use a try/catch block which is atomic and safer. Example: 
+
+```C#
+// bad ❌
+string TryGetFileContents(string path) {
+  if(!File.Exists(path))
+    return null;
+
+  // file could be deleted here by other process
+
+  var stream = File.OpenRead(path);
+  ...do something here...
+}
+
+// better ✅
+string TryGetFileContents(string path) {
+  try {
+    var stream = File.OpenRead(path)
+    ... do something here...
+ 
+  } catch (FileNotFoundException ex){ 
+     return null;
+  }
+}
+```
+
+
+#### Error Handling - Model the Absence of Values Explicitly
 
 Handling null depends on the language and programming style you are using:
 
@@ -2111,16 +2157,19 @@ Handling null depends on the language and programming style you are using:
 
 - ADTs combine ‘Sum Types’ and ‘Product Types’ and are excellent for representing multiple special cases, including multiple error states.
 
-[top](#Table-Of-Contents)
-##### Error Handling - Do Not Initialise with Null or Return Null
+> [!TIP]
+>If a value can legitimately have no value, ensure safe nullability. In order of preference: 1. Use the languages native safe nullability type system (e.g. var? in Kotlin); 2. Use known zero values, Optionals, ADTs to model absence of value explicitly; 3. If your language's type system does not support safe nullability implicitly, make it clear when null is meant to represent absence of value e.g. with @Nullable annotations. 
 
 > [!TIP]
-> Don't initialise struct values with null or return null from functions.
+> Don't initialise struct values with null.
+
+[top](#Table-Of-Contents)
+
 #### Error Handling - Exceptions vs Errors-as-Values
 
-Errors as values vs exceptions is a hotly debated topic in programming communities. There are pros and cons to each approach. 
+Errors as values vs exceptions is a hotly debated topic in programming communities. There are pros and cons to each approach as discussed below. My personal opinion is that if used correctly, (runtime) exceptions are an effective error handling strategy, and there are compelling reasons why exceptions are idiomatic in many popular languages - language designers aren't dumb. However, I also recognise that exceptions can be abused and used incorrectly so care should be used in their application. I also recommend that errors-as-values should be used to model known business errors to 'make (known) invalid states unrepresentable' in your application - the two approaches are not mutually exclusive.   
 
-Errors-as-Values
+Example Errors-as-Values:
 ```go
 // Go
 package main
@@ -2148,7 +2197,7 @@ func main() {
 }
 ```
 
-Throw runtime exception:
+Example Throwing of Runtime Exception:
 ```Java
 // Java
 import java.util.Arrays;  
@@ -2175,30 +2224,37 @@ public class Main {
     }  
 }
 ```
-##### Proponents of errors-as-values
+
+##### Proponents of Errors-as-Values
 
 - Fans of errors-as-values argue that functions should return either a success value OR a failure value for known business errors. In doing this, the potential for failure is made explicit in a function signature.  I agree - it is is commonly regarded as the more reliable approach to handling known business errors because you are explicitly forced to handle errors immediately, typically using a conditional to test for error or success. This ensures error handling is not an afterthought. 
-- Supporters also argue that there is less uncertainty compared to throwing exceptions because it can be challenging to determine all the exception types that can be thrown by a deep call stack. Also recognise that unhandled unchecked exceptions do not create compilation errors, meaning the compiler can't help you discover all of the different types of unchecked exception that could be thrown. You often need to dig and read all the docs.
+
+- Supporters also argue that there is less uncertainty compared to throwing exceptions because it can be challenging to determine all the exception types that can be thrown by a deep call stack. This has given rise to some saying: '_Exceptions suck because they are a non-local goto_.' Also recognise that unhandled (runtime) exceptions do not create compilation errors, meaning the compiler can't help you discover all of the different types of exception that could be thrown. You often need to dig and read all the docs. Personally, I disagree with the 'non-local goto' opinion - we're not really jumping to another location in the code to contiue with the application logic, instead we're going back the way we came, unrolling the call-stack.  
+
 - Another issue of a specific type of exception known as a 'checked' exception is that they prevent functional composition. This is because the compiler forces you to handle checked exceptions wherever they can be thrown, but they are not considered as part of a function's return signature and type system. Instead, exceptions invoke orthogonal flows that 'break out' of your regular functional flow. Checked exceptions therefore breaks 'referential transparency' (see discussion below on Error Monads such as `Either` & `Validated`). Checked exceptions are generally not recommended these days, except for certain special use-cases where they still have their supporters.
 
 [top](#Table-Of-Contents)
 ##### Proponents of exceptions
 
-- Fans of exceptions argue that by forcing you to interleave error checking at function call sites throughout your code obscures the code's happy path and readability.  
+- Fans of exceptions argue that by forcing you to interleave error checking at function call sites throughout your code obscures the code's happy path and readability. I tend to agree, especially when adding boilerplate to manually pass an error back up the call stack.
+
 - Exception fans also argue that exceptions centralise your error handling code which gives a clean separation of concerns.
+
 - For low-level code, exceptions are largely considered an effective strategy for surfacing underlying issues such as low level operating system issues which may be mistakenly obscured by the errors-as-values pattern (although the same could be said by mindlessly catching all exceptions).
-- When used correctly and with discipline, exceptions can also be more performant than interleaved error-value checking. This is because languages like C++ and Java have 'zero cost exception handling.' I think this is a misleading term, what it actually means is 'zero cost to the happy path code provided no exceptions are thrown.' Assuming no exceptions are thrown, quite simply, there is less for your code to do as there are no interleaved conditional error checks. While any performance hit from interleaved result checking is likely to be marginal for the majority of use-cases, it may become more pronounced in deeply nested code or tight compute loops. However, this can be mitigated with good code structuring by moving error checks out of and before any performance critical-sections.
+
+- When used correctly and with discipline, exceptions can also be more performant than interleaved error-value checking. This is because languages like C++ and Java have 'zero cost exception handling.' I think this is a misleading term, what it actually means is 'zero cost to the happy path provided no exceptions are thrown.' Assuming no exceptions are thrown, quite simply, there is less for your code to do as there are no interleaved conditional error checks. While any performance hit from interleaved result checking is likely to be marginal for the majority of use-cases, it may become more pronounced in deeply nested code or tight compute loops. However, this can be mitigated with good code structuring by moving error checks out of and before any performance critical-sections.
 
 ![](attachments/Pasted%20image%2020250125114743.png)
-
 
 > [!TIP]
 > Quite simply: use errors-as-values to model known business errors, and runtime exceptions only for genuine exceptional conditions and programming bugs. 
 
 > [!TIP]
-> `try/catch` and `panic/recover` are very different strategies, a key difference is the resulting control flow after they are triggered.
+> `try/catch` and `panic/recover` are very different strategies, a key difference is the resulting control flow after they are triggered and opportunity to react to an exception.
 
 In a `try/catch/finally` block, unless you re-throw or return from within the catch or finally block, code coming after the `try/catch/finally` block *will still execute*. This does not happen with `panic/recover` - a function that is aborted via panic begins to unwind the stack, running deferred blocks/functions as it encounters them (in Go, this is the only place recovery takes affect, although use of recover is not widespread in Go and `panic` is typically used to end a program). Thus, panic/recover is very different to try/catch stemming out of the fact that it is built around deferred logic as a recovery mechanism (e.g. Go & Zig).
+
+As presented by the [AWS Prime Video app developers](https://www.youtube.com/watch?v=_wcOovoDFMI) in their experiences in re-writing the AWS TV app from JS/C++ to Rust/Wasm, "writing panic free code is really hard." Despite all the benefits of the re-write to Rust, the "lack of exceptions has been a real pain-point" for them as a panicking app crashes without having the opportunity to catch and respond to an exception in a user friendly way. 
 
 [top](#Table-Of-Contents)
 
@@ -2208,13 +2264,12 @@ Of course, choice between exceptions or errors-as-values depends on the language
 
 ##### Can I use both styles in a hybrid approach
 
-- Yes, depending on your language of choice and what is considered idiomatic. Some modern languages support both approaches. For example, to support interoperability with Java, the Kotlin language supports unchecked exceptions as well as its own `Result` type which is intended for low-level code rather than for modelling business errors. For modelling business errors, they recommend using sealed class hierarchies that introduce exhaustive pattern matching to handle errors (see discussion on data oriented programming).
+- Yes, depending on your language of choice and what is considered idiomatic. Some modern languages support both approaches. For example, to support interoperability with Java, the Kotlin language supports unchecked exceptions as well as its own `Result` type which is intended for low-level code rather than for modelling business errors. For modelling business errors, Jetbrains/Kotlin recommend using sealed class hierarchies and exhaustive pattern matching to handle errors (see discussion on data oriented programming).
 
 - At the time of writing, a dedicated union type for capturing a result OR one or more errors is on the [Kotlin roadmap](https://www.youtube.com/watch?v=B-DoVr12fK0).
 
-- Languages may also support more advanced error handling strategies. For example, the Kotlin Arrow2 library simplifies the use of OOP and Functional error handling within the same code base (Functional vs OOP? - choose both). For example, lower level code or existing code can apply `try/catch/finally` blocks for localised exception handling and recovery if needed, while higher level calling code can provide a wrapping `error context` that can be used at the boundary; Rather than throwing exceptions at the boundary between different layers of code, exceptions can be _raised_ into the higher level error context. Raising rather than (re)throwing this allows the functions that raise to be composed within functional compositional call chains because raising does not break referential transparency. In the top layer of your code, such as in a top-level service facade or global error handler in a webapp, you would then need to handle the exceptions raised within the error context, such as performing a transaction roll back or performing a retry.  For a great presentation with examples, see this great talk from Simon Vergauwen from [Kotlin Conf 2023](https://youtu.be/JcFEI8_af3g?si=vH5OG86JTQWFrGnw) (note that context receivers as used in the talk will be replaced by context parameters in the future).
-
 [top](#Table-Of-Contents)
+
 
 #### Error Handling - Exceptions Should Not be Used for Flow Control - Exceptional Does Not Mean Conditional
 
@@ -2239,6 +2294,20 @@ If you use exceptions (not all languages have exceptions e.g., Rust, Go), define
 Generally, pushing genuine runtime exception handling code (for unexpected problems) up to the ‘outer layers’ of your code toward the boundaries is usually a good approach. It also helps cleanly separate the ‘happy path’ from interleaving error handling code.  However, this is not a hard rule, in some situations you may need to try/catch/finally at the source of the error to take important corrective actions such as closing an IO resource or rolling-back a DB transaction.
 
 [top](#Table-Of-Contents)
+
+ #### Error Handling - Do not add sensitive details to exception messages 
+
+ Don't add e.g. email addresses to exception messages, they will end up in a log and you don't want emails and usernames in logs. 
+
+#### Error Handling - Do not create custom exception types when the standard library exception types handle your cases
+
+#### Error Handling - Use assertions 
+
+Assertions are for developers and for documenting the invariants of the system. For example, replace comments like 'this should never happen' with asserts. They are compiled out in release code anyway.
+
+#### Error Handling - Catch Less and Throw More
+
+TODO
 
 #### Error Handling - Model Exceptions as Values with Algebraic Data Types 
 
@@ -2295,14 +2364,19 @@ Using ADTs to model better return types. After [Gavin Bierman's Devoxx talk, Jav
 
 #### Error Handling in the Functional Way - Returning Smarter Wrapper Types eg the Either Monad
 
-Before I get to error monads such as `Either` and `Validated`, I'll try to briefly explain what Monads are. Monads are notoriously difficult concept to grasp, but once you have, its pretty easy to hold onto and it is a very useful concept (opinion) that can be implemented in most programming language, not just in FP.  
+Before I get to error monads such as `Either` and `Validated`, I'll try to briefly explain what Monads are. Monads are notoriously difficult concept to grasp, but once you have, its pretty easy to hold onto and it is a very useful concept (opinion) that can be implemented in most programming languages, not just in FP.
 
 > [!TIP]
 Error monads aren't strictly necessary if use ADTs as return types or if your language has its own approach to 'errors-as-values,' however, monads add some extra smarts to facilitate happy-path functional composition. Please read on. 
 
 ##### What are Monads aka Higher-Kinded Types
 
-A monad is a burrito 🌯 (or a bento-box 🍱 😊). If you've looked into functional programming, you'll understand this aphorism because monads are a notoriously difficult concept to explain: Like a burrito, a monad is a wrapper object (the tortilla) around a type (the filling). This sounds like ADTs right? yes, but monads also add additional 'mapper' methods that are used to apply passed-in computations on the monad's wrapped type in order to transform it into a new result type (or produce a wrapped error). I prefer the bento-box analogy, because there are more moving parts to a bento-box which better describes a monad (opinion). Having a basic understanding is a useful concept to grasp. 
+A monad is a burrito 🌯 (or a bento-box 🍱 😊). If you've looked into functional programming, you'll understand this aphorism because monads are a notoriously difficult concept to explain: Like a burrito, a monad is a wrapper object (the tortilla) around a type (the filling). This sounds like ADTs right? yes, but monads also add additional 'mapper' methods that are used to apply passed-in computations on the monad's wrapped type in order to transform it into a new result type (or produce a wrapped error). These mapper methods can be chained together as needed. Monads also allow some additional behind the scenes logic to be applied in addition to the passed-in transformations/computations - these are extra 'super-powers' that a particular monad provides. A simple example is the writer monad that appends to an append-log behind the scenes whenever writer mapper methods are called. 
+
+> [!TIP]
+Here's my definition: A monad is a design pattern that wraps a type so that operations can be chained together to transform that type while also allowing additional 'extra super power' processing to occur behind the scenes.
+
+I prefer the bento-box analogy, because there are more moving parts to a bento-box which better describes a monad (opinion). Having a basic understanding is a useful concept to grasp. 
 
 A core tenant of the functional paradigm is to produce a more declarative and expressive 'happy path' of composed computations that isn't polluted with interleaved error handling logic. In a monadic call chain, you define ‘what to do’ by chaining functions that return monads to achieve an end result, not ‘how to do it’ as in more imperative approaches. The happy path self-documents, it screams what the business logic does. In more imperative approaches, you often see that each result is checked using a conditional before continuing with the next computation. Some devs like this approach, ok cool, but others argue that polluting the happy path leads to unreadable code, especially for large call chains.  
 
