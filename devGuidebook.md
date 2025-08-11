@@ -2,7 +2,7 @@
 
 Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre where I still work as the Research Software Engineering Group leader. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. There is nothing truly original here, but what I do hope to add is a balanced and informed opinion based on many years of hard won experience. Many of the published practices out there I agree with and have personally encountered or applied on projects, others I'm not so sure about. Happy reading. DaveM
 
-Last Updated 03/02/25.  Enjoy.
+Last Updated 09/08/25.  Enjoy.
 
 ## Table Of Contents
 
@@ -52,84 +52,92 @@ dv.view('toc')
         1. [Use Intention Revealing Names](#Use-Intention-Revealing-Names)
         2. [Considered Comments](#Considered-Comments)
         3. [Do Not Name Abstractions After Constituent Parts](#Do-Not-Name-Abstractions-After-Constituent-Parts)
+        4. [Abstractions - Finding a Balance](#Abstractions---Finding-a-Balance)
     4. [Testing has Three Main Purposes](#Testing-has-Three-Main-Purposes)
-    5. [Keep Classes and Functions Smallish](#Keep-Classes-and-Functions-Smallish)
+    5. [Keep Most Functions SmallISH](#Keep-Most-Functions-SmallISH)
     6. [Limit the Number of Function Arguments](#Limit-the-Number-of-Function-Arguments)
     7. [Separation of Concerns for Locality of Behaviour](#Separation-of-Concerns-for-Locality-of-Behaviour)
-    8. [Code Should be Cohesive](#Code-Should-be-Cohesive)
-    9. [OOP Redefined](#OOP-Redefined)
-    10. [SOLID](#SOLID)
+    8. [Information Hiding - Deep Rather than Shallow Interfaces](#Information-Hiding---Deep-Rather-than-Shallow-Interfaces)
+    9. [Code Should be Cohesive](#Code-Should-be-Cohesive)
+    10. [OOP Redefined](#OOP-Redefined)
+    11. [SOLID](#SOLID)
         1. [SRP](#SRP)
         2. [Open-Closed Principle](#Open-Closed-Principle)
-    11. [Pervasive Polymorphism](#Pervasive-Polymorphism)
+    12. [Pervasive Polymorphism](#Pervasive-Polymorphism)
         1. [Inheritance is Solely for Strong 'Is A' Type Relationships to Maintain State Invariants and Post-Conditions](#Inheritance-is-Solely-for-Strong-'Is-A'-Type-Relationships-to-Maintain-State-Invariants-and-Post-Conditions)
         2. [Inheritance Should be Explicitly Designed For](#Inheritance-Should-be-Explicitly-Designed-For)
-        3. [Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Augment your Type-System With Shared Marker Types](#Avoid-Paying-too-much-Inheritance-Tax---Use-Parametric-Polymorphism-to-Augment-your-Type-System-With-Shared-Marker-Types)
-        4. [Parametric Polymorphism for Existing Types](#Parametric-Polymorphism-for-Existing-Types)
-        5. [Extensions for Augmenting Existing Types](#Extensions-for-Augmenting-Existing-Types)
+        3. [Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Represent New Types](#Avoid-Paying-too-much-Inheritance-Tax---Use-Parametric-Polymorphism-to-Represent-New-Types)
+        4. [Ad-Hoc Polymorphism with Externally Implemented Interfaces to Represent New Types](#Ad-Hoc-Polymorphism-with-Externally-Implemented-Interfaces-to-Represent-New-Types)
+        5. [Simpler Extensions to Avoid Polluting Core Abstractions With Smaller Customisations](#Simpler-Extensions-to-Avoid-Polluting-Core-Abstractions-With-Smaller-Customisations)
         6. [Structural Polymorphism and Duck Typing](#Structural-Polymorphism-and-Duck-Typing)
         7. [Sealing](#Sealing)
         8. [Composition / Delegation](#Composition-/-Delegation)
-    12. [Parametric Polymorphism Language Comparison](#Parametric-Polymorphism-Language-Comparison)  
+    13. [Parametric Polymorphism Language Comparison](#Parametric-Polymorphism-Language-Comparison)  
         1. [Rust Example](#Rust-Example)  
         1. [Kotlin Example](#Kotlin-Example)  
         1. [Java Example](#Java-Example)  
         1. [Go Example](#Go-Example)
-    13. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
-    14. [Dependency Rule and Dependency Inversion Principle](#Dependency-Rule-and-Dependency-Inversion-Principle)
+    14. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
+        1. [OOPs - A Performance Mistake\?](#OOPs---A-Performance-Mistake\?)
+    15. [Dependency Rule and Dependency Inversion Principle](#Dependency-Rule-and-Dependency-Inversion-Principle)
         1. [A Hearts and Minds Analogy](#A-Hearts-and-Minds-Analogy)
-    15. [Dependency Injection and Inversion of Control to Implement the Dependency Rule and DI](#Dependency-Injection-and-Inversion-of-Control-to-Implement-the-Dependency-Rule-and-DI)
-    16. [Circular Dependencies via Setters and Lazy Initialisation](#Circular-Dependencies-via-Setters-and-Lazy-Initialisation)
-    17. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
-    18. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
+    16. [Dependency Injection and Inversion of Control to Implement the Dependency Rule and DI](#Dependency-Injection-and-Inversion-of-Control-to-Implement-the-Dependency-Rule-and-DI)
+    17. [Circular Dependencies via Setters and Lazy Initialisation](#Circular-Dependencies-via-Setters-and-Lazy-Initialisation)
+    18. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
+    19. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
         1. [Throwing Exceptions from Constructors](#Throwing-Exceptions-from-Constructors)
         2. [Use a Smart Constructor or Factory to Return a Smarter Return Type](#Use-a-Smart-Constructor-or-Factory-to-Return-a-Smarter-Return-Type)
         3. [Use the Builder Pattern to Check Complex Invariants Before Building the Object](#Use-the-Builder-Pattern-to-Check-Complex-Invariants-Before-Building-the-Object)
-    19. [Know Some Design Patterns](#Know-Some-Design-Patterns)
+    20. [Know Some Design Patterns](#Know-Some-Design-Patterns)
         1. [The Strategy Pattern Example](#The-Strategy-Pattern-Example)
         2. [The Visitor Pattern](#The-Visitor-Pattern)
         3. [Builder Pattern for More Complex Object Creation Scenarios](#Builder-Pattern-for-More-Complex-Object-Creation-Scenarios)
-    20. [Information Hiding](#Information-Hiding)
-    21. [Keep it Simple Stupid KISS](#Keep-it-Simple-Stupid-KISS)
-    22. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
-    23. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
-    24. [Comment in line As You Go](#Comment-in-line-As-You-Go)
-    25. [The Boy Scout Rule](#The-Boy-Scout-Rule)
-    26. [Principal of Least Knowledge and Train Wrecks - The Law of Demeter](#Principal-of-Least-Knowledge-and-Train-Wrecks---The-Law-of-Demeter)
-    27. [FP vs OOP - Choose Two](#FP-vs-OOP---Choose-Two)
+    21. [Information Hiding](#Information-Hiding)
+    22. [Keep it Simple Stupid KISS](#Keep-it-Simple-Stupid-KISS)
+    23. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
+    24. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
+    25. [Comment in line As You Go](#Comment-in-line-As-You-Go)
+    26. [The Boy Scout Rule](#The-Boy-Scout-Rule)
+    27. [Principal of Least Knowledge and Train Wrecks - The Law of Demeter](#Principal-of-Least-Knowledge-and-Train-Wrecks---The-Law-of-Demeter)
+    28. [FP vs OOP - Choose Two](#FP-vs-OOP---Choose-Two)
         1. [Be Careful Not to Pollute Pure Functions with Hidden Mutable State](#Be-Careful-Not-to-Pollute-Pure-Functions-with-Hidden-Mutable-State)
         2. [Make Private your Default Class Level Visibility](#Make-Private-your-Default-Class-Level-Visibility)
         3. [Make Immutability your Default](#Make-Immutability-your-Default)
         4. [Interior Mutability](#Interior-Mutability)
         5. [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
         6. [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
-    28. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
-    29. [Error Handling](#Error-Handling)
+    29. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
+        1. [Stringly typed functions are bad - use stronger types to model your arguments and return types](#Stringly-typed-functions-are-bad---use-stronger-types-to-model-your-arguments-and-return-types)
+        2. [Use ADTs to Describe Types](#Use-ADTs-to-Describe-Types)
+    30. [Error Handling](#Error-Handling)
         1. [Error Handling - Four Types of Problems](#Error-Handling---Four-Types-of-Problems)
         2. [Error Handling - Fail Early](#Error-Handling---Fail-Early)
         3. [Error Handling - Be defensive at application boundaries, not within your inner domain logic](#Error-Handling---Be-defensive-at-application-boundaries,-not-within-your-inner-domain-logic)
-        4. [Error Handling - Model the Absence of Values Explicitly](#Error-Handling---Model-the-Absence-of-Values-Explicitly)
-            1. [Error Handling - Do Not Initialise with Null or Return Null](#Error-Handling---Do-Not-Initialise-with-Null-or-Return-Null)
-        5. [Error Handling - Exceptions vs Errors-as-Values](#Error-Handling---Exceptions-vs-Errors-as-Values)
-            1. [Proponents of errors-as-values](#Proponents-of-errors-as-values)
+        4. [Error Handling - Beware Flaky Defensive If-Checks such as TOCTOU](#Error-Handling---Beware-Flaky-Defensive-If-Checks-such-as-TOCTOU)
+        5. [Error Handling - Model the Absence of Values Explicitly](#Error-Handling---Model-the-Absence-of-Values-Explicitly)
+        6. [Error Handling - Exceptions vs Errors-as-Values](#Error-Handling---Exceptions-vs-Errors-as-Values)
+            1. [Proponents of Errors-as-Values](#Proponents-of-Errors-as-Values)
             2. [Proponents of exceptions](#Proponents-of-exceptions)
             3. [Can I use both styles in a hybrid approach](#Can-I-use-both-styles-in-a-hybrid-approach)
-        6. [Error Handling - Exceptions Should Not be Used for Flow Control - Exceptional Does Not Mean Conditional](#Error-Handling---Exceptions-Should-Not-be-Used-for-Flow-Control---Exceptional-Does-Not-Mean-Conditional)
-        7. [Error Handling - Only use Exceptions for Exceptional Situations Such As Coding Errors and Unexpected Errors](#Error-Handling---Only-use-Exceptions-for-Exceptional-Situations-Such-As-Coding-Errors-and-Unexpected-Errors)
-        8. [Error Handling - Provide Relevant Exceptions for the Abstraction Layer](#Error-Handling---Provide-Relevant-Exceptions-for-the-Abstraction-Layer)
-        9. [Error Handling - Bubble Exceptions Upwards or Trap at Source](#Error-Handling---Bubble-Exceptions-Upwards-or-Trap-at-Source)
-        10. [Error Handling - Model Exceptions as Values with Algebraic Data Types](#Error-Handling---Model-Exceptions-as-Values-with-Algebraic-Data-Types)
-        11. [Error Handling in the Functional Way - Returning Smarter Wrapper Types eg the Either Monad](#Error-Handling-in-the-Functional-Way---Returning-Smarter-Wrapper-Types-eg-the-Either-Monad)
+        7. [Error Handling - Exceptions Should Not be Used for Flow Control - Exceptional Does Not Mean Conditional](#Error-Handling---Exceptions-Should-Not-be-Used-for-Flow-Control---Exceptional-Does-Not-Mean-Conditional)
+        8. [Error Handling - Only use Exceptions for Exceptional Situations Such As Coding Errors and Unexpected Errors](#Error-Handling---Only-use-Exceptions-for-Exceptional-Situations-Such-As-Coding-Errors-and-Unexpected-Errors)
+        9. [Error Handling - Provide Relevant Exceptions for the Abstraction Layer](#Error-Handling---Provide-Relevant-Exceptions-for-the-Abstraction-Layer)
+        10. [Error Handling - Bubble Exceptions Upwards or Trap at Source](#Error-Handling---Bubble-Exceptions-Upwards-or-Trap-at-Source)
+        11. [Error Handling - Do not create custom exception types when the standard library exception types handle your cases](#Error-Handling---Do-not-create-custom-exception-types-when-the-standard-library-exception-types-handle-your-cases)
+        12. [Error Handling - Use assertions](#Error-Handling---Use-assertions)
+        13. [Error Handling - Catch Less and Throw More](#Error-Handling---Catch-Less-and-Throw-More)
+        14. [Error Handling - Model Exceptions as Values with Algebraic Data Types](#Error-Handling---Model-Exceptions-as-Values-with-Algebraic-Data-Types)
+        15. [Error Handling in the Functional Way - Returning Smarter Wrapper Types eg the Either Monad](#Error-Handling-in-the-Functional-Way---Returning-Smarter-Wrapper-Types-eg-the-Either-Monad)
             1. [What are Monads aka Higher-Kinded Types](#What-are-Monads-aka-Higher-Kinded-Types)
             2. [Basic Monad implementation](#Basic-Monad-implementation)
             3. [Example Type Safe Functional Composition by Short-Circuiting on Errors](#Example-Type-Safe-Functional-Composition-by-Short-Circuiting-on-Errors)
             4. [Can I Combine Monads and ADTs to Model Multiple Success or Error states](#Can-I-Combine-Monads-and-ADTs-to-Model-Multiple-Success-or-Error-states)
             5. [Other Error Monads such as Validation and Ior](#Other-Error-Monads-such-as-Validation-and-Ior)
             6. [Inlining within a Computation Block to Avoid Nesting](#Inlining-within-a-Computation-Block-to-Avoid-Nesting)
-    30. [Effect Orientated Programming](#Effect-Orientated-Programming)
-    31. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
+    31. [Effect Orientated Programming](#Effect-Orientated-Programming)
+    32. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
         1. [Know the difference between IO bound tasks and CPU bound tasks and their solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-solution-patterns)
-    32. [Security Development Practices](#Security-Development-Practices)
+    33. [Security Development Practices](#Security-Development-Practices)
 5. [Agile Process Guide aka Feedback Driven Development](#Agile-Process-Guide-aka-Feedback-Driven-Development)
     1. [Design Thinking Workshops and Scoping Document](#Design-Thinking-Workshops-and-Scoping-Document)
     2. [Epics and Work Package Span Multiple Sprints](#Epics-and-Work-Package-Span-Multiple-Sprints)
@@ -502,9 +510,12 @@ Abstractions give us freedom and protect us from more volatile concrete implemen
 
 [top](#Table-Of-Contents)
 
-### Keep Classes and Functions Smallish
+### Keep Most Functions SmallISH
 
-General rule – not much bigger than your screen’s viewport. I don't subscribe to certain views that functions should be no longer than four or five lines myself - I find it too difficult to hop around the code when functions are this small.   However, a viewport size / page is fine, and if you still need convincing, know that compilers can apply far more effective in-lining optimisations with smaller classes and functions.
+I don't subscribe to certain views that functions should be no longer than four or five lines myself - I find it too difficult to keep a good train of thought when hopping around many small functions. I think functions can be long when necessary, especially complex functions that require a sequential train of thought to build a mental model. As a general rule, most functions should normally not be much bigger than your screen’s viewport, but larger functions are fine when you need them. 
+
+>[!TIP]
+Know that compilers can apply far more effective in-lining optimisations with smaller classes and functions.
 
 [top](#Table-Of-Contents)
 
@@ -639,13 +650,15 @@ What does polymorphism mean to you? For those with background in OPP, you most l
 Don't limit your understanding of Polymorphism to inheritance alone, it broadly means that '__a single type can represent multiple types__.'
 
 If we acknowledge this interpretation, then polymorphism can include: 
-| Polymorphism type   | Description|
-|--------------- | --------------- |
-| Inheritance | Classic inheritance hierarchies with base class & sub-type specialisations  |
-| Union/Sum Types  | A type must be one from a selection of types to implement choice|
-| Parametric (often implies Composition) | A 'marker type' is ***attached to a type*** to represent another type, often by composing objects |
-| Structural Typing / Protocols | A type is ***compatible*** if has methods that correspond to an interface protocol, with compile-time checks (eg Go)  |
-| Duck Typing | Same as Structural Typing with dynamic-dispatch (eg Python)|
+
+| Polymorphism type                  | Description                                                                                                                                                                           |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Inheritance                        | Classic inheritance hierarchies with base class & sub-type specialisations                                                                                                            |
+| Union/Sum Types                    | A type must be one from a selection of types to implement choice                                                                                                                      |
+| Parametric Polymorphism            | An interface is attached to a type to represent another type, often by composing objects                                                                                              |
+| Ad-hoc Polymorphism / Type-classes | An externally implemented interface is attached to a type to represent another type, often by composing objects. Existing 3rd party types can be attached to the external interfaces. |
+| Structural Typing / Protocols      | A type is compatible if has methods that correspond to an interface protocol, with compile-time checks (eg Go)                                                                        |
+| Duck Typing                        | Same as Structural Typing with dynamic-dispatch (eg Python)                                                                                                                           |
 
 #### Inheritance is Solely for Strong 'Is A' Type Relationships to Maintain State Invariants and Post-Conditions 
 
@@ -662,41 +675,43 @@ By default, in some languages you can extend a class by default, unless you expl
 
 [top](#Table-Of-Contents)
 
-#### Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Augment your Type-System With Shared Marker Types
+#### Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Represent New Types 
 
 > [!TIP]
-By design, inheritance is an intentionally a strong 'is a' relationship; For a sub-type to act as its parent type (Liskov substitution principle), then it needs to maintain the same behaviour, and same invariants and post-conditions. A common mistake is to focus just on behaviour, inheritance is more than that.
+By design, inheritance is an intentionally strong 'Is A' relationship; For a sub-type to act as its parent type (the Liskov substitution principle), then it needs to maintain the same behaviour, AND the same invariants AND post-conditions. A common mistake is to focus just on behaviour, inheritance is a much stronger relationship than that.
 
 > [!TIP]
-I say "don't pay too much inheritance tax" intentionally because inheritance is great in certain scenarios such as in building frameworks, libraries, and for strong/natural "Is a" relationships e.g. "type A is a type of B." A great example is the 'Either' monad - the Left/error and Right/success objects inherit from the Either base class, so an Either can be Left or Right, but never both. 
+I say "don't pay too much inheritance tax" intentionally because inheritance is great in certain scenarios such as in building frameworks, libraries, and for strong/natural "Is A" relationships e.g. "type A is a type of B." A great example is the 'Either' monad - the Left/error and Right/success objects inherit from the Either base class, so an Either can be Left or Right, but never both. 
 
 However, deeply nested inheritance hierarchies where sub-classes extend super-classes can become very brittle. This is because you are structurally tied to the classes in the parent hierarchy: 
   - If you don't need all of the characteristics provided through inheritance, it can be difficult to 'split-out' what is not wanted without widespread refactoring. 
   - Some languages (eg Java) do not allow multiple inheritance which could encourage deeper inheritance hierarchies. 
-  - If you don't have access to the src of the parent hierarchy, you may be forced to implement abstract methods you don't need, typically by throwing unsupported exceptions/errors. 
+  - If you don't have access to the src of the inheritance hierarchy, you may be forced to implement abstract methods you don't need, typically by throwing unsupported exceptions/errors. 
 
-If you do have access to the src of the parent hierarchy, you may need to extract the required methods into a new level and inherit from that level to facilitate better segregation of concerns e.g., from the direct parent if you do want those methods, or from a higher-level ancestor if you do not need every method. This can be an expensive refactor meaning deep inheritance is often considered an anti-pattern these days, especially for application developers. A number of modern languages don't even support inheritance. Having said that, inheritance arguably does have its place when developing libraries and frameworks, and especially for relationships that have a strong and natural "Is a" type of relationship e.g., 'typeA is a genuine / real sub-type of typeB.'
+If you have access to the src of the inheritance hierarchy, you may need to extract the required methods into a new level and inherit from that level to facilitate better segregation of concerns e.g., from the direct parent if you want all methods, or from a higher-level ancestor if you do not need every method. This can be an expensive refactor meaning deep inheritance is often considered an anti-pattern these days, especially when building applications rather than frameworks and libraries. A number of modern languages don't even support inheritance. Having said that, inheritance arguably does have its place when developing libraries and frameworks, and especially for relationships that have a strong and natural "Is A" type of relationship e.g., 'typeA is a genuine / real sub-type of typeB.'
 
 > [!TIP]
-Rather than pay too much inheritance tax, consider using 'Parametric Polymorphism' where a 'marker type' attaches a contract which allows a type to be represented as another type. This shared marker type augments your type-system for use in function parameters, return values, and attribute declarations, often in conjunction with generics ('holder types'). The canonical name for this type of polymorphism is "parametric polymorphism," "generic programming" or "ad-hoc polymorphism." It is typically implemented with dynamic-dispatch and is often used in conjunction with Composition under the hood where an object uses the functionality of another object to implement its behaviour.  
+Attach Interfaces/Traits to your types for new behaviour: Rather than pay too much inheritance tax, consider using 'Parametric Polymorphism' where a 'behaviour type' such as an interface or trait attaches a new contract to your types which allows a type to be represented as another type. This shared behaviour type augments your type-system for use in function parameters, return values, and attribute declarations, and is often used in conjunction with generics ('<holder_types>'). The canonical name is "parametric polymorphism" or "generic programming".  It is typically implemented with dynamic-dispatch and is often used in conjunction with Composition under the hood where an object uses the functionality of another object to implement its behaviour.  
 
-The mechanism for sharing code varies across languages and includes Interfaces (eg Java), Traits (eg Rust), Mixins (eg Python), and Type-Classes (eg Scala). Often, composition is used under the hood to share behaviour. Several modern languages don’t even support inheritance (Rust, Zig, Go), relying instead on parametric polymorphism.
+Several modern languages don’t even support inheritance (Rust, Zig, Go), relying instead on parametric polymorphism. Despite the subtle differences across languages, they generally follow the pattern of externally implemented interfaces that you use to 'attach or graft' behaviour onto types:  Interfaces (eg Java, Kotlin), Traits (eg Rust), Mixins (eg Python), Type-Classes and externally implemented interfaces (Scala, Kotlin). 
 
-| Parametric Polymorphism                                                          | Inheritance                                                                                                         |
-| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Interface segregation is finer grained - you choose what to implement            | You may need to inherit everything from all ancestors (note, this might be the intention as per Liskov substituion) |
-| More loosley coupled, changes to an attached trait does not affect other traits. | Tightly coupled - changes in the parent hierarchy can vertically affect all sub-types                               |
-| More flexible - attach multiple marker types                                     | Single inheritance in some languages is more restrictive                                                            |
+| Parametric Polymorphism Pro                                                            | Inheritance Con                                                                                                     |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Interface segregation is finer grained - you choose what to implement                  | You may need to inherit everything from all ancestors (note, this might be the intention as per Liskov substituion) |
+| More loosely coupled, changes to an implemented interface does not affect other types. | Tightly coupled - changes in the parent hierarchy can vertically affect all sub-types                               |
+| More flexible - implement multiple interfaces                                          | Single inheritance in some languages is more restrictive                                                            |
+| Polymorphism - multiple implementations for a generic interface/trait.                 |                                                                                                                     |
 
 ![](Pasted%20image%2020241220110926.png)
 
-#### Parametric Polymorphism for Existing Types
+#### Ad-Hoc Polymorphism with Externally Implemented Interfaces to Represent New Types 
 
-The mechanism for attaching marker types varies across languages. Some languages allow you to attach the marker type onto existing types without having to modify the original type. This is very convenient and powerful for easily creating '*blanket implementations*,' and when you don't have access to the src code of those types e.g., types defined in external packages. Rust and Scala lexically split their type definitions from the definition of the attached marker type using an additional 'referencing-layer.' Conversely, Kotlin and C# provide extension functions to extend the behaviour of existing (or custom) types, which is a subtly different approach that achieves a similar outcome (you can still also define your own custom interface and use extension-functions and composition to achieve the same result as Rust traits). 
+The mechanism for attaching behaviour varies across languages. Some languages allow you to attach behaviour types onto existing types without having to modify the original type, this is known as 'ad-hoc polymorphism' and comes from functional programming. It includes Traits in Rust, and Type-Classes in Scala/Haskell/Kotlin. This is very convenient and powerful for easily creating '*blanket implementations*,' and when you don't have access to the src code of those types. To do this, languages lexically split their core data types from the definition of the external interface. There are subtly different approaches used to subsequently 'attach' externally implemented interfaces to existing types as explored below. 
 
 > [!TIP]
-Lexically splitting a type from a marker type via an extra 'referencing layer' is elegant and powerful compared to implementing the marker directly on the original type definition itself, such as implementing an interface directly on a class declaration. This is because you don't need to modify the existing type which facilitates simple blanket implementations, and when you do not have access to the src code of the original type. If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
+Lexically splitting a core type from new behaviour defined in an externally implemented interface and then linking the two together is elegant and powerful compared to implementing the interface _directly on the original type declaration itself_ (eg implementing an interface directly on a class). The main advantages is that you don't need to modify an existing type which enables new blanket implementations. Recognise that there are at least 3 code fragments required to do this: 1) an existing / 3rd party type, 2) an externally implemented interface/trait/type-class, and 3) code that 'attaches or links' them together.  If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
 
+The following Rust example provides a simple example. 
 ```Rust
 // Rust
 use externalcrate::SomeStruct;    // here is our existing type
@@ -705,7 +720,7 @@ trait Length {                    // A marker trait for shared behaviour
   fn get_length(&self) -> u32;
 }
 
-impl Length for SomeStruct {      // A referencing layer that attaches Length to SomeStruct
+impl Length for SomeStruct {      // Implementation, attaches Length to SomeStruct
   fn get_length(&self) -> u32 {
     self.to_string().len() as u32
   }
@@ -714,14 +729,85 @@ impl Length for SomeStruct {      // A referencing layer that attaches Length to
 
 [top](#Table-Of-Contents)
 
-#### Extensions for Augmenting Existing Types
+Advantages of Ad-hoc Polymorphism: 
+- No modification of existing types - behaviour is attached without modification of existing types types (e.g. Tweet and String).
+- New 'Blanket Implementations' - ability to define a new type implementation for a whole group of types at once, rather than having to write a separate implementation for each one.
 
-Some languages allow you to extend the existing types using extension functions and properties e.g., C# and Kotlin (the latter learning from the former). Extension functions and properties can be grafted onto existing types even if you don't have access to the source code for those types. 
+The following Kotlin example provides another example. You will notice that the approach is different:
+- Rust: A trait implementation is attached to an existing type using a code fragment that references the trait implementation and type/struct:  `impl <someTrait> for <someStruct>`. 
+- Kotlin: Separate objects are used to create implementations of our external interface, and these instances are then indirectly attached ('scoped' in kotlin terminology) to our existing type at the call-site e.g. using the: `with(someScopeObj)` 'scope' function. This process uses 'dynamic / double dispatch' to supply the correct implementation, not static dispatch. In this model, recognise that there are 4 separate fragments of code: 1) the existing type, 2) the interface, 3) different implementations of the interface, 4) a scope function (`with()`) at the call-site to supply the required implementation (scope object). 
+
+```Kotlin
+data class Tweet(val tweet: String, val retweet: String) // Existing type (assume Tweet is 3rd party)
+
+// Generic extension interfaces 
+interface Summary<T> {
+  fun T.summarise(): String // <- extension function receiver on T
+  fun T.info(): String = "Default Information" // <- default impl of extension fun receiver
+}
+interface Farewell<D> {
+  fun D.sayBye(): String
+}
+
+// Externally implemented interfaces provide implementations (aka Scope objects)  
+object TweetSummaryScope : Summary<Tweet> {
+  override fun Tweet.summarise(): String = "Tweet: $tweet Retweet: $retweet"
+}
+object AnyFarewellScope : Farewell<Any> {
+  override fun Any.sayBye(): String = "Tat ta"
+}
+
+// Example of a pure generic function that combines generic interface behaviour
+context(summary: Summary<T>, farewell: Farewell<D>)
+fun <T, D> globalFuncWithMultipleContexts(toSummarise: T, toSayGoodbye: D) =
+  with(summary) {  // can access T's methods here
+    with(farewell) { // can access D's methods here
+      "Summary is: ${toSummarise.summarise()}, Info: ${toSummarise.info()} Bye: ${toSayGoodbye.sayBye()}"
+    }
+  }
+
+// in some test case class: 
+    @Test
+    fun `test attaching type classes to existing types String and Tweet`() {
+        val tweet = Tweet("my tweet", "my retweet") // Create existing type 
+        with(TweetSummaryScope) {   // scope Summary<Tweet> to provide extra behaviour on Tweets
+            with(AnyFarewellScope) { // scope Farewell<Any> to provide extra behaviour on any object
+                assertEquals("Tat ta", tweet.sayBye()) // Add behaviour to existing type 'String'
+                // example local scoped anonymous object, prevents pollution of global scope (just to demo the concept)
+                val anyFarewellScope2 = object : Farewell<Any> { override fun Any.sayBye(): String = "Bye bye" }
+                with(anyFarewellScope2) {
+                    assertEquals("Bye bye", tweet.sayBye()) 
+                }
+                val expected = "Summary is: Tweet: my tweet Retweet: my retweet, Info: Default Information"
+                assertEquals("$expected Bye: Tat ta", globalFuncWithMultipleContexts(tweet, "Bye: "))
+            }
+        }
+    }
+```
+
+Pros of the 'indirect' Kotlin approach:
+- Polymorphic behaviour-types / type-classes 
+    - You can dynamically (eg conditionally) bring into scope multiple behaviour-type implementations when needed using the `with(scopeOb)`scope function (see the `@test` for an example).  
+    - You can implement the same interface multiple times in different ways for a single core type ([not doable in Rust](https://stackoverflow.com/questions/46167642/can-i-implement-the-same-trait-multiple-times-in-different-ways-for-a-single-str)). Multiple scope objects are combined as needed to supply the required `context`. 
+- Reduced scope pollution 
+    - The  `anyFarewellScope2` example shows how to reduce pollution of the global scope by creating the implementation as a local variable. 
+
+Cons of the 'indirect' approach:
+- Complexity - The Rust approach is simpler and the API is more self-describing. Similarly, implementing interfaces directly on your types is much simpler (but you then lose the ability to augment 3rd party types).
+- Reduced discoverability -  You need to be explicitly aware-of and import type-classes in order to use them (e.g. as function args, as context parameters, and within scope functions). This means knowing "what's available here?" can be a problem in a poorly structured project.  
+- Performance - dynamic dispatch incurs a performance overhead, unlike Rust traits which are statically dispatched. 
+
+Note that these externally implemented interfaces cannot access private or protected members of the type they are augmenting. I'm not sure this should be regarded as a con, however;  If you need to access private members, you should have access to the src-code and you should extend/implement directly on the type itself. 
+    
+[top](#Table-Of-Contents)
+#### Simpler Extensions to Avoid Polluting Core Abstractions With Smaller Customisations 
+
+Some languages allow you to extend the existing types using simple extension functions and properties e.g., C# and Kotlin. Extension functions and extension properties can be grafted onto existing types even if you don't have access to the source code for those types. Note that this technique does not create a new behaviour-type as explained above, rather you are simply extending your existing core types and abstractions. 
 
 >[!TIP]
->One of the primary intentions of extensions is to keep core abstractions small by not polluting them with your own customisations, this way the original abstraction keeps their original behaviour (Andrey Breslav, original Kotlin language designer).
+>One of the primary intentions of extensions is to _keep core abstractions small by not polluting them with your own customisations_, this way the original abstractions keep their original behaviour (Andrey Breslav, original Kotlin language designer).
 
-Notice that in the example below, `swap` is grafted onto the existing `MutableList` interface. All other references to `MutableList` can call `swap` creating a blanket implementation without polluting the original. Similarly, all list implementations can access the `lastIndex` extension property.
+Notice that in the example below, `swap` is grafted onto the existing `MutableList` interface. All other references to `MutableList` can call `swap` creating a blanket implementation without polluting the original type. Similarly, all list implementations can access the `lastIndex` extension property. Note that extension functions and properties do not have access to private members of the types they extend. 
 
 ```Kotlin
 // Kotlin
@@ -747,7 +833,7 @@ fun <E> consumer(mutableList: MutableList<E>, index1: Int, index2: Int) {
 
 #### Structural Polymorphism and Duck Typing
 
-Some languages have have ‘Duck Typing,’ this is like using an interface at a call site (eg the type of a function parameter or return value), but *does not require you to explicitly define a contract on a type using scaffold code* such as `class A implements interfaceB` (Java) or `impl traitB for typeA` (Rust). Instead, a particular type implicitly implements an interface if has the corresponding methods available: “if it walks and swims like a duck, it’s probably a duck,” otherwise an error is generated. If the type checking occurs at compile time, it is often called ‘Structural Typing/Polymorphism’ eg `Template` classes in C++ and in Go. If type checking occurs at runtime and produces runtime errors, it is called "Duck typing" which is more common in dynamic languages.  
+Some languages have have ‘Duck Typing’ (e.g. Go, Py), this is like using an interface at a call site (eg the type of a function parameter or return value), but *does not require you to explicitly define a contract on a type using scaffold code* such as `class A implements interfaceB` (Java) or `impl traitB for typeA` (Rust) or a `with` scope function in conjunction with a context parameter (Kotlin). Instead, a particular type implicitly implements an interface if has the corresponding methods available: “if it walks and swims like a duck, it’s probably a duck,” otherwise an error is generated. If the type checking occurs at compile time, it is often called ‘Structural Typing/Polymorphism’ eg `Template` classes in C++ and in Go. If type checking occurs at runtime and produces runtime errors, it is called "Duck typing" which is more common in dynamic languages.  
 
 >[!TIP]
 The ease and speed of development that duck typing brings is great for scripting and smaller code bases, but as the size and complexity of the code increases, I would advise using scaffolding code for stronger compile time type checking (for Pythonistas, you can always introduce static typing such as Python’s optional type hints, and for Go, see the code in the 'Go Example' above for a tip to check a type implements an interface). 
@@ -1472,6 +1558,17 @@ If you can do OOP, you can do DOP: DOP advocates for cleanly separating data fro
 >[!TIP]
 There is no need to extract logic such as data validation and invariant checking into utility functions, this logic should be co-located with your data types, in class/record constructors for example.
 
+Parlog: DOP: A sealed interface hierarchy with record implementations (DOP approach) is not appropriate for the JDK JSON API becauase of the lack of encapsulation, even though it seems like a perfect fit. This is because the lack of encapsulation makes internal evolution tricky which is not appropriate for a for long-lived public/stable API like the proposed JdK Json API. The DOP approach is great for application code though. 
+
+#### OOPs - A Performance Mistake\?
+
+Casey: Compile time OOP encapsulation hierarchies are bad for performance code such as physics simulations and games. Casey advocates for an 'NP Component System' for better performance where 'Discriminated Union' types such as RustEnums, Java Records, Kotlin Inline value classes used with 'match/swtich-case' expressions are more performant than 'Fat Structs' that mix multiple members of different types behind interfaces. The former enables better performance as calculations can be efficiently applied to a bunch of these anaemic types by architecting the system's core logic around more relevant 'engineering boundaries' (type safe and no dynamic-dispatch) rather than as individual polymorphic domain objects (dynamic-dispatch e.g. as with traits). A nice analogy is that of column based storage (ecs - enum/case/swich?) vs row based storage (oop).  
+
+Anaemic types that have one core value type, outlinking
+
+https://youtu.be/wo84LFzx5nI?si=oaVFo33k59VX_5LW
+
+![](attachments/Pasted%20image%2020250722193312.png)
 ### Dependency Rule and Dependency Inversion Principle
 
 The Dependency Rule states that: "Source code dependencies must point only inwards." This is illustrated in the following diagram.  
