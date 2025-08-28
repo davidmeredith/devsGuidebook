@@ -311,7 +311,7 @@ Customers have the right to:
 
 ### Tooling
 
-#### Do not be Smart - Use the Right Tools for the Job and for your customer
+#### Use the Right Tools for the Job and for Your Customer
 
 As a centre, we should be using the right tools for the job, we all have our preferences, but there’s no need to be stubbornly loyal about a particular language. As software professionals, we should recognise the right tools for the job and for our clients.  
 
@@ -319,7 +319,7 @@ Have the customer in mind. For example, Haskell and other Lisps are great (I’v
 
 ##### To Garbage Collect or Not To GC
 
-For certain types of programming, e.g. numerical algorithm development, HPC and when squeezing software into tight spaces such as embedded systems, a Garbage Collected (GC) language probably isn’t the best choice - a GC adds extra memory, disk, and CPU requirement. Therefore, venerable manual memory managed languages without a runtime such as C/C++/Fortran are still a good choice. Newer memory safe languages such as Zig, Rust, Mojo, Julia are interesting and relevant in this space, but I do not have enough hard-won experience in these languages to recommend them or not.
+For certain types of programming, e.g. numerical algorithm development, HPC, and when squeezing software into tight spaces such as embedded systems, a Garbage Collected (GC) language probably isn’t the best choice - a GC adds extra memory, disk, and CPU requirement. Therefore, venerable manual memory managed languages without a runtime such as C/C++/Fortran are still a good choice. Newer memory safe languages such as Zig, Rust, Mojo, Julia are interesting and relevant in this space, but I do not have enough hard-won experience in these languages to recommend them or not.
 
  For most other types of software development such as full-stack, enterprise, web services, mobile, and general-purpose programming, I do recommend using a memory safe language and this implies having a GC for the majority of languages (apart from Rust).  There is a recognised shift in industry away from memory unsafe languages as the vast majority Common Vulnerability Exploits (CVEs) stem from unsafe memory language exploits, causing organisations such as [Google](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html) (for Android), [NSA and Microsoft to urge the use of memory-safe languages](https://www.theregister.com/2022/11/11/nsa_urges_orgs_to_use/), [DARPA through its 'TRACTOR' programme (Translating All C to Rust), and the US Gov](https://www.darpa.mil/research/programs/translating-all-c-to-rust) for all its  governmental projects to start all new projects in a memory safe language.
 
@@ -327,7 +327,7 @@ For certain types of programming, e.g. numerical algorithm development, HPC and 
 > “A human garbage collector is just wasted effort” (Eckle & Ward, Happy Path Programming). 
 ##### Monads and Green Threads need a GC
 
-At the time of writing, there doesn't seem to be a non-GC language that supports monads for functional composition coupled with a colourless async runtime eg green threads and coroutines. Note, I do not mean platform/kernel/OS threads, I mean virtual or 'green' threads that are implemented by the runtime eg Go's Goroutines, Java's Project Loom, Fibres PHP and Ruby.  This appears to be a current open research topic in non-GC'd languages. According to this [Rust maintainer](https://www.youtube.com/watch?v=1zOd52_tUWg), async is possible with coloured approaches such as `async/await` (eg C++, Rust), but colourless approaches such as green threads and coroutines, and advanced functional programming with monads currently requires a GC. The GC handles memory clean-up for several low level complexities eg async task cancellation, how to implement memory clean up without higher-level approaches such as RAII and destructors, and providing a debugger that is usable for complex async code. I'm currently monitoring what Zig does in future - [here is an interesting summary](https://github.com/ziglang/zig/wiki/FAQ#what-is-the-status-of-async-in-zig), and apparently Zig's `defer/errdefer` becomes impractical in an async context. 
+At the time of writing, there doesn't seem to be a non-GC language that supports monads for functional composition coupled with a colourless async runtime eg green threads and coroutines. Note, I do not mean platform/kernel/OS threads, I mean virtual or 'green' threads that are implemented by the runtime eg Go's Goroutines, Java's Project Loom, Fibres PHP and Ruby, Kotlin coroutines.  This appears to be a current open research topic in non-GC'd languages. According to this [Rust maintainer](https://www.youtube.com/watch?v=1zOd52_tUWg), async is possible with coloured approaches such as `async/await` (eg C++, Rust), but colourless approaches such as green threads and coroutines, and advanced functional programming with monads currently requires a GC. The GC handles memory clean-up for several low level complexities eg async task cancellation, how to implement memory clean up without higher-level approaches such as RAII and destructors, and providing a debugger that is usable for complex async code. I'm currently monitoring what Zig does in future - [here is an interesting summary](https://github.com/ziglang/zig/wiki/FAQ#what-is-the-status-of-async-in-zig), and apparently Zig's `defer/errdefer` becomes impractical in an async context. 
 
 > [!NOTE]
 For me, the increased productivity, and availability of a colourless async runtime with the ability to implement monads for functional composition is (currently) worth the cost of using a GC language, especially for application programming.
@@ -345,14 +345,6 @@ Keep all project documents and the Decision Point Review templates in a single r
 ![](attachments/Pasted%20image%2020240611092007.png)
 
 [top](#Table-Of-Contents)
-
-#### Gitlab and Version Control
-
-For Hartree folks: Use the STFC Gitlab instance unless there is good reason not to: [https://gitlab.stfc.ac.uk/](https://gitlab.stfc.ac.uk/)
-
-#### Container Repository
-
-For Hartree folks: Use the STFC Harbor repository to upload and store containers: [https://harbor.stfc.ac.uk/](https://harbor.stfc.ac.uk/)
 
 #### Build Tools
 
@@ -510,7 +502,7 @@ Abstractions give us freedom and protect us from more volatile concrete implemen
 
 [top](#Table-Of-Contents)
 
-### Keep Most Functions SmallISH
+### Keep Most Functions Small-ish
 
 I don't subscribe to certain views that functions should be no longer than four or five lines myself - I find it too difficult to keep a good train of thought when hopping around many small functions. I think functions can be long when necessary, especially complex functions that require a sequential train of thought to build a mental model. As a general rule, most functions should normally not be much bigger than your screen’s viewport, but larger functions are fine when you need them. 
 
@@ -519,11 +511,64 @@ Know that compilers can apply far more effective in-lining optimisations with sm
 
 [top](#Table-Of-Contents)
 
-### Limit the Number of Function Arguments
+### Should I Limit the Number of Function Arguments
+
+If your language has named parameters with default values (e.g. Py/Kotlin), then you often encounter long function argument lists. For example, take [the definition of `k_means` from scikit-learn](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.k_means.html) shown below. This is fine as the named parameters clarify what the args are, whilst default values means you only need to provide new/custom values where the defaults are not suiable: 
+
+```Python
+def k_means(
+    X,
+    n_clusters,
+    *,
+    sample_weight=None,
+    init="k-means++",
+    n_init="auto",
+    max_iter=300,
+    verbose=False,
+    tol=1e-4,
+    random_state=None,
+    copy_x=True,
+    algorithm="lloyd",
+    return_n_iter=False,
+):
+    # ...
+```
+
+However, if your language does not have named function arguments, then such a long argument list would be difficult to comprehend, and there is the risk of argument mix-up. There are several potential solutions that you can use to simulate an approximate solution, such as the builder pattern and DTOs used as parameter bags to wrap long argument lists. 
 
 >[!TIP]
->Consider using immutable Data Transfer Objects (aka DTOs / Data Objects / Records) if your function has more than ~4 arguments, and nesting these gives good structure.
+>Consider using immutable Data Transfer Objects (aka DTOs / Data Objects / Records) if your function has more than ~4 arguments and if you language does not support named and default function arguments.
 
+In the following example, a simple mutable object bag is used to define a lambda to name optional arguments with default values. Using a mutable object here is ok because the lambda's scope doesn't leak beyond the method execution. In the future, Java records with 'withers' will likely become the recommended approach, until then, there are libs such as [record-builder](https://github.com/Randgalt/record-builder).   
+```Java
+// public class for brevity, but this could be defined as a nested class for locality 
+public class MyFunction {
+    private MyFunction(){}
+    public static class Props{
+        public String name = "";
+        public int age = 0;
+        public String phone = "not Set";
+        public String idNumber = "not Set";
+        private Props(){}
+    }
+    static public void execute(String mandatoryParam, Consumer<Props> params){
+        var p = new Props();
+        params.accept(p);
+
+        //validation logic if required
+        if(p.age < 0){
+            throw new RuntimeException("age can't be negative");
+        }
+        // do something
+    }
+}
+
+void main(){
+    // The lambada simulates named function arguments
+    // Local scoping avoids issues with subsequent mutation of the properties bag  
+    MyFunction.execute("this is mandatory", p -> {p.name = "Homer"; p.age = 30;});
+}
+```
 ### Separation of Concerns for Locality of Behaviour 
 
 Functions should do one thing. For some functions this is true, especially low-level functions for example. However, I don't believe this is a unanimous rule. Higher-level functions (the outer layer in the dependency bullseye) often compose multiple child functions to achieve an end result. For example, consider a controller that composes multiple service facade calls to provide a final response.  
@@ -579,7 +624,7 @@ Here’s the authoritative view from the famous [Kent Beck from Nov (2022) and h
 
 Examples of patterns that support cohesion include the State Pattern.
 
-- In the State pattern, consider code that is widespread across many files with each file having 'switch' or 'when' statements that reference a centrally declared enum set. The switch/when statements execute different behaviours based on the current enum state value. If you add or remove a state enum option, you will need to update the all switch/when statements that are spread across your code-base. This is not a problem for small projects, but for large code bases it can require significant refactoring. The state pattern co-locates the state enum values with the associated behaviour. To do this, the central enum set could be replaced with a corresponding set of state objects, where each state object collects and implements the relevant state-dependent behaviour itself. 
+- Consider code that is widespread across many files with each file having 'switch' or 'when' statements that reference a centrally declared enum set. The switch/when statements execute different behaviours based on the current enum state value. If you add or remove a state enum option, you will need to update the all switch/when statements spread across your entire code-base. This is not a problem for small projects, but for large code bases it can require significant refactoring. The state pattern co-locates the state enum values with the associated behaviour - state objects are responsible for their own behaviour and for changing into another state. To do this, the central enum set could be replaced with a corresponding set of state objects, where each state object collects and implements the relevant state-dependent behaviour itself. 
 
 TODO - provide an example 
 
@@ -594,16 +639,17 @@ OOP bashing appears to be popular these days, but this is mostly because of the 
 
 | Pillar                            | Implementations                                                                                                            |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Abstraction                       | Interfaces, Traits, Service Facade                                                                                         |
+| Abstraction                       | Interfaces, Traits, Service Facade, Type-Classes                                                                           |
 | Encapsulation                     | Classes, Records/struts/nested-structs, Closures, Modules, Public/Private/Protected visibility, monads (wrap side-effects) |
-| Polymorphism                      | Inheritance, ADTs, Type-classes, Generics & Parametric Polymorphism, Interfaces/Traits, Dynamic-Dispatch                   |
-| ~~Inheritance~~ Sharing Behaviour | Composition / Delegation, Traits, Default Interfaces, Inheritance                                                          |
+| Polymorphism                      | Inheritance, ADTs, Type-Classes, Generics & Parametric Polymorphism, Interfaces/Traits, Dynamic-Dispatch                   |
+| ~~Inheritance~~ Sharing Behaviour | Composition / Delegation, Traits, Default Interfaces, Inheritance, Type-Classes                                            |
 
 I believe inheritance should be replaced with 'Sharing Behaviour': the other pillars are generic to accommodate multiple implementations and inheritance is not the only way of sharing code across types. Other ways to share code include Composition (available any language), traits (Scala, Rust), interfaces with default implementations and attributes (Java, Go, Py), and type-classes (Scala), to name a few. I agree that inheritance can be overdone, but it does have it place (see section on 'Don't pay too much inheritance tax').  
 
 ### SOLID
 
 For OPP, understand the principles of SOLID:
+
 | SOLD  | Meaning |
 | -------------- | --------------- |
 | Single Responsibility Principle (SRP) | A module should be reponsible to one, and only one, ACTOR (Bob Martin's reinterpretation) |
@@ -704,23 +750,25 @@ Several modern languages don’t even support inheritance (Rust, Zig, Go), relyi
 
 ![](Pasted%20image%2020241220110926.png)
 
-#### Ad-Hoc Polymorphism with Externally Implemented Interfaces to Represent New Types 
+#### Ad-Hoc Polymorphism via Type-Classes - Externally Implemented Interfaces 
 
-The mechanism for attaching behaviour varies across languages. Some languages allow you to attach behaviour types onto existing types without having to modify the original type, this is known as 'ad-hoc polymorphism' and comes from functional programming. It includes Traits in Rust, and Type-Classes in Scala/Haskell/Kotlin. This is very convenient and powerful for easily creating '*blanket implementations*,' and when you don't have access to the src code of those types. To do this, languages lexically split their core data types from the definition of the external interface. There are subtly different approaches used to subsequently 'attach' externally implemented interfaces to existing types as explored below. 
+Interfaces have limitations: they abstract over behaviours of instances, not behaviour of types which means you need to already have an instance to use them. Known as the expression problem. https://www.youtube.com/watch?v=Gz7Or9C0TpM Java proposes moving the behaviour to a third-party 'witness' object and make it easy to publish a witness to the external interface. 
+
+Some languages allow you to externally implement interfaces 'outside of a type' and 'associate' implementations of these interfaces with existing types without having to modify the original type, this is known as 'ad-hoc polymorphism' or 'type-classes' and comes from functional programming. It includes Traits in Rust and Type-Classes in Scala/Haskell/Kotlin, Protocols (Clojure/Swift), Implicits (Scala), Shapes and Extensions (C#). This is very convenient and powerful for easily creating '*blanket implementations*' for defining a new type for a whole group of types at once, even when you don't have access to the src code of those types. To do this, languages typically lexically split their core data types from the implementation of the external interface. There are subtly different approaches used to subsequently 'associate' or 'scope' the externally implemented interfaces to existing types, as explored below. 
 
 > [!TIP]
-Lexically splitting a core type from new behaviour defined in an externally implemented interface and then linking the two together is elegant and powerful compared to implementing the interface _directly on the original type declaration itself_ (eg implementing an interface directly on a class). The main advantages is that you don't need to modify an existing type which enables new blanket implementations. Recognise that there are at least 3 code fragments required to do this: 1) an existing / 3rd party type, 2) an externally implemented interface/trait/type-class, and 3) code that 'attaches or links' them together.  If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
+Lexically splitting a type from a new type that defines new behaviour defined in an externally implemented interface and then associating the two together is different from _directly implementing the interface on the original type declaration itself_ (eg implementing an interface directly on a class). The main advantages is that you don't need to modify an existing type which enables new blanket implementations. Recognise that there are at least 3 code fragments required to do this: 1) an existing type which can be a 3rd party type where you don't have access to the src, 2) an externally implemented interface/trait/type-class, and 3) code that 'associates' or 'scopes' them together, typically via dynamic dispatch.  If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
 
-The following Rust example provides a simple example. 
+The following Rust example provides a simple example. Note that in this example, Rust uses static dispatch or 'monomorphization' for performance reasons and not dynamic-dispatch (which allows you to create multiple implementations for the same type at small performance costs). 
 ```Rust
 // Rust
 use externalcrate::SomeStruct;    // here is our existing type
 
-trait Length {                    // A marker trait for shared behaviour
+trait Length {                    // A trait to declare shared behaviour
   fn get_length(&self) -> u32;
 }
 
-impl Length for SomeStruct {      // Implementation, attaches Length to SomeStruct
+impl Length for SomeStruct {      // Implementation attaches trait 'Length' to type 'SomeStruct' 
   fn get_length(&self) -> u32 {
     self.to_string().len() as u32
   }
@@ -730,12 +778,17 @@ impl Length for SomeStruct {      // Implementation, attaches Length to SomeStru
 [top](#Table-Of-Contents)
 
 Advantages of Ad-hoc Polymorphism: 
-- No modification of existing types - behaviour is attached without modification of existing types types (e.g. Tweet and String).
-- New 'Blanket Implementations' - ability to define a new type implementation for a whole group of types at once, rather than having to write a separate implementation for each one.
+- No modification of existing types - behaviour is attached without need to access or modify existing types types.
+- New 'Blanket Implementations' - gives the ability to define a new type-class implementation for a whole group of types at once, rather than having to write separate implementations for each one.
+
+Disadvantages of Ad-hoc Polymorphism: 
+- Increased code complexity.
+- Dynamic dispatch has a small performance penalty (usually it is not a problem for the majority of code-bases). 
+- Externally implemented interfaces don't carry state (member variables). For example, as cited by the Rust book: "trait objects differ from traditional objects in that we can’t add data to a trait object. Trait objects aren’t as generally useful as objects in other languages: their specific purpose is to allow abstraction across common behaviour."  Note that some languages allow variables to be declared on interfaces but with caveats e.g., Kotlin allows abstract properties or accessor methods with no backing fields (see Kotlin docs) to define what properties (and methods) a class must implement.   
 
 The following Kotlin example provides another example. You will notice that the approach is different:
-- Rust: A trait implementation is attached to an existing type using a code fragment that references the trait implementation and type/struct:  `impl <someTrait> for <someStruct>`. 
-- Kotlin: Separate objects are used to create implementations of our external interface, and these instances are then indirectly attached ('scoped' in kotlin terminology) to our existing type at the call-site e.g. using the: `with(someScopeObj)` 'scope' function. This process uses 'dynamic / double dispatch' to supply the correct implementation, not static dispatch. In this model, recognise that there are 4 separate fragments of code: 1) the existing type, 2) the interface, 3) different implementations of the interface, 4) a scope function (`with()`) at the call-site to supply the required implementation (scope object). 
+- Rust: A trait implementation is linked to an existing type using a code fragment that references the trait implementation and type/struct:  `impl <someTrait> for <someStruct>`. 
+- Kotlin: Separate objects are used to create implementations of our external interface, and these instances are then indirectly attached ('scoped' in kotlin terminology) to our existing type at the call-site using: `with(someScopeObj)` 'scope' function. This process uses 'dynamic dispatch' to supply the correct implementation, not static dispatch. In this model, recognise that there are 4 separate fragments of code: 1) the existing type, 2) the interface, 3) different implementations of the interface, 4) a scope function (`with()`) at the call-site to supply the required implementation (scope object). 
 
 ```Kotlin
 data class Tweet(val tweet: String, val retweet: String) // Existing type (assume Tweet is 3rd party)
@@ -757,7 +810,8 @@ object AnyFarewellScope : Farewell<Any> {
   override fun Any.sayBye(): String = "Tat ta"
 }
 
-// Example of a pure generic function that combines generic interface behaviour
+// E.g. of a function that declares multiple externally implemented interfaces as requried context, 
+// and multiple generic types as required parameters   
 context(summary: Summary<T>, farewell: Farewell<D>)
 fun <T, D> globalFuncWithMultipleContexts(toSummarise: T, toSayGoodbye: D) =
   with(summary) {  // can access T's methods here
@@ -785,24 +839,24 @@ fun <T, D> globalFuncWithMultipleContexts(toSummarise: T, toSayGoodbye: D) =
     }
 ```
 
-Pros of the 'indirect' Kotlin approach:
-- Polymorphic behaviour-types / type-classes 
-    - You can dynamically (eg conditionally) bring into scope multiple behaviour-type implementations when needed using the `with(scopeOb)`scope function (see the `@test` for an example).  
-    - You can implement the same interface multiple times in different ways for a single core type ([not doable in Rust](https://stackoverflow.com/questions/46167642/can-i-implement-the-same-trait-multiple-times-in-different-ways-for-a-single-str)). Multiple scope objects are combined as needed to supply the required `context`. 
+Pros of the Kotllin 'scope' (dynamic dispatch) approach:
+- Polymorphism 
+    - You can dynamically / conditionally bring into scope multiple type-class implementations when needed using the `with(scopeOb)`scope function (see the `@test` for an example).  
+    - You can implement the same interface multiple times for a single parameterised type class ([not doable with Rust static dispatch](https://stackoverflow.com/questions/46167642/can-i-implement-the-same-trait-multiple-times-in-different-ways-for-a-single-str)). Multiple scope object implementations can then be combined as needed to supply the required implementations. 
 - Reduced scope pollution 
-    - The  `anyFarewellScope2` example shows how to reduce pollution of the global scope by creating the implementation as a local variable. 
+    - The  `anyFarewellScope2` example shows how to reduce pollution of the global scope by creating an implementation as a local scoped variable. 
 
-Cons of the 'indirect' approach:
-- Complexity - The Rust approach is simpler and the API is more self-describing. Similarly, implementing interfaces directly on your types is much simpler (but you then lose the ability to augment 3rd party types).
-- Reduced discoverability -  You need to be explicitly aware-of and import type-classes in order to use them (e.g. as function args, as context parameters, and within scope functions). This means knowing "what's available here?" can be a problem in a poorly structured project.  
-- Performance - dynamic dispatch incurs a performance overhead, unlike Rust traits which are statically dispatched. 
+Cons of the Kotlin 'scope' (dynamic dispatch) approach:
+- Complexity - The Rust approach is simpler and the API is more self-describing. Similarly, implementing interfaces directly on types is much simpler (but you then lose the ability to augment 3rd party types).
+- Reduced discoverability -  You need to be explicitly aware of and import type-classes in order to use them (e.g. as function args, as context parameters, and within scope functions). This means knowing "what's available here?" can be a problem in a poorly structured project.  Interestingly, at the time of writing, Java is exploring type classes for Java which proposes a solution for this findability problem where type class instances can be queried-for and discovered using new 'witness' keywords. https://www.youtube.com/watch?v=Gz7Or9C0TpM 
+- Performance - dynamic dispatch incurs a small performance overhead. 
 
 Note that these externally implemented interfaces cannot access private or protected members of the type they are augmenting. I'm not sure this should be regarded as a con, however;  If you need to access private members, you should have access to the src-code and you should extend/implement directly on the type itself. 
     
 [top](#Table-Of-Contents)
-#### Simpler Extensions to Avoid Polluting Core Abstractions With Smaller Customisations 
+#### Simpler Extensions - Avoid Polluting Core Abstractions With Small Behaviour Customisations 
 
-Some languages allow you to extend the existing types using simple extension functions and properties e.g., C# and Kotlin. Extension functions and extension properties can be grafted onto existing types even if you don't have access to the source code for those types. Note that this technique does not create a new behaviour-type as explained above, rather you are simply extending your existing core types and abstractions. 
+Some languages allow you to extend the existing types using simple extension functions and properties to create blanket implementations of functions e.g., C# and Kotlin. Extension functions and extension properties can be grafted onto existing types even if you don't have access to the source code for those types. Note that this technique does not create a new behaviour-type as explained above, rather you are simply extending your existing core types and abstractions. 
 
 >[!TIP]
 >One of the primary intentions of extensions is to _keep core abstractions small by not polluting them with your own customisations_, this way the original abstractions keep their original behaviour (Andrey Breslav, original Kotlin language designer).
@@ -862,9 +916,9 @@ Unless your language supports duck-typing, composition alone may not establish a
 [top](#Table-Of-Contents)
 
 
-### Parametric Polymorphism Language Comparison
+#### Parametric Polymorphism Language Comparison
 
-I feel demonstrating parametric polymorphism across a selection of languages is a useful endeavour because it also demonstrates several related concepts such as interfaces/traits, composition, extension methods, union types and sealing.  
+I feel demonstrating parametric polymorphism across a selection of languages is useful to demonstrate several related concepts such as interfaces/traits, composition, extension methods, union types and sealing.  I'm not going to cover ad-hoc polymorphism and type-classes as that is explained in more detail above. 
 
 ##### Rust Example
 
@@ -876,6 +930,7 @@ The detailed example below demonstrates:
 - Trait composition and implementing multiple traits - see `Product`.
 - Extension Trait to augment existing types - see `StringExt`.
 - Generic functions and trait bounds - see `filter_items`.
+- Trait objects and dynamic dispatch is not shown, this is covered in the section Ad-hoc Polymorphism and Type-Classes. 
 
 ```Rust
 // Rust Parametric Polymorphism
@@ -1192,7 +1247,7 @@ While Rust-like traits are elegant and powerful, you can achieve a similar effec
 Limitations:
 - Extension of existing types from another package may not be possible (eg final classes).
 - No trait or extension-function inheritance.
-- May need to use a combination of composition or inheritance to augment existing types, which may not be as convenient as attaching marker types. 
+- May need to use a combination of composition or inheritance to augment existing types, which may not be as convenient as attaching type classes. 
 
 ```java
 
@@ -1345,7 +1400,7 @@ public class Main {
 
 ##### Go Example
 
-In Go, you can create trait-like behaviour using 'mixin' structs to provide default implementations of interfaces.
+In Go, you can create trait-like behaviour using 'mixin' structs to provide default implementations of interfaces, but note that 'mixin' structs are not true type-classes in that you cant attach new behaviour to existing 3rd party types for blanket implementations. 
 
 Limitations
 - No extension/augmentation of existing types in another package.
@@ -1550,7 +1605,9 @@ func main() {
 }
 ```
 [top](#Table-Of-Contents)
+##### Python Example
 
+Coming soon. 
 ### Data Orientated Programming vs OOP - Choose Two 
 
 If you can do OOP, you can do DOP: DOP advocates for cleanly separating data from behaviour. Data is modelled using hierarchically nested structs/records/data-objects, and methods that operate on those data are typically extracted into top-level or module/package level functions. DOP tends to adopt more noun orientated naming approach whereas OPP tends to adopt a mix of nouns and verbs.
@@ -1558,11 +1615,11 @@ If you can do OOP, you can do DOP: DOP advocates for cleanly separating data fro
 >[!TIP]
 There is no need to extract logic such as data validation and invariant checking into utility functions, this logic should be co-located with your data types, in class/record constructors for example.
 
-Parlog: DOP: A sealed interface hierarchy with record implementations (DOP approach) is not appropriate for the JDK JSON API becauase of the lack of encapsulation, even though it seems like a perfect fit. This is because the lack of encapsulation makes internal evolution tricky which is not appropriate for a for long-lived public/stable API like the proposed JdK Json API. The DOP approach is great for application code though. 
+Here's an interesting comment I noticed after watching a Java update newscast from Nicolai Parlog from the Java DevRel team regarding whether to use DOP for the pending JDK standard JSON API (i.e. a core native Java standard library, not a 3rd party API like Jackson), paraphrasing: "A sealed interface hierarchy with `record` over `class` implementations (i.e. a DOP approach) is not appropriate for the JDK JSON API because of the lack of record encapsulation, even though it seems like a perfect fit. This is because the lack of encapsulation makes internal evolution tricky which is not appropriate for a for long-lived public/stable API like the proposed Java JSON API. However, the DOP approach is great for application code though." 
 
-#### OOPs - A Performance Mistake\?
-
-Casey: Compile time OOP encapsulation hierarchies are bad for performance code such as physics simulations and games. Casey advocates for an 'NP Component System' for better performance where 'Discriminated Union' types such as RustEnums, Java Records, Kotlin Inline value classes used with 'match/swtich-case' expressions are more performant than 'Fat Structs' that mix multiple members of different types behind interfaces. The former enables better performance as calculations can be efficiently applied to a bunch of these anaemic types by architecting the system's core logic around more relevant 'engineering boundaries' (type safe and no dynamic-dispatch) rather than as individual polymorphic domain objects (dynamic-dispatch e.g. as with traits). A nice analogy is that of column based storage (ecs - enum/case/swich?) vs row based storage (oop).  
+#### OOPs - A Performance Mistake\? ECS vs OOP
+TODO:
+CaseyM: Compile time OOP encapsulation hierarchies are bad for performance code such as physics simulations and games. Casey advocates for an 'NP Component System' for better performance where 'Discriminated Union' types such as RustEnums, Java Records, Kotlin Inline value classes and data classes used with 'match/swtich-case' expressions are more performant than 'Fat Structs' that mix multiple members of different types behind interfaces. The former enables better performance as calculations can be efficiently applied to a bunch of these (anaemic) types by architecting the system's core logic around more relevant 'engineering boundaries' that type-safe and have no dynamic-dispatch, rather than as individual polymorphic domain objects. A nice analogy is that of column vs row based storage in DBs (ECS - Entity Component System as an analogy to column based storage while row based storage is OOP).  
 
 Anaemic types that have one core value type, outlinking
 
@@ -2017,6 +2074,9 @@ configOps = NewConfigOptionsBuilder().id("someId").maxConnections(10).prefix("so
 e.g. [builder pattern in Golang]( https://dev.to/kittipat1413/understanding-the-builder-pattern-in-go-gp9) 
 
 [top](#Table-Of-Contents)
+#### State Pattern
+
+todo
 
 ### Information Hiding
 
@@ -2408,51 +2468,73 @@ TODO
 
 #### Error Handling - Model Exceptions as Values with Algebraic Data Types 
 
-With ADTs, for any single function, you can replace any thrown exceptions and return values using a single generic abstract data type. Using a sealed interface, all possible success and error variations can then be modelled using ad-hoc polymorphism. This means the _abstract_ data type becomes an _algebraic_ data type (ADT), also known as a 'nominal' or  'named' union type (an ADT provides the combination of aggregation *and* choice to model all possible variants). The ADT replaces exceptions with 'errors-as-values,' and multiple optional success types, if required. 
+With ADTs, for any single function, you can replace thrown exceptions with return values using a single generic abstract data type that wraps the exception or error. For example, using a sealed interface, all possible success AND error variations can be modelled using polymorphism. Our _abstract_ data type becomes an _algebraic_ data type (ADT), also known as a 'nominal' or  'named' union type (an ADT provides the combination of aggregation *and* choice to model all possible variants). The ADT replaces exceptions with an 'errors-as-values,' approach that can include multiple optional success and error types, if required. 
 
-This is super-powerful because you can add new success and/or error/exception return types through polymorphism, and also intentionally restrict all calling clients to a single permissible enum set. This is invaluable for developers of libraries for example where you explicitly want to limit the return types of your library functions and prevent clients overriding with their own implementations.  
+This is super-powerful because you can add new success and/or error/exception return types through polymorphism, and also intentionally restrict all calling clients to a single permissible set. This is invaluable for developers of libraries where you explicitly want to limit the return types of your library functions and prevent clients overriding with their own implementations.  
 
 [top](#Table-Of-Contents)
 
-To process the function's abstract return type with very little boilerplate, exhaustive pattern matching with switch ensures all possible variants are handled - the compiler will produce an error if any are unhandled. There is a lot to unpack here, but the example given below from Gavin Bierman clearly demonstrates this approach using modern Java (2024). The use of ADTs with pattern matching is being coined in the Java community as 'Data Orientated Programming,' and can be applied for modelling any data type hierarchies such as converting JSON to Java types, but Java certainly wasn't the first language to implement this approach. I suspect that this approach will become very popular in the Java community in the future, moving away from exceptions in higher level application code (note, as discussed above, exceptions will still have their place in lower level library and framework code). 
+To process the function's abstract return type with very little boilerplate, exhaustive pattern matching with switch ensures all possible variants are handled - the compiler will produce an error if any case is unhandled. There is a lot to unpack here, but the example given below from Gavin Bierman clearly demonstrates this approach using modern Java (2024). The use of ADTs with pattern matching is being coined in the Java community as 'Data Orientated Programming,' and can be applied for modelling many types of data type hierarchy (Gavin uses converting JSON to Java types as an example). I suspect that this approach will become very popular in the Java community in the future, moving away from exceptions in higher level application code (note, as discussed above, exceptions will still have their place in lower level library and framework code). 
 
 ```java
-// Java (java 23 with previews enabled)
-public class Main {
-    public static <V> void main(String[] args) {
+// (java 23 with previews enabled)
+import java.util.concurrent.TimeoutException;
 
-        // Switch uses exhaustive pattern matching and deconstruction. 
-        // A compile time error is generated if not all variations are handled.
-        Result<V> result = updatedLegacyFunction(4L);
-        switch (result) {
-            case Failure<V>(Throwable cause) -> println("Throwable "+cause);
-            case Interrupted<V> v -> println("TODO");
-            case Success<V> v  -> println("val is "+v);
-            case Timeout<V> v -> println("TODO");
-        }
- .  } 
+public class ResultsAsValuesDemoMain {
+    
+    // main method prints:
+    // handledsuccess: success[result=all good]
+    // timeout: java.util.concurrent.timeoutexception: too long
+    // interrupted: interrupted[result=i was interrupted]
+    // failure: java.lang.exception: failed
+    public static <V> void main(String[] args) {
+        MyResult<V> result = updatedLegacyFunction(4L);
+        printResult(result);
+        result = updatedLegacyFunction(15L);
+        printResult(result);
+        result = updatedLegacyFunction(10L);
+        printResult(result);
+        result = updatedLegacyFunction(7L);
+        printResult(result);
+   }
+
+   static <V> void printResult(MyResult<V> result){
+       // Switch uses exhaustive pattern matching and deconstruction.
+       // A compile time error is generated if not all variations are handled.
+       switch (result) {
+           case Failure<V>(Throwable cause) -> System.out.println("Failure: "+cause);
+           case Interrupted<V> val -> System.out.println("Interrupted: "+val);
+           case Success<V> val  -> System.out.println("Success: "+val);
+           case Timeout<V>(Throwable cause) -> System.out.println("Timeout: "+cause);
+       }
+   }
 
     // legacy function that throws exceptions
-    static long legacyFunction(long timeout)
-            throws InterruptedException, ExecutionException, TimeoutException {
-       // ...elided... 
+    static String legacyFunction(long timeout) throws InterruptedException, TimeoutException, Exception {
+        if (timeout < 5) return "All good";
+        else if(timeout > 10) throw new TimeoutException("Too long");
+        else if (timeout == 10) throw new InterruptedException("I was interrupted");
+        else throw new Exception("Failed");
     }
 
-    // can be re-written to return an ADT
-    static <V> Result<V> updatedLegacyFunction(long timeout){
-        if (timeout < 5) return (Result<V>) new Success<>("All good");
-        return new Failure<>(new TimeoutException());
+    // legacy function can be re-written to return an ADT 'error as result'
+    static <V> MyResult<V> updatedLegacyFunction(long timeout){
+        if (timeout < 5) return (MyResult<V>) new Success<>("All good");
+        else if(timeout > 10) return (MyResult<V>) new Timeout<>(new TimeoutException("Too long"));
+        else if (timeout == 10) return (MyResult<V>) new Interrupted<>("I was interrupted");
+        else return new Failure<>(new Exception("Failed"));
     }
 }
 
-// Result<V> is an Algebraic Data Type.  
-// ADTs combine power of union/sum types for modelling choice with 
-// product types to model custom wrapped errors. 
-sealed interface Result<V> permits Success, Failure, Timeout, Interrupted { }
-record Success<V>(V result) implements Result<V> {}
-record Failure<V>(Throwable result) implements Result<V> {}
-record Timeout<V>() implements Result<V> {}
-record Interrupted<V>() implements Result<V> {}
+// MyResult<V> is an Algebraic Data Type.
+// ADTs combine power of union/sum types for modelling choice with
+// product types to model custom wrapped errors.
+sealed interface MyResult<V> permits Success, Failure, Timeout, Interrupted { }
+record Success<V>(V result) implements MyResult<V> {}
+record Failure<V>(Throwable result) implements MyResult<V> {}
+record Timeout<V>(Throwable result) implements MyResult<V> {}
+record Interrupted<V>(V result) implements MyResult<V> {}
+
 ```
 
 Using ADTs to model better return types. After [Gavin Bierman's Devoxx talk, Java Language Futures](https://www.youtube.com/watch?v=NNPN5tvjzqA)
