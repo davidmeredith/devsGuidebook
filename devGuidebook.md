@@ -34,17 +34,15 @@ dv.view('toc')
     10. [Customer Bill of Rights - modified from Uncle Bob Martin Clean Agile](#Customer-Bill-of-Rights---modified-from-Uncle-Bob-Martin-Clean-Agile)
     11. [Developer Bill of Rights - modified from Uncle Bob Martin Clean Agile](#Developer-Bill-of-Rights---modified-from-Uncle-Bob-Martin-Clean-Agile)
     12. [Tooling](#Tooling)
-        1. [Do not be Smart - Use the Right Tools for the Job and for your customer](#Do-not-be-Smart---Use-the-Right-Tools-for-the-Job-and-for-your-customer)
+        1. [Use the Right Tools for the Job and for Your Customer](#Use-the-Right-Tools-for-the-Job-and-for-Your-Customer)
             1. [To Garbage Collect or Not To GC](#To-Garbage-Collect-or-Not-To-GC)
             2. [Monads and Green Threads need a GC](#Monads-and-Green-Threads-need-a-GC)
             3. [What about Rust or Zig](#What-about-Rust-or-Zig)
         2. [Kanban - Jira and Confluence](#Kanban---Jira-and-Confluence)
-        3. [Gitlab and Version Control](#Gitlab-and-Version-Control)
-        4. [Container Repository](#Container-Repository)
-        5. [Build Tools](#Build-Tools)
-        6. [Static Code Analysis](#Static-Code-Analysis)
-        7. [Containerisation for Portability](#Containerisation-for-Portability)
-        8. [Workflows and Containerisation](#Workflows-and-Containerisation)
+        3. [Build Tools](#Build-Tools)
+        4. [Static Code Analysis](#Static-Code-Analysis)
+        5. [Containerisation for Portability](#Containerisation-for-Portability)
+        6. [Workflows and Containerisation](#Workflows-and-Containerisation)
 4. [Coding Recommendations and Best Practices](#Coding-Recommendations-and-Best-Practices)
     1. [High Quality Code is Easy to Understand and Change](#High-Quality-Code-is-Easy-to-Understand-and-Change)
     2. [Quality is the best shortcut - Fowler Design Stamina Hypothesis](#Quality-is-the-best-shortcut---Fowler-Design-Stamina-Hypothesis)
@@ -54,8 +52,8 @@ dv.view('toc')
         3. [Do Not Name Abstractions After Constituent Parts](#Do-Not-Name-Abstractions-After-Constituent-Parts)
         4. [Abstractions - Finding a Balance](#Abstractions---Finding-a-Balance)
     4. [Testing has Three Main Purposes](#Testing-has-Three-Main-Purposes)
-    5. [Keep Most Functions SmallISH](#Keep-Most-Functions-SmallISH)
-    6. [Limit the Number of Function Arguments](#Limit-the-Number-of-Function-Arguments)
+    5. [Keep Most Functions Small-ish](#Keep-Most-Functions-Small-ish)
+    6. [Should I Limit the Number of Function Arguments](#Should-I-Limit-the-Number-of-Function-Arguments)
     7. [Separation of Concerns for Locality of Behaviour](#Separation-of-Concerns-for-Locality-of-Behaviour)
     8. [Information Hiding - Deep Rather than Shallow Interfaces](#Information-Hiding---Deep-Rather-than-Shallow-Interfaces)
     9. [Code Should be Cohesive](#Code-Should-be-Cohesive)
@@ -67,49 +65,51 @@ dv.view('toc')
         1. [Inheritance is Solely for Strong 'Is A' Type Relationships to Maintain State Invariants and Post-Conditions](#Inheritance-is-Solely-for-Strong-'Is-A'-Type-Relationships-to-Maintain-State-Invariants-and-Post-Conditions)
         2. [Inheritance Should be Explicitly Designed For](#Inheritance-Should-be-Explicitly-Designed-For)
         3. [Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Represent New Types](#Avoid-Paying-too-much-Inheritance-Tax---Use-Parametric-Polymorphism-to-Represent-New-Types)
-        4. [Ad-Hoc Polymorphism with Externally Implemented Interfaces to Represent New Types](#Ad-Hoc-Polymorphism-with-Externally-Implemented-Interfaces-to-Represent-New-Types)
-        5. [Simpler Extensions to Avoid Polluting Core Abstractions With Smaller Customisations](#Simpler-Extensions-to-Avoid-Polluting-Core-Abstractions-With-Smaller-Customisations)
+        4. [Ad-Hoc Polymorphism via Type-Classes - Externally Implemented Interfaces](#Ad-Hoc-Polymorphism-via-Type-Classes---Externally-Implemented-Interfaces)
+        5. [Simpler Extensions - Avoid Polluting Core Abstractions With Small Behaviour Customisations](#Simpler-Extensions---Avoid-Polluting-Core-Abstractions-With-Small-Behaviour-Customisations)
         6. [Structural Polymorphism and Duck Typing](#Structural-Polymorphism-and-Duck-Typing)
         7. [Sealing](#Sealing)
         8. [Composition / Delegation](#Composition-/-Delegation)
-    13. [Parametric Polymorphism Language Comparison](#Parametric-Polymorphism-Language-Comparison)  
-        1. [Rust Example](#Rust-Example)  
-        1. [Kotlin Example](#Kotlin-Example)  
-        1. [Java Example](#Java-Example)  
-        1. [Go Example](#Go-Example)
-    14. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
-        1. [OOPs - A Performance Mistake\?](#OOPs---A-Performance-Mistake\?)
-    15. [Dependency Rule and Dependency Inversion Principle](#Dependency-Rule-and-Dependency-Inversion-Principle)
+        9. [Parametric Polymorphism Language Comparison](#Parametric-Polymorphism-Language-Comparison)
+            1. [Rust Example](#Rust-Example)
+            2. [Kotlin Example](#Kotlin-Example)
+            3. [Java Example](#Java-Example)
+            4. [Go Example](#Go-Example)
+            5. [Python Example](#Python-Example)
+    13. [Data Orientated Programming vs OOP - Choose Two](#Data-Orientated-Programming-vs-OOP---Choose-Two)
+        1. [OOPs - A Performance Mistake\? ECS vs OOP](#OOPs---A-Performance-Mistake\?-ECS-vs-OOP)
+    14. [Dependency Rule and Dependency Inversion Principle](#Dependency-Rule-and-Dependency-Inversion-Principle)
         1. [A Hearts and Minds Analogy](#A-Hearts-and-Minds-Analogy)
-    16. [Dependency Injection and Inversion of Control to Implement the Dependency Rule and DI](#Dependency-Injection-and-Inversion-of-Control-to-Implement-the-Dependency-Rule-and-DI)
-    17. [Circular Dependencies via Setters and Lazy Initialisation](#Circular-Dependencies-via-Setters-and-Lazy-Initialisation)
-    18. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
-    19. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
+    15. [Dependency Injection and Inversion of Control to Implement the Dependency Rule and DI](#Dependency-Injection-and-Inversion-of-Control-to-Implement-the-Dependency-Rule-and-DI)
+    16. [Circular Dependencies via Setters and Lazy Initialisation](#Circular-Dependencies-via-Setters-and-Lazy-Initialisation)
+    17. [Dynamic Late Binding vs Static Binding](#Dynamic-Late-Binding-vs-Static-Binding)
+    18. [It Should Not be Possible to Create an Object in an Invalid State](#It-Should-Not-be-Possible-to-Create-an-Object-in-an-Invalid-State)
         1. [Throwing Exceptions from Constructors](#Throwing-Exceptions-from-Constructors)
         2. [Use a Smart Constructor or Factory to Return a Smarter Return Type](#Use-a-Smart-Constructor-or-Factory-to-Return-a-Smarter-Return-Type)
         3. [Use the Builder Pattern to Check Complex Invariants Before Building the Object](#Use-the-Builder-Pattern-to-Check-Complex-Invariants-Before-Building-the-Object)
-    20. [Know Some Design Patterns](#Know-Some-Design-Patterns)
+    19. [Know Some Design Patterns](#Know-Some-Design-Patterns)
         1. [The Strategy Pattern Example](#The-Strategy-Pattern-Example)
         2. [The Visitor Pattern](#The-Visitor-Pattern)
         3. [Builder Pattern for More Complex Object Creation Scenarios](#Builder-Pattern-for-More-Complex-Object-Creation-Scenarios)
-    21. [Information Hiding](#Information-Hiding)
-    22. [Keep it Simple Stupid KISS](#Keep-it-Simple-Stupid-KISS)
-    23. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
-    24. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
-    25. [Comment in line As You Go](#Comment-in-line-As-You-Go)
-    26. [The Boy Scout Rule](#The-Boy-Scout-Rule)
-    27. [Principal of Least Knowledge and Train Wrecks - The Law of Demeter](#Principal-of-Least-Knowledge-and-Train-Wrecks---The-Law-of-Demeter)
-    28. [FP vs OOP - Choose Two](#FP-vs-OOP---Choose-Two)
+        4. [State Pattern](#State-Pattern)
+    20. [Information Hiding](#Information-Hiding)
+    21. [Keep it Simple Stupid KISS](#Keep-it-Simple-Stupid-KISS)
+    22. [DRY Do not Repeat Yourself](#DRY-Do-not-Repeat-Yourself)
+    23. [YAGNI You Are not Going to Need It](#YAGNI-You-Are-not-Going-to-Need-It)
+    24. [Comment in line As You Go](#Comment-in-line-As-You-Go)
+    25. [The Boy Scout Rule](#The-Boy-Scout-Rule)
+    26. [Principal of Least Knowledge and Train Wrecks - The Law of Demeter](#Principal-of-Least-Knowledge-and-Train-Wrecks---The-Law-of-Demeter)
+    27. [FP vs OOP - Choose Two](#FP-vs-OOP---Choose-Two)
         1. [Be Careful Not to Pollute Pure Functions with Hidden Mutable State](#Be-Careful-Not-to-Pollute-Pure-Functions-with-Hidden-Mutable-State)
         2. [Make Private your Default Class Level Visibility](#Make-Private-your-Default-Class-Level-Visibility)
         3. [Make Immutability your Default](#Make-Immutability-your-Default)
         4. [Interior Mutability](#Interior-Mutability)
         5. [Use Calculations Where Possible to Limit Side Effects](#Use-Calculations-Where-Possible-to-Limit-Side-Effects)
         6. [Separate Operations from Calculations](#Separate-Operations-from-Calculations)
-    29. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
+    28. [Data Orientated Programming with Algebraic Data Types - ADTs](#Data-Orientated-Programming-with-Algebraic-Data-Types---ADTs)
         1. [Stringly typed functions are bad - use stronger types to model your arguments and return types](#Stringly-typed-functions-are-bad---use-stronger-types-to-model-your-arguments-and-return-types)
         2. [Use ADTs to Describe Types](#Use-ADTs-to-Describe-Types)
-    30. [Error Handling](#Error-Handling)
+    29. [Error Handling](#Error-Handling)
         1. [Error Handling - Four Types of Problems](#Error-Handling---Four-Types-of-Problems)
         2. [Error Handling - Fail Early](#Error-Handling---Fail-Early)
         3. [Error Handling - Be defensive at application boundaries, not within your inner domain logic](#Error-Handling---Be-defensive-at-application-boundaries,-not-within-your-inner-domain-logic)
@@ -134,10 +134,10 @@ dv.view('toc')
             4. [Can I Combine Monads and ADTs to Model Multiple Success or Error states](#Can-I-Combine-Monads-and-ADTs-to-Model-Multiple-Success-or-Error-states)
             5. [Other Error Monads such as Validation and Ior](#Other-Error-Monads-such-as-Validation-and-Ior)
             6. [Inlining within a Computation Block to Avoid Nesting](#Inlining-within-a-Computation-Block-to-Avoid-Nesting)
-    31. [Effect Orientated Programming](#Effect-Orientated-Programming)
-    32. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
+    30. [Effect Orientated Programming](#Effect-Orientated-Programming)
+    31. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
         1. [Know the difference between IO bound tasks and CPU bound tasks and their solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-solution-patterns)
-    33. [Security Development Practices](#Security-Development-Practices)
+    32. [Security Development Practices](#Security-Development-Practices)
 5. [Agile Process Guide aka Feedback Driven Development](#Agile-Process-Guide-aka-Feedback-Driven-Development)
     1. [Design Thinking Workshops and Scoping Document](#Design-Thinking-Workshops-and-Scoping-Document)
     2. [Epics and Work Package Span Multiple Sprints](#Epics-and-Work-Package-Span-Multiple-Sprints)
@@ -752,9 +752,8 @@ Several modern languages don’t even support inheritance (Rust, Zig, Go), relyi
 
 #### Ad-Hoc Polymorphism via Type-Classes - Externally Implemented Interfaces 
 
-Interfaces have limitations: they abstract over behaviours of instances, not behaviour of types which means you need to already have an instance to use them. Known as the expression problem. https://www.youtube.com/watch?v=Gz7Or9C0TpM Java proposes moving the behaviour to a third-party 'witness' object and make it easy to publish a witness to the external interface. 
-
-Some languages allow you to externally implement interfaces 'outside of a type' and 'associate' implementations of these interfaces with existing types without having to modify the original type, this is known as 'ad-hoc polymorphism' or 'type-classes' and comes from functional programming. It includes Traits in Rust and Type-Classes in Scala/Haskell/Kotlin, Protocols (Clojure/Swift), Implicits (Scala), Shapes and Extensions (C#). This is very convenient and powerful for easily creating '*blanket implementations*' for defining a new type for a whole group of types at once, even when you don't have access to the src code of those types. To do this, languages typically lexically split their core data types from the implementation of the external interface. There are subtly different approaches used to subsequently 'associate' or 'scope' the externally implemented interfaces to existing types, as explored below. 
+Some languages allow you to externally implement generic interfaces 'outside of a type' and associate implementations of these interfaces with other existing types without having to modify those original types, usually through generics. This is known as 'ad-hoc polymorphism' and comes from functional programming. It includes Traits in Rust and Type-Classes in Scala/Haskell/Kotlin, Protocols (Clojure/Swift), Implicits (Scala), Shapes and Extensions (C#). This is very convenient and powerful for easily creating '*blanket implementations*' for defining a new type for a whole group of types at once, even when you don't have access to the src code of those types. To do this, languages typically lexically split their core data types from the implementation of the external interface. There are subtly different approaches used to subsequently 'associate' or 'scope' the externally implemented interfaces to existing types, as explored below. 
+    Interfaces have limitations: they abstract over behaviours of instances, not behaviour of types which means you need to already have an instance to use them. This is known as the expression problem: https://www.youtube.com/watch?v=Gz7Or9C0TpM and Java proposes moving the behaviour to a third-party 'witness' object and make it easy to publish a witness to the external interface. 
 
 > [!TIP]
 Lexically splitting a type from a new type that defines new behaviour defined in an externally implemented interface and then associating the two together is different from _directly implementing the interface on the original type declaration itself_ (eg implementing an interface directly on a class). The main advantages is that you don't need to modify an existing type which enables new blanket implementations. Recognise that there are at least 3 code fragments required to do this: 1) an existing type which can be a 3rd party type where you don't have access to the src, 2) an externally implemented interface/trait/type-class, and 3) code that 'associates' or 'scopes' them together, typically via dynamic dispatch.  If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
@@ -1242,7 +1241,7 @@ fun main() {
 
 ##### Java Example
 
-While Rust-like traits are elegant and powerful, you can achieve a similar effect using a combination of interfaces with default method implementations, and a mixture of composition and inheritance. As you can see in the Java example below, there is a lot more boilerplate. Java's approach is still not as powerful as Rust and Kotlin's approaches which allow automatic 'blanket implementations' on existing types and trait/extension-function inheritance.
+While Rust-like traits are elegant and powerful, you can achieve a similar effect using a combination of interfaces with default method implementations, and a mixture of composition and inheritance. As you can see in the Java example below, there is a lot more boilerplate. Java's approach is still not as powerful as Rust and Kotlin's approaches which allow type-classes for automatic 'blanket implementations' on existing types and trait/extension-function inheritance.
 
 Limitations:
 - Extension of existing types from another package may not be possible (eg final classes).
@@ -1610,12 +1609,12 @@ func main() {
 Coming soon. 
 ### Data Orientated Programming vs OOP - Choose Two 
 
-If you can do OOP, you can do DOP: DOP advocates for cleanly separating data from behaviour. Data is modelled using hierarchically nested structs/records/data-objects, and methods that operate on those data are typically extracted into top-level or module/package level functions. DOP tends to adopt more noun orientated naming approach whereas OPP tends to adopt a mix of nouns and verbs.
+If you can do OOP, you can do DOP: DOP advocates for cleanly separating data from behaviour. Data is modelled using hierarchically nested structs/records/data-objects, and methods that operate on those data are typically extracted into top-level or module/package level functions. DOP tends to adopt more noun orientated naming approach whereas OPP tends to adopt a mix of nouns and verbs. DOP tends to violate the Open-Closed principle compared to OOPs Visitor pattern. For example, given a bunch of 3rd party types, with DOP you can exhaustively pattern match if a new 3rd party type was added and you would need to update your code to handle that new type (whereas visitor pattern can ignore the new type), so there is a trade-off. However, it can produce simpler code that is easier to reason about. 
 
 >[!TIP]
 There is no need to extract logic such as data validation and invariant checking into utility functions, this logic should be co-located with your data types, in class/record constructors for example.
 
-Here's an interesting comment I noticed after watching a Java update newscast from Nicolai Parlog from the Java DevRel team regarding whether to use DOP for the pending JDK standard JSON API (i.e. a core native Java standard library, not a 3rd party API like Jackson), paraphrasing: "A sealed interface hierarchy with `record` over `class` implementations (i.e. a DOP approach) is not appropriate for the JDK JSON API because of the lack of record encapsulation, even though it seems like a perfect fit. This is because the lack of encapsulation makes internal evolution tricky which is not appropriate for a for long-lived public/stable API like the proposed Java JSON API. However, the DOP approach is great for application code though." 
+Here's an interesting comment I noticed after watching a Java update newscast from Nicolai Parlog from the Java DevRel team regarding whether to use DOP for the pending JDK standard JSON API (i.e. a core native Java standard library, not a 3rd party API like Jackson), paraphrasing: "A sealed interface hierarchy with `record` chosen over `class` implementations (i.e. a DOP approach) is not appropriate for the JDK JSON API because of the lack of record encapsulation (and extensibility via open-closed), even though it seems like a perfect fit. This is because the lack of encapsulation makes internal evolution tricky which is not appropriate for a for long-lived public/stable API like the proposed Java JSON API. However, the DOP approach is great for application code though." 
 
 #### OOPs - A Performance Mistake\? ECS vs OOP
 TODO:
