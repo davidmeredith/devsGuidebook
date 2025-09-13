@@ -2,7 +2,7 @@
 
 Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre where I still work as the Research Software Engineering Group leader. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. There is nothing truly original here, but what I do hope to add is a balanced and informed opinion based on many years of hard won experience. Many of the published practices out there I agree with and have personally encountered or applied on projects, others I'm not so sure about. Happy reading. DaveM
 
-Last Updated 09/08/25.  Enjoy.
+Last Updated 13/09/25.  Enjoy.
 
 ## Table Of Contents
 
@@ -65,7 +65,7 @@ dv.view('toc')
         1. [Inheritance is Solely for Strong 'Is A' Type Relationships to Maintain State Invariants and Post-Conditions](#Inheritance-is-Solely-for-Strong-'Is-A'-Type-Relationships-to-Maintain-State-Invariants-and-Post-Conditions)
         2. [Inheritance Should be Explicitly Designed For](#Inheritance-Should-be-Explicitly-Designed-For)
         3. [Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Represent New Types](#Avoid-Paying-too-much-Inheritance-Tax---Use-Parametric-Polymorphism-to-Represent-New-Types)
-        4. [Ad-Hoc Polymorphism via Type-Classes - Externally Implemented Interfaces](#Ad-Hoc-Polymorphism-via-Type-Classes---Externally-Implemented-Interfaces)
+        4. [Ad-Hoc Polymorphism via Type-Classes aka Externally Implemented Interfaces](#Ad-Hoc-Polymorphism-via-Type-Classes-aka-Externally-Implemented-Interfaces)
         5. [Simpler Extensions - Avoid Polluting Core Abstractions With Small Behaviour Customisations](#Simpler-Extensions---Avoid-Polluting-Core-Abstractions-With-Small-Behaviour-Customisations)
         6. [Structural Polymorphism and Duck Typing](#Structural-Polymorphism-and-Duck-Typing)
         7. [Sealing](#Sealing)
@@ -706,18 +706,19 @@ If we acknowledge this interpretation, then polymorphism can include:
 | Structural Typing / Protocols      | A type is compatible if has methods that correspond to an interface protocol, with compile-time checks (eg Go)                                                                        |
 | Duck Typing                        | Same as Structural Typing with dynamic-dispatch (eg Python)                                                                                                                           |
 
-#### Inheritance is Solely for Strong 'Is A' Type Relationships to Maintain State Invariants and Post-Conditions 
+
+#### Inheritance is Solely for Strong 'Is A' Type Relationships for State, State-Invariants, and Post-Conditions 
 
 > [!TIP]
-A common mistake is to assume inheritance is mainly for sharing behaviour. It is not, it is for inheriting all public and protected members including state variables and, importantly, maintaining all invariants and post-conditions. 
+A common mistake is to assume inheritance is mainly for sharing behaviour. It is not, it is for inheriting all public and protected members including state variables and, importantly, requries all invariants and post-conditions are maintained. Interfaces and type-classes don't allow state sharing by design, they are designed to be lightweight solely for passing around behaviour. When you need to share state, you need to rely on inheritance and/or composition.
 
-The Liskov substitution principle mandates this - it should be possible to replace a parent object with any of its sub-types. The sub-type must therefore maintain all public members including methods and state, and all invariants (i.e. conditions and relationships across all state that hold true), and all post-conditions (i.e. the invariants hold after object construction and after applying behaviour). Inheritance is the mechanism that enables this. Inheritance should be reserved only for strong and natural 'is a' types of relationships. It can be over-applied, in fact you often do not need inheritance and should share behaviour using parametric polymorphism instead. As a memory aid, if you define a super class `Bird`, you would think adding the `fly()` method would be appropriate, but no, not all birds can fly and some can swim, so flying is a behaviour better added as by the `Flyer` interface, so `Penguine` can omit `fly()` (and also apply the `Swimmer` interface). 
+The Liskov substitution principle requires all invariants and post-conditions are maintained when extending a parent - it is required that a parent object can be replaced with any of its sub-types. The sub-type must therefore maintain all public members including methods, state, all invariants (i.e. conditions and relationships across all state that hold true), and all post-conditions (i.e. the invariants hold after object construction and after applying behaviour). Inheritance is the mechanism that enables all of this. Inheritance should be reserved only for strong and natural 'IS A' relationships e.g. a swallow is a bird. This principle can be over-applied, in fact you often do not need inheritance and should instead favour sharing behaviour using parametric polymorphism and/or type classes instead. As a memory aid, if you define a super class `Bird`, you would think adding the `fly()` method would be appropriate, but no, not all birds can fly and some can swim, so flying is a behaviour better added as by the `Flyer` interface, so `Penguine` can omit `fly()` (and also apply the `Swimmer` interface). I would say that the semantics of the parent need to be maintained by the children on all of the 'features' for the relationship to be a natural 'IS A' relationship.
 
 [top](#Table-Of-Contents)
 
 #### Inheritance Should be Explicitly Designed For
 
-By default, in some languages you can extend a class by default, unless you explicitly disallow it e.g., using the `final` keyword in Java or through object and interface Sealing. In modern languages, classes are typically closed to extension by default.  For example, in Kotlin you have to explicitly enable class extension using the `open` keyword to make it explicit that this class is designed to be extended. This makes SOLID’s 'Open Closed Principle' best-practice explicit in the language.  
+By default, in some languages you can extend a class by default (the wrong default), unless you explicitly disallow it e.g., using the `final` keyword in Java or through object and interface Sealing. In modern languages, classes are typically closed to extension by default.  For example, in Kotlin you have to explicitly enable class extension using the `open` keyword to make it explicit that this class is designed to be extended. This makes SOLID’s 'Open Closed Principle' best-practice explicit in the language.  
 
 [top](#Table-Of-Contents)
 
@@ -750,13 +751,21 @@ Several modern languages don’t even support inheritance (Rust, Zig, Go), relyi
 
 ![](Pasted%20image%2020241220110926.png)
 
-#### Ad-Hoc Polymorphism via Type-Classes - Externally Implemented Interfaces 
+#### Ad-Hoc Polymorphism via Type-Classes aka Externally Implemented Interfaces 
 
-Some languages allow you to externally implement generic interfaces 'outside of a type' and associate implementations of these interfaces with other existing types without having to modify those original types, usually through generics. This is known as 'ad-hoc polymorphism' and comes from functional programming. It includes Traits in Rust and Type-Classes in Scala/Haskell/Kotlin, Protocols (Clojure/Swift), Implicits (Scala), Shapes and Extensions (C#). This is very convenient and powerful for easily creating '*blanket implementations*' for defining a new type for a whole group of types at once, even when you don't have access to the src code of those types. To do this, languages typically lexically split their core data types from the implementation of the external interface. There are subtly different approaches used to subsequently 'associate' or 'scope' the externally implemented interfaces to existing types, as explored below. 
-    Interfaces have limitations: they abstract over behaviours of instances, not behaviour of types which means you need to already have an instance to use them. This is known as the expression problem: https://www.youtube.com/watch?v=Gz7Or9C0TpM and Java proposes moving the behaviour to a third-party 'witness' object and make it easy to publish a witness to the external interface. 
+Some languages allow you to externally implement generic interfaces 'outside of a type' and associate implementations of these interfaces to other existing types without having to modify those original types. This is known as 'ad-hoc polymorphism' and comes from functional programming. Approaches differ across languages, and includes Traits in Rust and Type-Classes in Scala/Haskell/Kotlin, Protocols (Clojure/Swift), Implicits (Scala), Shapes and Extensions (C#). 
+
 
 > [!TIP]
-Lexically splitting a type from a new type that defines new behaviour defined in an externally implemented interface and then associating the two together is different from _directly implementing the interface on the original type declaration itself_ (eg implementing an interface directly on a class). The main advantages is that you don't need to modify an existing type which enables new blanket implementations. Recognise that there are at least 3 code fragments required to do this: 1) an existing type which can be a 3rd party type where you don't have access to the src, 2) an externally implemented interface/trait/type-class, and 3) code that 'associates' or 'scopes' them together, typically via dynamic dispatch.  If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
+A type class is an abstract, parameterized type that lets you add new behaviour (not state) to any closed / existing data type without using sub-typing.
+
+Why? Ad-hoc polymorphism is very convenient and powerful for easily creating '*blanket implementations*' for defining a new type for a whole group of types at once, even when you don't have access to the src code of those types. This can't be done with interfaces that are defined directly on types. Brian Goetz describes the limitations of traditional interfaces where you implement the interface directly on the type as follows: "Interfaces have limitations: they abstract over behaviours of instances, not behaviour of types which means you need to already have an instance of a type to use them. This is known as the expression problem." This basically means you need the src of a type in order to directly implement an interface to extend the type with new behaviour. To address this limitation, the Java architects are exploring the use of type classes, the current proposal is to move additional behaviour to a third-party 'witness' object and publish a witness to the existing/external type [as explained here](https://www.youtube.com/watch?v=Gz7Or9C0TpM). 
+
+There are subtly different approaches used to 'associate' or 'scope' the externally implemented interfaces to existing types, as explored below. Languages typically lexically split their core data types from the implementation of the external interface, and some languages use parametersied generics on the external interfaces to provide an  implementation for the (existing) type.  
+
+
+> [!TIP]
+Lexically splitting a type from a new type that defines new behaviour defined in an externally implemented interface (a type class) and then associating the two together is different from _directly implementing the interface on the original type declaration itself_ (eg implementing an interface directly on a class). The main advantages is that you don't need to modify an existing type which enables new blanket implementations. Recognise that there are at least 3 code fragments required to do this: 1) an existing type which can be a 3rd party type where you don't have access to the src, 2) an externally implemented interface/trait/type-class, and 3) code that 'associates' or 'scopes' them together.  If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
 
 The following Rust example provides a simple example. Note that in this example, Rust uses static dispatch or 'monomorphization' for performance reasons and not dynamic-dispatch (which allows you to create multiple implementations for the same type at small performance costs). 
 ```Rust
@@ -782,12 +791,12 @@ Advantages of Ad-hoc Polymorphism:
 
 Disadvantages of Ad-hoc Polymorphism: 
 - Increased code complexity.
-- Dynamic dispatch has a small performance penalty (usually it is not a problem for the majority of code-bases). 
+- If dynamic dispatch is used, it has a small performance penalty (usually it is not a problem for the majority of code-bases). 
 - Externally implemented interfaces don't carry state (member variables). For example, as cited by the Rust book: "trait objects differ from traditional objects in that we can’t add data to a trait object. Trait objects aren’t as generally useful as objects in other languages: their specific purpose is to allow abstraction across common behaviour."  Note that some languages allow variables to be declared on interfaces but with caveats e.g., Kotlin allows abstract properties or accessor methods with no backing fields (see Kotlin docs) to define what properties (and methods) a class must implement.   
 
 The following Kotlin example provides another example. You will notice that the approach is different:
 - Rust: A trait implementation is linked to an existing type using a code fragment that references the trait implementation and type/struct:  `impl <someTrait> for <someStruct>`. 
-- Kotlin: Separate objects are used to create implementations of our external interface, and these instances are then indirectly attached ('scoped' in kotlin terminology) to our existing type at the call-site using: `with(someScopeObj)` 'scope' function. This process uses 'dynamic dispatch' to supply the correct implementation, not static dispatch. In this model, recognise that there are 4 separate fragments of code: 1) the existing type, 2) the interface, 3) different implementations of the interface, 4) a scope function (`with()`) at the call-site to supply the required implementation (scope object). 
+- Kotlin: Separate objects are used to create implementations of our external interface, and these instances are then indirectly attached ('scoped' in kotlin terminology) to our existing type at the call-site using: `with(someScopeObj)` 'scope' function. This process uses dynamic dispatch to supply the correct implementation, not static dispatch. In this model, recognise that there are 4 separate fragments of code: 1) the existing type, 2) the interface, 3) different implementations of the interface, 4) a scope function (`with()`) at the call-site to supply the required implementation (scope object). 
 
 ```Kotlin
 data class Tweet(val tweet: String, val retweet: String) // Existing type (assume Tweet is 3rd party)
@@ -825,6 +834,8 @@ fun <T, D> globalFuncWithMultipleContexts(toSummarise: T, toSayGoodbye: D) =
         val tweet = Tweet("my tweet", "my retweet") // Create existing type 
         with(TweetSummaryScope) {   // scope Summary<Tweet> to provide extra behaviour on Tweets
             with(AnyFarewellScope) { // scope Farewell<Any> to provide extra behaviour on any object
+                // if two implementations for the same type class are scoped with 'with' e.g. consider another nested 'with(AnyFarewellScope2) {}'
+                // then the last implementation wins. 
                 assertEquals("Tat ta", tweet.sayBye()) // Add behaviour to existing type 'String'
                 // example local scoped anonymous object, prevents pollution of global scope (just to demo the concept)
                 val anyFarewellScope2 = object : Farewell<Any> { override fun Any.sayBye(): String = "Bye bye" }
@@ -886,7 +897,7 @@ fun <E> consumer(mutableList: MutableList<E>, index1: Int, index2: Int) {
 
 #### Structural Polymorphism and Duck Typing
 
-Some languages have have ‘Duck Typing’ (e.g. Go, Py), this is like using an interface at a call site (eg the type of a function parameter or return value), but *does not require you to explicitly define a contract on a type using scaffold code* such as `class A implements interfaceB` (Java) or `impl traitB for typeA` (Rust) or a `with` scope function in conjunction with a context parameter (Kotlin). Instead, a particular type implicitly implements an interface if has the corresponding methods available: “if it walks and swims like a duck, it’s probably a duck,” otherwise an error is generated. If the type checking occurs at compile time, it is often called ‘Structural Typing/Polymorphism’ eg `Template` classes in C++ and in Go. If type checking occurs at runtime and produces runtime errors, it is called "Duck typing" which is more common in dynamic languages.  
+Some languages have have ‘Duck Typing’ (e.g. Go, Py) where interfaces are used as function parameters or return values, or to parameterise other types such as lists, but importantly, *you do not need to explicitly define an interface on a type itself for that type to conform to the contract.*  For example, you wouldn't declare: `class A implements interfaceB` (Java) or `impl traitB for typeA` (Rust). Instead, a particular type implicitly implements an interface if has the corresponding methods available: “if it walks and swims like a duck, it’s probably a duck.” If the type checking occurs at compile time, it is often called ‘Structural Typing/Polymorphism’ eg `Template` classes in C++ and in Go. If type checking occurs at runtime and produces runtime errors, it is called "Duck typing" which is more common in dynamic languages.  
 
 >[!TIP]
 The ease and speed of development that duck typing brings is great for scripting and smaller code bases, but as the size and complexity of the code increases, I would advise using scaffolding code for stronger compile time type checking (for Pythonistas, you can always introduce static typing such as Python’s optional type hints, and for Go, see the code in the 'Go Example' above for a tip to check a type implements an interface). 
@@ -895,12 +906,136 @@ The ease and speed of development that duck typing brings is great for scripting
 
 #### Sealing 
 
-Some languages allow the developer to seal interfaces/classes/types in order to restrict the range of allowed subtypes. 
+Some languages (Java, Kotlin, I'm not sure if there are others) allow you to seal interfaces and classes in order to restrict the range of allowed subtypes for inheritance and interface implementations. Sealing provides more control over inheritance alone. 
 
 >[!TIP]
-Why sealing? Limiting the extensibility of types is a useful feature for domain modelling when code reuse is not a goal. Instead, the restriction of subtypes to a known set helps comprehension, clarity, type misuse, and security. Sealing mitigates the need for defensive coding for unknown subtypes, and is useful for increasing the security of libraries. It facilitates exhaustive `when` and/or `switch` case patterns for Algebraic Data Types (see ADTs below).
+Why sealing? Limiting the extensibility of types is a useful feature for API design and domain modelling when you need to control code reuse. So, why would you want to control code reuse? The answer is that restriction of subtypes to a known set helps comprehension, clarity, type misuse, and security. Sealing mitigates the need for defensive coding for unknown subtypes, and is useful for increasing the security of libraries. It also facilitates exhaustive `when` and/or `switch` case patterns for Algebraic Data Types (see ADTs below).
 
-As a simple example, consider a sealed result class that has a fixed number of subtypes to indicate different kinds of results. You can react to the different results via exhaustive when/switch patterns. In another domain modelling example, consider subtypes of the class `Shape` - the author may be interested in the clarity of code that handles known subclasses of Shape, and is not interested in writing defensive code for unknown subclasses of `Shape`.
+For Java devs: A `final` class can't be subclassed. A package-private class (the default in Java, no modifier) can only have subclasses in the same package, not from another package. This means you need to make a class public to extend from it (or `protected` for a different package in the same project). If an abstract base class is public, this allows uncontrolled extended by anyone, which we want to prevent. So, how do we allow public access but prevent free/uncontrolled class extension or interface implementation? - the answer is sealing; 
+
+>[!TIP] 
+In Java/Kotlin, the main motivation behind sealed classes and sealed interfaces is to have the possibility for a superclass or interface to be widely accessible, but not widely extensible, allowing only controlled extension where you need it. Sealing opens up several advantages for API design. 
+
+As a simple example, consider a sealed result class that has a fixed number of subtypes to indicate different kinds of results. You can react to the different results via exhaustive when/switch patterns. In another domain modelling example, consider subtypes of the class `Vehicle` - the author may be interested in the clarity of code that handles known subclasses such as `Car` and `Lorry`, and is not interested in writing defensive code for every unknown type of vehicle.
+
+```Java
+package org.vehicles_sealing;
+
+// file MOT.java
+public sealed interface MOT permits Car, Lorry {
+    int getMaxMOTIntervalMonths();
+    default int getMaxDistanceBetweenMOT(){
+       return 10_000;
+    }
+}
+
+// In a separate file, same package: file Vehicle.java
+public abstract sealed class Vehicle permits Car, Lorry {
+
+    private final String registrationNumber;
+
+    public Vehicle(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
+    }
+
+    public String getRegistrationNumber() {
+        return registrationNumber;
+    }
+}
+
+// In a separate file, same package: Car.java
+public final class Car extends Vehicle implements MOT {
+
+    private final int numberOfSeats;
+
+    public Car(int numberOfSeats, String registrationNumber) {
+        super(registrationNumber);
+        this.numberOfSeats = numberOfSeats;
+    }
+
+    public int getNumberOfSeats() {
+        return numberOfSeats;
+    }
+
+    @Override
+    public int getMaxMOTIntervalMonths() {
+        return 12;
+    }
+}
+
+// In a separate file, same package: Lorry.java
+// The use of non-sealed allows for controlled extension points where you may want them, e.g. Truck.
+public non-sealed class Lorry extends Vehicle implements MOT {
+
+    private final int loadCapacity;
+
+    public Lorry(int loadCapacity, String registrationNumber) {
+        super(registrationNumber);
+        this.loadCapacity = loadCapacity;
+    }
+
+    public int getLoadCapacity() {
+        return loadCapacity;
+    }
+
+    @Override
+    public int getMaxMOTIntervalMonths() {
+        return 12;
+    }
+    
+// In a separate file, same package: Truck.java
+public final class Truck extends Lorry {
+    private final boolean articulated;
+    public Truck(int loadCapacity, String registrationNumber, boolean articulated) {
+        super(loadCapacity, registrationNumber);
+        this.articulated = articulated;
+    }
+
+    public boolean isArticulated() {
+        return articulated;
+    }
+}
+
+```
+
+Corresponding Test case:
+```Java
+package org.vehicles_sealing;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CarTest {
+
+    @Test
+    void carTests() {
+        Car car = new Car(4, "MyReg");
+        Lorry lorry = new Lorry(5_000, "lorryReg");
+        Truck truck = new Truck(10_000, "lorryReg", true);
+        assertEquals(4, car.getNumberOfSeats());
+    }
+
+    private void exhaustiveDemo(Vehicle v){
+       switch (v) {
+           case Car car -> {
+               System.out.println("its a car, MOT due: "+car.getMaxMOTIntervalMonths()+" or after "+
+                       car.getMaxDistanceBetweenMOT()+" miles");
+           }
+           // truck must come before Lorry to be exhaustive, as Truck extends Lorry
+           case Truck truck -> {
+               System.out.println("its a truck, is it articulated: "+truck.isArticulated() +
+                       " MOT due:"+truck.getMaxMOTIntervalMonths()+ " or after "+
+                       truck.getMaxDistanceBetweenMOT()+" miles");
+           }
+           case Lorry lorry -> {
+               System.out.println("its a lorry, MOT due: "+lorry.getMaxMOTIntervalMonths() + " or after "+
+                       lorry.getMaxDistanceBetweenMOT()+ " miles");
+           }
+       }
+    }
+}
+
+```
 
 [top](#Table-Of-Contents)
 
