@@ -2,7 +2,7 @@
 
 Hi there. This is my attempt at writing a developer guidebook 📖. I originally did this for the STFC Hartree Centre where I still work as the Research Software Engineering Group leader. Feel free to raise issues if you disagree with anything, its just my opinion which is subject to change - I believe that strong opinions should be loosely held. There is nothing truly original here, but what I do hope to add is a balanced and informed opinion based on many years of hard won experience. Many of the published practices out there I agree with and have personally encountered or applied on projects, others I'm not so sure about. Happy reading. DaveM
 
-Last Updated 13/09/25.  Enjoy.
+Last Updated 19/12/25.  Enjoy.
 
 ## Table Of Contents
 
@@ -137,6 +137,8 @@ dv.view('toc')
     30. [Effect Orientated Programming](#Effect-Orientated-Programming)
     31. [Concurrency and Parallelism](#Concurrency-and-Parallelism)
         1. [Know the difference between IO bound tasks and CPU bound tasks and their solution patterns](#Know-the-difference-between-IO-bound-tasks-and-CPU-bound-tasks-and-their-solution-patterns)
+        2. [Coroutines vs Virtual Threads](#Coroutines-vs-Virtual-Threads)
+        3. [Structured Concurrency and Cancellation](#Structured-Concurrency-and-Cancellation)
     32. [Security Development Practices](#Security-Development-Practices)
 5. [Agile Process Guide aka Feedback Driven Development](#Agile-Process-Guide-aka-Feedback-Driven-Development)
     1. [Design Thinking Workshops and Scoping Document](#Design-Thinking-Workshops-and-Scoping-Document)
@@ -166,9 +168,9 @@ _"Programs must be written for people to read, and only incidentally for machine
 
 ### Target Audience
 
-This guide is intended for folks who read and write code, mostly for the full-stack application/infrastructure domain. It is not possible to produce a ‘one size fits all’ set of guidelines for everyone. If you predominantly use Python/R via Jupyter Notebooks for example, much of this advice might be overkill, and for that reason, there is separate section for notebooks in the original guidebook. Recognise there are ways to bring more good software practices into Notebooks, see [https://nbdev.fast.ai/](https://nbdev.fast.ai/) which includes good stuff such as Git-friendly notebooks, built in support for CI/CD, support for tests as regular notebook cells and more.
+This guide is intended for folks who read and write code, mostly for the full-stack application/infrastructure developers. It is not possible to produce a ‘one size fits all’ set of guidelines for everyone. If you predominantly use Python/R via Jupyter Notebooks for example, much of this advice might be overkill, and for that reason, there is separate section for notebooks in the original guidebook. Recognise there are ways to bring more good software practices into Notebooks, see [https://nbdev.fast.ai/](https://nbdev.fast.ai/) which includes good stuff such as Git-friendly notebooks, built in support for CI/CD, support for tests as regular notebook cells and more.
 
-Similarly, if you’re focussing on numerical computation in HPC using C/C++ or Fortran (formula translator), many of the guidelines are simply not appropriate; computational science is a very different domain to full-stack application development, each optimising for different priorities. Please bear this in mind, these are not rules, interpret them judiciously for your scenario, and as ever, the real answer is always “it depends”. I'll keep evolving this document and welcome any comments.
+Similarly, if you’re focussing on numerical computation in HPC using C/C++ or Fortran (formula translator), many of the guidelines are simply not appropriate; computational science is a very different domain to full-stack application development and enterprise systems, each optimise for different priorities. Please bear this in mind, these are not rules, interpret them judiciously for your scenario, and as ever, the real answer is always “it depends.” I'll keep evolving this document and welcome any comments.
 
 ## High Level Recommendations 
 ### If it is not in Git it does not exist
@@ -728,7 +730,7 @@ By default, in some languages you can extend a class by default (the wrong defau
 By design, inheritance is an intentionally strong 'Is A' relationship; For a sub-type to act as its parent type (the Liskov substitution principle), then it needs to maintain the same behaviour, AND the same invariants AND post-conditions. A common mistake is to focus just on behaviour, inheritance is a much stronger relationship than that.
 
 > [!TIP]
-I say "don't pay too much inheritance tax" intentionally because inheritance is great in certain scenarios such as in building frameworks, libraries, and for strong/natural "Is A" relationships e.g. "type A is a type of B." A great example is the 'Either' monad - the Left/error and Right/success objects inherit from the Either base class, so an Either can be Left or Right, but never both. 
+I say "don't pay too much inheritance tax" intentionally because inheritance is great in certain scenarios such as in building frameworks, libraries, and for strong/natural "Is A" relationships e.g. "type A is a type of B." A great example is the 'Either' monad - the Left/error and Right/success objects inherit from the Either base class, so an Either can be Left or Right, but never both. Another good example is in ORMs (object relational mapping frameworks) where it is common to extend a base 'Entity' class that provides the primary key for the entity/relation and any the invariants associated with the PK.  
 
 However, deeply nested inheritance hierarchies where sub-classes extend super-classes can become very brittle. This is because you are structurally tied to the classes in the parent hierarchy: 
   - If you don't need all of the characteristics provided through inheritance, it can be difficult to 'split-out' what is not wanted without widespread refactoring. 
@@ -2295,8 +2297,10 @@ Modern languages make class members private by default, at the individual class 
 
 #### Make Immutability your Default
 
-- Global Mutable State is evil and will eventually cause you problems.
-- Modern languages are immutable by default, for example, in Rust and Kotlin, you need to specifically ‘opt into’ mutable variables using special keywords such as ‘mut’ and ‘val’ (immutable) instead of ‘var’ (mutable).
+- Shared and mutable global State is evil and will cause you problems in a concurrent environment.
+- Modern languages are immutable by default. For example, in Rust and Kotlin, you need to specifically ‘opt into’ mutable variables using special keywords such as ‘mut’ (Rust) and ‘val’ (Kotlin) which define immutable state instead of ‘var’ which is mutable.
+- Return immutable defensive copies of data from methods and functions rather than the original mutable data (e.g. return a immutable copy of an object from a HashMap instead of the actual object). Defensive immutable copies are thread-safe, while our mutable references stored within our HashMap can stay safely encapsulated.
+  - This is very much a Rust way of thinking - in Rust you have to think more deeply about who owns what and when. More specifically, Rust allows only one mutable reference to be valid at any one time OR multiple immutable references, but never both (one mutable & many imutable) at the same time. It is possible to manually represent this concept in other languages, as described our HashMap example in the previous bullet (note however, that this example does not go as far as borrowing vs ownership when passing data to functions).  
 
 [top](#Table-Of-Contents)
 
@@ -2680,14 +2684,14 @@ Using ADTs to model better return types. After [Gavin Bierman's Devoxx talk, Jav
 Before I get to error monads such as `Either` and `Validated`, I'll try to briefly explain what Monads are. Monads are notoriously difficult concept to grasp, but once you have, its pretty easy to hold onto and it is a very useful concept (opinion) that can be implemented in most programming languages, not just in FP.
 
 > [!TIP]
-Error monads aren't strictly necessary if use ADTs as return types or if your language has its own approach to 'errors-as-values,' however, monads add some extra smarts to facilitate happy-path functional composition. Please read on. 
+Error monads aren't strictly necessary if using ADTs as return types or if your language has its own approach to 'errors-as-values.' However, monads add some extra smarts to facilitate happy-path functional composition. Please read on. 
 
 ##### What are Monads aka Higher-Kinded Types
 
-A monad is a burrito 🌯 (or a bento-box 🍱 😊). If you've looked into functional programming, you'll understand this aphorism because monads are a notoriously difficult concept to explain: Like a burrito, a monad is a wrapper object (the tortilla) around a type (the filling). This sounds like ADTs right? yes, but monads also add additional 'mapper' methods that are used to apply passed-in computations on the monad's wrapped type in order to transform it into a new result type (or produce a wrapped error). These mapper methods can be chained together as needed. Monads also allow some additional behind the scenes logic to be applied in addition to the passed-in transformations/computations - these are extra 'super-powers' that a particular monad provides. A simple example is the writer monad that appends to an append-log behind the scenes whenever writer mapper methods are called. 
+A monad is a burrito 🌯 (a better analogy is a bento-box 🍱 😊). If you've looked into functional programming, you'll understand this aphorism because monads are a notoriously difficult concept to explain: Like a burrito, a monad is a wrapper object (the tortilla) around a type (the filling). This sounds like ADTs right? yes, but monads also add additional 'mapper' methods that are used to apply passed-in computations on the monad's wrapped type in order to transform it into a new result type (or produce a wrapped error). These mapper methods can be chained together as needed. Monads also allow some additional behind the scenes logic to be applied in addition to the passed-in transformations/computations - these are extra 'super-powers' that a particular monad provides. A simple example is the writer monad that appends to an append-log behind the scenes whenever writer mapper methods are called. 
 
 > [!TIP]
-Here's my definition: A monad is a design pattern that wraps a type so that operations can be chained together to transform that type while also allowing additional 'extra super power' processing to occur behind the scenes.
+Here's my definition: A monad is a design pattern that wraps a type so that operations can be chained together to transform that type while also allowing additional processing behind the scenes, such as generating additional side-effects, for example.
 
 I prefer the bento-box analogy, because there are more moving parts to a bento-box which better describes a monad (opinion). Having a basic understanding is a useful concept to grasp. 
 
@@ -2751,7 +2755,7 @@ Regarding exceptions in functional composition: If your language uses ‘Checked
 [top](#Table-Of-Contents)
 ##### Example Type Safe Functional Composition by Short-Circuiting on Errors
 
-In the following examples, we will use monads to simplify a functional call chain. The functions that we will compose include monad aware functions and basic functions that return plain types:
+In the following examples, we will use monads to simplify a functional call chain. The functions that we will compose include monad aware functions and basic functions that return plain types. The [example repo for code below here](https://github.com/davidmeredith/monads-explained-kotlin-updated)
 
 ```Kotlin
     // Kotlin
@@ -3060,15 +3064,15 @@ A bento-box is better analogy for describing higher kinded types - why? coming s
 
 ### Concurrency and Parallelism
 
-In computing, concurrency is not parallelism, despite the two terms having very similar dictionary definitions. *Concurrency is a software concern* involving context switching of a process on a single CPU core via a ‘kernel thread’ (these types of thread are also commonly referred to as process thread, carrier thread, and platform thread) . Context switching gives the illusion that multiple things are happening at once because the time slicing is so small. *True parallelism is both a software and hardware concern* which requires increasingly more hardware to do more things at once. This can range from multiple cores on one CPU, multiple CPUs, multiple nodes, remote actors, remote VMs, cloud functions such as Lambda and more. 
+In computing, concurrency is not parallelism, despite the two terms having very similar dictionary definitions. *Concurrency is a software concern* involving context switching of a process on a single CPU core via a ‘kernel thread’ (these types of thread are also commonly referred to as 'process thread,' 'carrier thread,' and 'platform thread') . Context switching gives the illusion that multiple things are happening at once because the time slicing is so small. *True parallelism is both a software and hardware concern* which requires increasingly more hardware to do more things at once. This can range from multiple cores on one CPU, multiple CPUs, multiple nodes, remote actors, remote VMs, clustered VMs, cloud functions such as AWS Lambda and more. 
 
 For example, parallelism with increasingly heavyweight implementations from small to large could range from:
-- Single host with shared memory parallelism using low level platform threads and locks (mutexes), where threads map to cores. Programming with platform threads and locks is low level and is really for library developers rather than application developers.
-- Single host with shared memory parallelism using software abstractions built on lower level threads, such as co-routines with channels for sharing data, virtual threads a.k.a. fibers, async/await methods, pragmas to parallelise tight loops such as used in in OpenMP.   
-- Multi-processing where each child-process has its own memory space and data is separately distributed to each process for processing, or data can be shared using inter-process-communication mechanisms (IPC) such as memory-mapped files (memory and disk) or messaging over sockets.
+- Single host with shared memory parallelism using low level platform threads and locks (mutexes), where threads map to cores. Programming with platform threads and locks is low level.
+- Single host with shared memory parallelism using software abstractions built on lower level platform threads, such as suspending functions commonly called co-routines, virtual threads a.k.a. fibers, async/await methods/functions, pragmas to parallelise tight loops such as used in in OpenMP.   
+- Multi-processing where each child-process has its own memory space where data is separately distributed to each process for processing, or data can be shared using inter-process-communication mechanisms (IPC) such as memory-mapped files (memory and disk) or messaging over sockets.
 - K8s worker nodes/pods hosted in the same K8s cluster with communication over ethernet. 
-- HPC using compute clusters where 'tightly coupled' workloads message-pass over a high performance interconnect (MPI). 
-- Geographically distributed compute nodes/servers such as remote Actors / FaaS / Grid computing / service mesh. 
+- HPC using compute clusters where 'tightly coupled' workloads message-pass over a high performance interconnect (MPI), VM clusters (e.g. Apache Terracotta). 
+- Geographically distributed compute nodes/servers such as remote Actors / FaaS / Grid computing / service mesh.  
 - Geographically distributed multi-clustering (e.g., Grid, federated HPC - a potential route to exa-scale). 
 
 Some general recommendations:
@@ -3098,9 +3102,10 @@ Some general recommendations:
 
 *IO Bound Tasks* require asynchronous patterns to achieve concurrency. The solution patterns include:
 
-- **Async/Await** (e.g., Rust/C# async/await functions and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your functions are typically split into two types; 1) red functions for asynchronous code typically requiring special keyword modifiers to annotate functions and their call-sites e.g. `async` (function) and `await` (call-site) and; 2) blue functions for plain synchronous code having no modifiers. Here is the [original and now famous blog - What Color is Your Function](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)
+- **Async/Await** (e.g., Rust/C# async/await functions and Kotlin’s suspending functions). These are often referred to as ‘coloured approaches’ because your functions are typically split into two types; 1) red functions for asynchronous code typically requiring special keyword modifiers to annotate functions and their call-sites e.g. `async` (function) and `await` (call-site) and; 2) blue functions for plain synchronous code having no modifiers. Here is the [original and now famous blog - What Color is Your Function](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function). If await is called on an async function, this often causes other async functions to be suspended. 
 - **Colourless Coroutines** (e.g. Go's Goroutines). Go's Goroutines are not coloured because they only require the `go` keyword at the function call-site, there is no need to annotate a function as asynchronous which allows you to call regular functions in an asynchronous way (although you frequently need to pass in concurrency primitives to share data such as `Channels`). 
-- **Virtual-Threads / Green Threads / Fibres** such as the ‘colourless’ [Project Loom](https://wiki.openjdk.org/display/loom/Main) for the JDK where the virtual threads are implemented in user space using continuations. With the release of Loom, the venerable JVM platform arguably boasts the most advanced approach to concurrency. JVM languages can implement a truly colourless programming approach on top using a combination of platform and virtual threads and higher-level abstractions such as the streams API. 
+- **Virtual-Threads / Green Threads / Fibres** such as the ‘colourless’ [Project Loom](https://wiki.openjdk.org/display/loom/Main) for the JDK where the virtual threads are implemented in user space using continuations. With the release of Loom, the venerable JVM platform arguably boasts one of the most advanced approach to concurrency. JVM languages can implement a (partly) colourless programming approach on top using a combination of platform and virtual threads and higher-level abstractions such as the streams API. 
+  - I would argue that Loom's virtual threads are not entirely colourless (which is why I say 'partly' colourless above). This is because when handling thread processing logic in functions/methods, often you must mark the method with a `throws InterruptedException`. This throws clause is part of the method signature, it is a contract indicating that this method can be interrupted by another thread (it can be pre-empted). The throws clause marks the method as an asynchronous method, which means the method is not itself colourless. 
 - **Continuations** are very low-level and are used to implement patterns such as coroutines & virtual threads. Continuations can be suspended, stored on the heap, and restarted. Typically, you would not directly use continuation APIs using a Continuation Passing Style (CPS) in your own application logic, although some languages do have public APIs for CPS.
 - **Async-Wrapper types such as Futures & Promises.** Note that these are really just higher-level synchronisation primitives, and the task that you await itself would need to be non-blocking to achieve high levels of concurrency.  
 - **Call-Back functions** (beware ‘call-back hell’ as often seen in JavaScript). In fact, more friendly ‘synchronous’ patterns such as Coroutines and Continuations simply abstract much of the lower-level call backs from the programmer.
@@ -3122,6 +3127,30 @@ Some general recommendations:
 If you must use low-level locks and synchronization primitives with critical sections, try to use ‘re-entrant’ locks for better composability and performance over non-re-entrant synchronized blocks. Check if the languages mutexes (semaphores, count-down latches) are re-entrant (language agnostic advice).
 
 [top](#Table-Of-Contents)
+
+#### Coroutines vs Virtual Threads
+
+>[!TIP]
+Coroutines (concurrent routines), also known as continuations, are NOT lightweight threads, they are an entirely different abstraction from threads. A coroutine is a lightweight and suspendable sequence of function calls that run on-top of 'carrier' threads (i.e. real platform/OS threads). 
+
+Coroutines are generally implemented as 'coloured' functions i.e. functions that use prefixes such as 'suspend' (Kotlin) or 'async' (Rust/others). The underlying carrier thread that runs a coroutine can be different depending on your application's configuration. For example, the actual carrier thread may come from named and scalable thread-pool, or it may be the main UI 'application' thread in a GUI or Android application for example.
+
+>[!TIP]
+Coroutines are suspended at their function boundaries. 
+
+A single function split into multiple smaller functions enables more suspension points. As a result, some thought about function granularity and splitting is needed when designing coroutines. Depending on configuration and design, the next suspending function may run on an entirely different carrier thread from the previous.    
+
+Coroutines are generally started using some form of 'launch construct,' they can't simply be started by calling the suspending function from a regular function. The launch construct varies across languages; in Golang, you simply prefix a function invocation at its call site with the 'go' prefix which works in conjunction with an underlying thread pool configuration. In Kotlin you need to create a 'coroutine builder' such as `Coroutine.launch()` and a coroutine dispatcher which controls which thread or thread pool the coroutines use for their execution. This makes it simple to change the underlying carrier thread across a coroutine call sequence, conceptually 'run this part of the coroutine on the main UI thread, then switch and run this part of the coroutine on a named thread pool, then switch back and finish on the main thread'. This is very powerful, and typically this requirement surfaces more in GUI/Mobile applications where you need to be careful not to block the main UI thread compared to server-side applications that process a request within a thread started by the application container.
+
+>[!TIP]
+A running coroutine can be suspended if another coroutine is awaited i.e. calling `await()` on one coroutine can suspend another.
+
+Virtual threads are NOT coroutines. A virtual thread (see Java's Project Loom), does not manually declare the suspension points like coloured functions do. Instead, suspension in a blocking sequence of calls is handled automatically by the runtime - whenever a blocking call is encountered such as a network or socket call, it is pre-emptively unloaded from the carrier thread to allow another virtual thread to run. This is very powerful especially for server applications and it massively scales concurrency, but it does not provide the thread switching capability of Kotlin's coroutines.
+
+#### Structured Concurrency and Cancellation 
+
+Coming soon TODO 
+
 
 ### Security Development Practices
 
