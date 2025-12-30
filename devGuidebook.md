@@ -2755,7 +2755,7 @@ Regarding exceptions in functional composition: If your language uses ‘Checked
 [top](#Table-Of-Contents)
 ##### Example Type Safe Functional Composition by Short-Circuiting on Errors
 
-In the following examples, we will use monads to simplify a functional call chain. The functions that we will compose include monad aware functions and basic functions that return plain types. The [example repo for code below here](https://github.com/davidmeredith/monads-explained-kotlin-updated)
+In the following examples, we will use monads to simplify a functional call chain. The functions that we will compose include monad aware functions and basic functions that return plain types. The [example repo for code below here](https://github.com/davidmeredith/monads-explained-kotlin-updated) and here is the [same in Rust](https://github.com/davidmeredith/monads-explained-rust). 
 
 ```Kotlin
     // Kotlin
@@ -2916,13 +2916,16 @@ fun intToString(n: Int): Either<Error, String> { /*... note String success val..
 fun stringToThing(s: String): Either<Error, Thing> { /*... note Thing success val...*/ }
 fun Thing.summarize(): String { /*...simple extension function returns plain String...*/ }
 ```
+
 To get the desired result, our first attempt at functional composition produces the following example. Note that we mix `flatMap` and `map` as required depending on the return types of the composed functions. We use `map` when our computation (`summarize`) does not itself return a monad, and `flatMap` when the computation does return a monad. The resulting composition requires some nesting, urgh: 
+
 
 ```Kotlin
 fun foo(n: Int): Either<Error, String> =
   intToString(n).flatMap { s -> stringToThing(s).map { t -> t.summarize()  } }
 ```
-To address this, several languages have introduced sequential computation blocks that flatten the call chain.  For example, this includes [Scala's for comprehension](https://docs.scala-lang.org/tour/for-comprehensions.html), [Haskell's do notation](https://en.wikibooks.org/wiki/Haskell/do_notation) and [Kotlin's Arrow2 Raise DSL](https://arrow-kt.io/learn/typed-errors/from-either-to-raise/).  I use , an idiomatic Arrow2 example is shown below using the Raise DSL which includes the `either` block builder:
+
+To address this, several languages have introduced sequential computation blocks that flatten the call chain.  For example, this includes [Scala's for comprehension](https://docs.scala-lang.org/tour/for-comprehensions.html), [Haskell's do notation](https://en.wikibooks.org/wiki/Haskell/do_notation) and [Kotlin's Arrow2 Raise DSL](https://arrow-kt.io/learn/typed-errors/from-either-to-raise/).  An idiomatic Arrow2 example is shown below using the Raise DSL which includes the `either` block builder:
 
 ```Kotlin
 fun foo(n: Int): Either<Error, String> = either {
@@ -2932,6 +2935,7 @@ fun foo(n: Int): Either<Error, String> = either {
   t.summarize()
 }
 ```
+
 No nesting, much nicer, but where did those `bind()` methods come from, they aren't declared on Arrow2's `Either` type and what do they do?  Well, those bind functions are extension functions that can be grafted onto `Either` if used within the scope of the `either` block. Recall from our discussion on pervasive polymorphism above, that some languages (Kotlin, C#) use extension functions to allow you to extend existing types. 
 
 - Q. So, how does this either block flatten the nested call chain? 
@@ -3130,32 +3134,33 @@ If you must use low-level locks and synchronization primitives with critical sec
 #### Coroutines vs Virtual Threads
 
 >[!TIP]
-Coroutines (concurrent routines) are NOT lightweight threads, they are an entirely different abstraction from threads. A coroutine is a lightweight and suspendable sequence of function calls that run on-top of 'carrier' threads (i.e. real platform/OS threads). 
+Coroutines (concurrent routines) are NOT lightweight threads, they are an entirely different abstraction from threads. A coroutine is a lightweight and suspendable function call or sequence of calls that run on-top of 'carrier' platform threads. 
 
-Coroutines are generally implemented as 'coloured' functions i.e. functions that use prefixes such as 'suspend' (Kotlin) or 'async' (Rust/others). The underlying carrier thread that runs a coroutine can be different depending on your application's configuration. For example, the actual carrier thread may come from named and scalable thread-pool, or it may be the main UI 'application' thread in a GUI or Android application for example.
+*Coroutines* are generally implemented as 'coloured' functions i.e. functions that use prefixes such as 'suspend' (Kotlin) or 'async' (Rust/others). The underlying carrier thread that runs a coroutine can be different depending on your application's configuration. For example, the actual carrier thread may come from named thread-pool can can be scaled independently, or it may be the main UI 'application' thread in a GUI or Android application for example.
 
 >[!TIP]
 Coroutines are suspended at their function boundaries.
 
-A single function split into multiple smaller functions enables more suspension points. As a result, some thought about function granularity and splitting is needed when designing coroutines. Depending on configuration and design, the next suspending function may run on an entirely different carrier thread from the previous.    
+This means that a single function split into multiple smaller functions enables more suspension points. As a result, some thought about function granularity and logic splitting is needed when designing coroutines. Depending on configuration and design, the next suspending function may run on an entirely different carrier thread from the previous.    
 
-Coroutines are generally started using some form of 'launch construct,' they can't simply be started by calling the suspending function from a regular function. The launch construct varies across languages; in Golang, you simply prefix a function invocation at its call site with the 'go' prefix which works in conjunction with an underlying thread pool configuration. In Kotlin you need to create a 'coroutine builder' such as `Coroutine.launch()` and a coroutine dispatcher which controls which thread or thread pool the coroutines use for their execution. This makes it simple to change the underlying carrier thread across a coroutine call sequence, conceptually 'run this part of the coroutine on the main UI thread, then switch and run this part of the coroutine on a named thread pool, then switch back and finish on the main thread'. This is very powerful, and typically this requirement surfaces more in GUI/Mobile applications where you need to be careful not to block the main UI thread compared to server-side applications that process a request within a thread started by the application container.
+Coroutines are generally started using a construct that launches the coroutine as they can't simply be started by calling the suspending function from a regular 'blue/sychronous' function. The launch construct implementation varies across languages; in Golang, you typically prefix a non-returning function invocation at its call site with the 'go' prefix which works in conjunction with an underlying thread pool configuration. While this is great because you don't need to split your functions into different types (async vs regular synchronous/blocking), you cannot simply use 'go' on everything and expect it to work - the go keyword doesn't return the function's result, so you need a way for the function to communicate with the use of Channels or WaitGroups.
+
+In Kotlin you need to create a 'coroutine builder' such as `Coroutine.launch()` and a coroutine 'Dispatcher' which controls which thread or thread pool the coroutines use for their execution. This makes it simple to change the underlying carrier thread across a sequence of coroutine calls i.e., conceptually: 'run this part of the coroutine on the main UI thread, then switch and run this part of the coroutine on a named thread pool, then switch back and finish on the main thread'. This is very powerful, and this requirement typically surfaces more often in GUI and Mobile applications (where you need to be careful not to block the main UI thread) compared to server-side applications that typically process a request within a thread started by the application container.
 
 >[!TIP]
-A running coroutine can be suspended if another coroutine is awaited i.e. calling `await()` on one coroutine can suspend another.
+A running coroutine can be suspended if another coroutine is awaited i.e. by calling `await()` on a coroutine can suspend another coroutine.
 
-Virtual threads are NOT coroutines. A virtual thread (see Java's Project Loom), does not manually declare the suspension points like coloured functions do. Instead, suspension in a blocking sequence of calls is handled automatically by the runtime - whenever a blocking call is encountered such as a network or socket call, it is pre-emptively unloaded from the carrier thread to allow another virtual thread to run. This is very powerful especially for server applications and it massively scales concurrency, but it does not provide the thread switching capability of Kotlin's coroutines.
+*Virtual threads* are NOT coroutines. A virtual thread (see Java's Project Loom) does not manually declare the suspension points with keywords like 'async' and 'suspend' like coloured functions do. Instead, a blocking sequence of calls is declared within a thread and suspension handled automatically by the runtime so that whenever a blocking call is encountered, such as a network or socket call, it is automatically unloaded from the carrier thread to allow another virtual thread to run. This is very powerful especially for server applications as virtual threads massively increases concurrency.
 
-In Loom, the virtual thread API re-uses the existing thread API, and functions are not split into blocking and non-blocking colours. However, I would argue that Loom's virtual threads are not entirely colourless (which is why I say 'partly' colourless in the section above). This is because when handling thread processing logic in functions/methods, often you must mark the method with a `throws InterruptedException`. This throws clause is part of the method signature, it is a contract indicating that this method can be interrupted by another thread (it can be pre-empted). The throws clause marks the method as an asynchronous method, which means the method is not itself colourless, just like an async/suspend function. 
+In Loom, the virtual thread API re-uses the existing thread API. A positive is that it does not split functions into separate blocking and non-blocking colours, a negative is that it does not provide a lower-level thread switching capability provided by Kotlin's coroutine dispatcher API. It could be argued that Loom's virtual threads are not entirely colourless (which is why I say 'partly' colourless in the section above). This is because when handling thread processing logic in functions/methods, [typically you must mark the method with](https://stackoverflow.com/questions/3976344/handling-interruptedexception-in-java) a `throws InterruptedException`. This throws clause is part of the method signature, it is a contract indicating that this method can be interrupted by another thread and marks the method as asynchronous, which means the method is not itself colourless, just like async/suspend functions. 
 
+#### Futures vs Channels
 #### Structured Concurrency and Cancellation 
 
 Coming soon TODO 
 
 
 ### Security Development Practices
-
-- For Hartree folks, if using a cloud hosted development environment, you must consult and agree to the practices given in [Hartree’s Cloud Acceptable Use Policy](https://stfc365.sharepoint.com/:w:/r/sites/HartreeIGaA/ISO27001/Information%20Security%20Management%20System/Policies/HCIS-0044-plc-01.1-Cloud%20Access.docx?d=wc3116a720ba941cc9de27c0029df1932&csf=1&web=1&e=zkvG1Q) document. All polices and related information can be found [here](https://stfc365.sharepoint.com/sites/HartreeIGaA/ISO27001/Forms/AllItems.aspx?csf=1&web=1&e=ZWjlia&siteid=%7B938CBF09%2D9359%2D4BB6%2DB56D%2D55D938C510C1%7D&webid=%7B02B09618%2D9B45%2D479E%2DBFA4%2D9DEE7B833CA6%7D&uniqueid=%7B8BE63CF1%2DD73D%2D441D%2D9570%2DCD95D488D38A%7D&RootFolder=%2Fsites%2FHartreeIGaA%2FISO27001%2FInformation%20Security%20Management%20System&FolderCTID=0x012000AFB03BC45914F7439215AF3907065BF0).
 
 ![](attachments/Pasted%20image%2020240611100053.png)
 
