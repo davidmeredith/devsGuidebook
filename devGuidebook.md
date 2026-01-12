@@ -2462,7 +2462,7 @@ Handling null depends on the language and programming style you are using:
 
 #### Error Handling - Exceptions vs Errors-as-Values
 
-Errors as values vs exceptions is a hotly debated topic in programming communities. There are pros and cons to each approach as discussed below. My personal opinion is that if used correctly, (runtime) exceptions are an effective error handling strategy, and there are compelling reasons why exceptions are idiomatic in many popular languages - language designers aren't dumb. However, I also recognise that exceptions can be abused and used incorrectly so care should be used in their application. I also recommend that errors-as-values should be used to model known business errors to 'make (known) invalid states unrepresentable' in your application - the two approaches are not mutually exclusive.   
+Errors as values vs exceptions is a hotly debated topic in programming communities. There are pros and cons to each approach as discussed below. My personal opinion is that if used correctly, (runtime) exceptions are an effective error handling strategy, and there are compelling reasons why exceptions are idiomatic in many popular languages - language designers aren't dumb. However, I also recognise that exceptions can be both intentionally abused and used incorrectly, and so care should be used in their application. I also recommend that errors-as-values should be used to model known business errors to 'make (known) invalid states unrepresentable' in your application - the two approaches need not be mutually exclusive.   
 
 Example Errors-as-Values:
 ```go
@@ -2522,9 +2522,9 @@ public class Main {
 
 ##### Proponents of Errors-as-Values
 
-- Fans of errors-as-values argue that functions should return either a success value OR a failure value for known business errors. In doing this, the potential for failure is made explicit in a function signature.  I agree - it is is commonly regarded as the more reliable approach to handling known business errors because you are explicitly forced to handle errors immediately, typically using a conditional to test for error or success. This ensures error handling is not an afterthought. 
+- Fans of errors-as-values argue that functions should return either a success value OR a failure value for known business errors. In doing this, the potential for failure is made explicit in a function signature.  I agree - it is is commonly regarded as the more reliable approach to handling known business errors because you are forced to handle errors, typically using a conditional to test for error or success. This ensures error handling is not an afterthought.
 
-- Supporters also argue that there is less uncertainty compared to throwing exceptions because it can be challenging to determine all the exception types that can be thrown by a deep call stack. This has given rise to some saying: '_Exceptions suck because they are a non-local goto_.' Also recognise that unhandled (runtime) exceptions do not create compilation errors, meaning the compiler can't help you discover all of the different types of exception that could be thrown. You often need to dig and read all the docs. Personally, I disagree with the 'non-local goto' opinion - we're not really jumping to another location in the code to contiue with the application logic, instead we're going back the way we came, unrolling the call-stack.  
+- Supporters also argue that there is less uncertainty compared to throwing exceptions because it can be challenging to determine all the exception types that can be thrown by a deep call stack. This has given rise to some saying: '_Exceptions suck because they are a non-local goto_.' Also recognise that unhandled (runtime) exceptions do not create compilation errors, meaning the compiler can't help you discover all of the different types of exception that could be thrown. You often need to dig and read the docs of the APIs you are using. Personally, I disagree with the 'non-local goto' opinion - we're not really jumping to another location in the code to continue with the application logic, instead we're going back the way we came, unrolling the call-stack.  
 
 - Another issue of a specific type of exception known as a 'checked' exception is that they prevent functional composition. This is because the compiler forces you to handle checked exceptions wherever they can be thrown, but they are not considered as part of a function's return signature and type system. Instead, exceptions invoke orthogonal flows that 'break out' of your regular functional flow. Checked exceptions therefore breaks 'referential transparency' (see discussion below on Error Monads such as `Either` & `Validated`). Checked exceptions are generally not recommended these days, except for certain special use-cases where they still have their supporters.
 
@@ -2553,15 +2553,15 @@ As presented by the [AWS Prime Video app developers](https://www.youtube.com/wat
 
 [top](#Table-Of-Contents)
 
-Whether to use exceptions has profound implications on your API design and performance, be aware of the issues highlighted above. Some modern languages, e.g. Mojo, go as far as trying to address the choice for you by compiling exception handling code under-the-hood to use errors-as-values. I think the aim is to allow you cleanly separate the happy path from exception handling code (clean separate of concerns). At the time of writing, it is too early to tell if this is a successful strategy.
+Whether to use exceptions has profound implications on your API design and performance, be aware of the issues highlighted above. Some modern languages, e.g. Mojo, go as far as trying to address the choice for you by compiling exception handling code under-the-hood to use errors-as-values. I think the aim is to allow you cleanly separate the happy path from exception handling code (clean separate of concerns).
 
 Of course, choice between exceptions or errors-as-values depends on the language and environment - you don't get exceptions support on every architecture and platform. The result pattern is much more flexible especially on embedded systems.
 
 ##### Can I use both styles in a hybrid approach
 
-- Yes, depending on your language of choice and what is considered idiomatic. Some modern languages support both approaches. For example, to support interoperability with Java, the Kotlin language supports unchecked exceptions as well as its own `Result` type which is intended for low-level code rather than for modelling business errors. For modelling business errors, Jetbrains/Kotlin recommend using sealed class hierarchies and exhaustive pattern matching to handle errors (see discussion on data oriented programming).
+- Yes, depending on your language of choice and what is considered idiomatic. Some modern languages support both approaches. For example, to support interoperability with Java, the Kotlin language supports unchecked exceptions as well as its own `Result` type which is intended for low-level code rather than for modelling business errors. For modelling business errors, Jetbrains/Kotlin recommend using sealed class hierarchies and exhaustive pattern matching to handle errors (see discussion on data oriented programming). 
 
-- At the time of writing, a dedicated union type for capturing a result OR one or more errors is on the [Kotlin roadmap](https://www.youtube.com/watch?v=B-DoVr12fK0).
+- At the time of writing, a Kotlin team are working on a union type for capturing a result OR one or more errors: [Kotlin roadmap](https://www.youtube.com/watch?v=B-DoVr12fK0) and [Rich Errors](https://www.youtube.com/watch?v=l2FdAobeUjs).
 
 [top](#Table-Of-Contents)
 
@@ -2726,29 +2726,49 @@ sealed class Either<out A, out B> {
     data class Left<A>(val value: A) : Either<A, Nothing>()   // left for error
     data class Right<B>(val value: B) : Either<Nothing, B>()  // right for success
 
-    fun <C> map(fn: (B) -> C): Either<A, C> = flatMap { Right(fn(it)) }
+    fun <C> map(next: (B) -> C): Either<A, C> = flatMap { Right(next(it)) } // notice map automatically wraps the 'next' function in a Right
 
-    fun <A, C> flatMap(fn: (B) -> Either<A, C>): Either<A, C> = when (this) {
-        is Right -> fn(this.value)
+    fun <A, C> flatMap(next: (B) -> Either<A, C>): Either<A, C> = when (this) {
+        is Right -> next(this.value)
         is Left -> this as Either<A, C>
     }
 }
 ```
 
- - A monad wraps a type `<A>`. Typically this is not a primitive type (int, float etc), but a type that requires its own constructor, hence 'higher-kinded' type.
+ - A monad wraps a type `<A>` or `<B>`. `<A>` is the type of an error, and `<B>` is the type of our success value. Typically, `<B>` is not a primitive type (int, float etc), but a type that requires its own constructor, hence 'higher-kinded' type.
  - A monad has a standard set of 'mapper' methods, also known as 'bind' methods  ('map' and 'flatMap'), and 'unit' methods sometimes called 'of' or name after 'of' e.g. 'ofLeft()' and 'ofRight()':
 
-     - 1) The 'unit' methods initialise a monad `F` by wrapping the given type `<A>` within the monadic context and has the form: 
-        - `F<A>.of(A)`
+     - 1) The 'unit' methods initialise a monad `F` by wrapping the given type `<B>` within the monadic context and has the form (where `M` stands for Monad): 
+        - `M<B>.of(B)`
 
-     - 2) The 'flatMap' method accepts a computation, typically a function-reference or lambda, which transforms `<A>` to `<B>`. This given function argument is often named 'next'. This passed-in 'next' function itself wraps `<B>` in a new monad result `F<B>`. The return value is directly (i.e. 'flatly') returned by flatMap, so I think a more accurate name for flatMap is 'mapAndFlatReturn'. FlatMap has the following form, notice the 'next' function's return type is the same as map's return type:
-        - `F<A>.flatMap(next: (A) -> F<B>): F<B>`
+     - 2) The 'flatMap' method accepts a computation, typically a function-reference or lambda, which transforms `<B>` to `<C>`. This given function argument is often named 'next'. This passed-in 'next' function must itself return the wrapped `<C>` value within a new monad result i.e. `M<C>`, typically to indicate the success or failure of the applied lambda. The return value is directly (i.e. 'flatly') returned by flatMap, so I think a more accurate name for flatMap is 'mapAndFlatReturnAMonad'. FlatMap has the following form, notice the 'next' function's return type is the same as map's return type:
+        - `M<B>.flatMap(next: (B) -> M<C>): M<C>`
 
-     - 3) The 'map' method accepts a function/lambda that transforms `<A>` to `<B>`. This passed-in 'next' function returns the plain type `<B>`, not a monad as in flatMap.  Therefore, before returning this value, map wraps this plain value within a newly created monad instance meaning the return type is consistent with flatMap, i.e. `F<B>` (I think a more accurate name for map is 'mapWrapAndReturn'). Map has the form: 
-        - `F<A>.map(next: (A) -> <B>): F<B>`
+     - 3) The 'map' method accepts a function/lambda and is used to transform `<B>` to `<C>`. This passed-in 'next' function must return the plain type `<C>`, not a monad as in flatMap.  Therefore, before returning this value, *map wraps this plain value within a newly created monad instance* meaning the return type is consistent with flatMap i.e. `M<C>` (I think a more accurate name for map is 'mapWrapAndReturnAMonad'). Map has the form: 
+        - `M<B>.map(next: (B) -> <C>): M<C>`
 
+> [!TIP]
+map() is for transformations only and is 'Right bias,' you stay in a "Right" and is designed specifically for transformations that cannot fail. If your transformation *can* fail, you must use flatMap to lift the error into a monad to maintain the integrity of your error handling as in the example below: 
 
-It is important to remember that you can use monads as smart return types for your functions whenever you need to. In the example above, the processing functions are globally declared for the sake of simplicity. You could easily create custom business objects that declare their own monadic functions, rather than limiting yourself to global functions. This is a more hybrid approach that span both OPP and FP, and is especially useful for encapsulating more complex stateful business logic.
+```kotlin
+    val endResult = validateIngredients(ingredients) // returns Either<BakingServiceError, OkVal>
+    // cooKPlain returns false on error, so we need to 'lift' this plain error into an Either.Left
+    // using flatMap:
+      .flatMap { u ->
+        if(cookPlain(ingredients, temperature = 130)) Either.Right(true) else Either.Left("temp too low")
+      }
+      .map { packPlain(pie, isFragile = false) } // map returns Right<String>
+      .map { deliver(pie) } // map returns Right<true>
+      .map { it -> "Blue Blah" } // map Returns Right<String>
+
+    when (endResult) {
+      is Either.Left<*> -> assert("temp too low" == endResult.value)
+      is Either.Right<String> -> fail("unexpected right")
+    }
+```
+
+> [!TIP]
+In the examples above, the composed functions are globally declared for the sake of simplicity. You could easily create custom business objects that declare their own monadic functions for chaining. This is a more hybrid approach that spans both OPP & FP, and is especially useful for encapsulating more complex stateful business logic.
 
 Regarding exceptions in functional composition: If your language uses ‘Checked Exceptions’ (e.g., old-style Java or when using other JVM languages that call out to underlying old-style Java libs), you can’t throw checked exceptions during functional composition as they force you to handle the error and break the call chain with try/catch or throws statements. In this scenario, wrap the exception in the monadic context and return a left error. Note that throwing _unchecked_ exceptions is OK in a functional call chain as they don’t force you to pollute the happy path with try/catch or throws, but you likely still want to wrap the error in a monad to return an error-as-value e.g., if that error is not a programming error or an exceptional circumstance.
 
