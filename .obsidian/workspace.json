@@ -22,6 +22,18 @@
             }
           },
           {
+            "id": "f715089eacf7d7a3",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.11.4"
+              },
+              "icon": "lucide-book-up",
+              "title": "Release Notes 1.11.4"
+            }
+          },
+          {
             "id": "d316c292464af3bc",
             "type": "leaf",
             "state": {
@@ -71,7 +83,8 @@
               "title": "Release Notes 1.9.10"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -210,7 +223,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "f5fa7c1a07238d9f",
+  "active": "f715089eacf7d7a3",
   "lastOpenFiles": [
     "devGuidebook.md~",
     "devGuidebook.md",
