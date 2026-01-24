@@ -2743,19 +2743,19 @@ sealed class Either<out A, out B> {
 
      - 2) The 'flatMap' method has the form: 
         - `M<B>.flatMap(next: (B) -> M<C>): M<C>`
-        where: 
-        - `M<B>` is the 'receiver' or 'subject' monad and wraps type `B`.
-        - `M<C>` is the next monad result in the call chain and wraps a transformed type `C`. 
-        - `next: (B) -> M<C>` is known as the 'next' functor which itself must return a new monad. 
-        - Explanation: Flatmap accepts a 'monad-returning' function that transforms `<B>` to `<C>` only IF our receiver monad's wrapped value is a success - if receiver monad's wrapped value is a success, flatmap applies the 'next' computation and returns/relays next's value which is a monad of the same type `M` (i.e. function chaining); if receiver monad's wrapped value is an error, flatmap short-circuits and returns the subject-monad and its existing wrapped error value. Note that this passed-in 'next' function must itself return the wrapped `<C>` value within a new monad result i.e. `M<C>`, typically to indicate the success or failure of the applied function. The return value is directly (i.e. 'flatly') returned by flatMap, so I think a more accurate name for flatMap is 'mapAndFlatReturnAMonad'. FlatMap has the following form, notice the 'next' function's return type is the same as map's return type.
+          where: 
+          - `M<B>` is the 'receiver' or 'subject' monad and wraps type `B`.
+          - `M<C>` is the next monad result in the call chain and wraps a transformed type `C`. 
+          - `next: (B) -> M<C>` is known as the 'next' functor which itself must return a new monad. 
+          - Explanation: Flatmap accepts a 'monad-returning' function that transforms `<B>` to `<C>` only IF our receiver monad's wrapped value is a success - if receiver monad's wrapped value is a success, flatmap applies the 'next' computation and returns/relays next's response, which is a monad of the same type `M` (i.e. function chaining); if receiver monad's wrapped value is an error, flatmap short-circuits and returns the subject-monad and its existing wrapped error value. Note that this passed-in 'next' function must itself return the wrapped `<C>` value within a new monad result i.e. `M<C>`, typically to indicate the success or failure of the applied function. The return value is directly (i.e. 'flatly') returned by flatMap, so I think a more accurate name for flatMap is 'mapAndFlatReturnAMonad'. FlatMap has the following form, notice the 'next' function's return type is the same as map's return type.
 
      - 3) The 'map' method has the form: 
         - `M<B>.map(next: (B) -> <C>): M<C>`
-        where: 
-        - `M<B>` is the receiver/subject monad and wraps type `B`.
-        - `M<C>` is the next monad result in the call chain and wraps a different type `C`. 
-        - `next: (B) -> <C>` is a plain/vanilla function, it returns a 'plain' type, not a monad. 
-        - Explanation: Map accepts a 'plain/vanilla' function that transforms `<B>` to `<C>`. Map then always returns a new success monad that wraps the result of that transformation and has the same type as the receiver monad `M`.  This passed-in 'next' function must return the plain type `<C>`, not a monad as in flatMap, so before map returns its new monad value **it wraps the plain return value within a newly created success (Right) monad instance.** This means map's return type is consistent with flatMap i.e. `M<C>` (I think a more accurate name for map is 'mapWrapAndReturnAMonad').
+          where: 
+          - `M<B>` is the receiver/subject monad and wraps type `B`.
+          - `M<C>` is the next monad result in the call chain and wraps a different type `C`. 
+          - `next: (B) -> <C>` is a plain/vanilla function, it returns a 'plain' type, not a monad. 
+          - Explanation: Map accepts a 'plain/vanilla' function that transforms `<B>` to `<C>`. Map then always returns a new success monad that wraps the result of that transformation and has the same type as the receiver monad `M`.  This passed-in 'next' function must return the plain type `<C>`, not a monad as in flatMap, so before map returns its new monad value **it wraps the plain return value within a newly created success (Right) monad instance.** This means map's return type is consistent with flatMap i.e. `M<C>` (I think a more accurate name for map is 'mapWrapAndReturnAMonad').
 
 > [!TIP]
 `map(b -> c)` is for transformations only and is 'Right bias' - i.e. it always stays in a "Right" and is designed specifically for applying plain functions for value transformations that cannot fail (map always wraps the plain function's result in a 'Right'). If your transformation *can* fail, you must apply extra logic within flatMap to 'lift' the error into a Right or Left monad to maintain the integrity of your error handling as shown in the example below: 
