@@ -99,7 +99,7 @@ dv.view('toc')
     24. [Comment in line As You Go](#Comment-in-line-As-You-Go)
     25. [The Boy Scout Rule](#The-Boy-Scout-Rule)
     26. [Principal of Least Knowledge and Train Wrecks - The Law of Demeter](#Principal-of-Least-Knowledge-and-Train-Wrecks---The-Law-of-Demeter)
-    27. [FP vs OOP - Choose Two](#FP-vs-OOP---Choose-Two)
+    27. [FP vs OOP - For FOOPs Sake Choose Two](#FP-vs-OOP---Choose-Two)
         1. [Be Careful Not to Pollute Pure Functions with Hidden Mutable State](#Be-Careful-Not-to-Pollute-Pure-Functions-with-Hidden-Mutable-State)
         2. [Make Private your Default Class Level Visibility](#Make-Private-your-Default-Class-Level-Visibility)
         3. [Make Immutability your Default](#Make-Immutability-your-Default)
@@ -2261,9 +2261,9 @@ A module should not know about the innards of the objects it manipulates. Import
 
 To quote Eric Evans, an expert in both OOP and Functional paradigms and of 'Domain Driven Design' book fame: "At times, I found FP an awkward fit. The problem would have fit OOP better. I'm happy that it is easier than it used to be to move between both those ways of thinking." 
 
-I completely agree with Eric - if the language permits, combining functional approaches with OOP is powerful in the right scenario. In fact, modern languages are more of a hybrid mix of OOP, Procedural & FP e.g. Rust, Kotlin, modern Java (others languages too). Hybrid approaches borrow concepts from FP such as ADTs, default immutability, functional composition such as `map` `filter` `collect`. 
+I completely agree with Eric - if the language permits, combining functional approaches with OOP is powerful in the right scenario. In fact, modern languages are more of a hybrid mix of OOP, Procedural & FP i.e. FOOP e.g. Rust, Kotlin, modern Java (others languages too). Hybrid approaches borrow concepts from FP such as ADTs, default immutability, functional composition such as `map` `filter` `collect`. 
 
-For the majority of developers, myself included, I also believe that adopting a pure functional language is a stretch - their popularity are still low representing ~5% of mind share according to IEEE, Tiobe.  I think the primary reason is that people just comprehend the world more readily in terms of objects, state and procedures, compared to purely functional/mathematical ways of thinking such as recursion and 'higher order functions'.  To boil it down further, basically loops are difficult or even unavailable in pure FP, and I think allowing some interior mutability is often a small price to pay for simplicity.      
+For the majority of developers, myself included, I also believe that adopting a pure functional language is a stretch - their popularity are still low representing ~5% of mind share according to IEEE, Tiobe.  I think the primary reason is that people just comprehend the world more readily in terms of objects, state and procedures, compared to purely functional/mathematical ways of thinking such as recursion and higher order functions.  To boil it down further, basically loops are difficult or even unavailable in pure FP, and I think allowing some interior mutability is often a small price to pay for simplicity. Take monads for example, they are stateful wrappers of values that have functions that are executed on those wrapped values - sounds kinda like an OPP approach to me!
 
 ![](attachments/Pasted%20image%2020240611091943.png)
 
@@ -2688,12 +2688,10 @@ Error monads aren't strictly necessary if using ADTs as return types or if your 
 
 ##### What are Monads aka Higher-Kinded Types
 
-A monad is a burrito 🌯 (a better analogy is a bento-box 🍱 😊). If you've looked into functional programming, you'll understand this aphorism because monads are a notoriously difficult concept to explain: Like a burrito, a monad is a wrapper object (the tortilla) around a type (the filling). This sounds like ADTs right? yes, but monads also add additional 'mapper' methods that are used to apply passed-in computations on the monad's wrapped type in order to transform it into a new result type (or produce a wrapped error). These mapper methods can be chained together as needed. Monads also allow some additional behind the scenes logic to be applied in addition to the passed-in transformations/computations - these are extra 'super-powers' that a particular monad provides. A simple example is the writer monad that appends to an append-log behind the scenes whenever writer mapper methods are called. 
+A monad is a burrito 🌯 (a better analogy is a bento-box 🍱 😊). If you've looked into functional programming, you'll understand this aphorism because monads are a notoriously difficult concept to explain: Like a burrito, a monad is a wrapper object (the tortilla) around a type (the filling). This sounds like ADTs right? yes, but monads also add additional 'mapper' methods that are used to apply passed-in computations on the monad's wrapped type in order to transform the wrapped value into a new result type (or produce a wrapped error). These mapper methods can be chained together. Monads also allow some additional behind the scenes logic to be applied in addition to the passed-in transformations/computations - these are extra 'super-powers' that a particular monad provides. A simple example is the writer monad that appends to an append-log behind the scenes whenever writer's methods are called. I prefer the bento-box analogy because there are more moving parts to a bento-box which better describes a monad (opinion).
 
 > [!TIP]
-Here's my definition: A monad is a design pattern that wraps a type so that operations can be chained together to transform that type while also allowing additional processing behind the scenes, such as generating additional side-effects, for example.
-
-I prefer the bento-box analogy, because there are more moving parts to a bento-box which better describes a monad (opinion). Having a basic understanding is a useful concept to grasp. 
+Here's my definition: A monad is a design pattern that wraps a type so that operations can be chained together to transform that wrapped type into a new type while also allowing additional processing to occur behind the scenes, such as generating additional side-effects, for example.
 
 A core tenant of the functional paradigm is to produce a more declarative and expressive 'happy path' of composed computations that isn't polluted with interleaved error handling logic. In a monadic call chain, you define ‘what to do’ by chaining functions that return monads to achieve an end result, not ‘how to do it’ as in more imperative approaches. The happy path self-documents, it screams what the business logic does. In more imperative approaches, you often see that each result is checked using a conditional before continuing with the next computation. Some devs like this approach, ok cool, but others argue that polluting the happy path leads to unreadable code, especially for large call chains.  
 
@@ -2702,15 +2700,16 @@ Here are some features of a monad:
 - A monad can be used as a return type for your functions and goes beyond errors-as-values by adding the ability to do type-safe functional composition.
 - A monad is a parametrised 'wrapper' type that is typically implemented with generics.
 - An 'Either' monad is a very common monad, its wrapped type is either a successful result OR some form of failure result that is returned from a passed-in computation, never both. For example: `Either<LeftErrorValue, RightSuccessValue>` (note that Rust is [opposite](opposite), where left is success and right is error). 
-- The *simple choice between error and success is essential for enabling functional composition in a consistent way:* this is a core distinction between monads and ADTs - ADTs lack the simple monad API (required `map` and `flatMap` methods).   
+- The *simple choice between error and success is essential for enabling functional composition in a consistent way:* this is a core distinction between monads and ADTs - ADTs lack the simple monadic API (i.e. required `map` and `flatMap` methods).   
 - The computation is passed-in using a standard API that defines two mapper methods - `map` and `flatMap`. 
-    - The passed-in function argument is often named `next` to indicate that it is the next bit of computation to apply.
-    - The 'next' computation operates on the monad's existing wrapped type to create the next result. 
-    - The 'next' computation can optionally generate custom side-effects e.g., calling out to another system or writing a file to disk for example.
-    - The 'next' function can be a normal function that returns a plain type, it does not have to be 'monad aware.' Alternatively, it can also be a function that itself returns another monad.
 - The monad API is designed to enable functional composition in a standard and consistent way from left to right, transforming each monad's wrapped success type along the way to achieve a final end result.
-    - As already mentioned, to do this in a consistent way, a monad must have two 'bind' methods called `map` and `flatMap` that each accept a computation. The computation is typically a function-reference or a lambda meaning map and flatMap are 'higher-order' functions. The given computation 'maps over' the monad's wrapped type to transform and return a new success type wrapped in a new monad instance (or a new error type wrapped in a new monad).
-    - If a mapper function returns an error type, subsequent calls in the chain will short-circuit the computation and will simply return the erroneous `Either`. Short-circuiting continues until the end of the call chain.
+- The passed-in function argument is often named `next` to indicate that it is the next computation to chain.
+- The 'next' computation operates on the monad's existing wrapped type to create the next monad result. 
+- The next monad's type is the same type as the current monad i.e. calling map or flatmap on an Either monad will produce another Either monad ('monad transformers' are required to change the monad's type in a call chain). 
+- The 'next' computation can optionally generate custom side-effects e.g., calling out to another system or writing a file to disk for example.
+- The 'next' function can be a normal function that returns a plain type, it does not have to be 'monad aware.' Alternatively, it can also be a function that itself returns another monad of the same type.
+- As already mentioned, to do this in a consistent way, a monad must have two 'bind' methods called `map` and `flatMap` that each accept a computation. The computation is typically a function-reference or a lambda meaning map and flatMap are 'higher-order' functions. The given computation 'maps over' the monad's wrapped type to transform and return a new success type wrapped in a new monad instance (or a new error type wrapped in a new monad).
+- If a mapper function returns an error type, subsequent calls in the chain will short-circuit the computation and will simply return the erroneous `Either`. Short-circuiting continues until the end of the call chain.
 - Monads exist for several common patterns of computation - you've likely used monads in several libraries and have not even realised.
 
 [top](#Table-Of-Contents)
@@ -2736,29 +2735,40 @@ sealed class Either<out A, out B> {
 ```
 
  - A monad wraps a type e.g. `<A>` or `<B>`. Typically, this wrapped value is not a primitive type (int, float etc), but a type that requires its own constructor, hence 'higher-kinded' type.
- - A monad has a standard set of 'mapper' methods, also known as 'bind' methods  ('map' and 'flatMap'), and 'unit' methods sometimes called 'of' or name after 'of' e.g. 'ofLeft()' and 'ofRight()':
+ - A monad has a standard set of 'mapper' methods, also known as 'functor' or 'bind' methods  ('map' and 'flatMap') and 'unit' methods sometimes called 'of' with variants e.g. 'ofLeft()' and 'ofRight()'.
 
-     - 1) The 'unit' methods initialise a monad `M` by wrapping the given type `<B>` within the monadic context and has the form (where `M` stands for Monad): 
+     - 1) The 'unit' methods initialise a monad `M` by wrapping the given type `<B>` within the monadic context and has the form 
         - `M<B>.of(B)`
+          where: 
+          - `M<B>` is a method, typically a static method, used to return an initialised monad of type `M`.
 
      - 2) The 'flatMap' method has the form: 
         - `M<B>.flatMap(next: (B) -> M<C>): M<C>`
           where: 
           - `M<B>` is the 'receiver' or 'subject' monad and wraps type `B`.
           - `M<C>` is the next monad result in the call chain and wraps a transformed type `C`. 
-          - `next: (B) -> M<C>` is known as the 'next' functor which itself must return a new monad. 
-          - Explanation: Flatmap accepts a 'monad-returning' function that transforms `<B>` to `<C>` only IF our receiver monad's wrapped value is a success - if receiver monad's wrapped value is a success, flatmap applies the 'next' computation and returns/relays next's response, which is a monad of the same type `M` (i.e. function chaining); if receiver monad's wrapped value is an error, flatmap short-circuits and returns the subject-monad and its existing wrapped error value. Note that this passed-in 'next' function must itself return the wrapped `<C>` value within a new monad result i.e. `M<C>`, typically to indicate the success or failure of the applied function. The return value is directly (i.e. 'flatly') returned by flatMap, so I think a more accurate name for flatMap is 'mapAndFlatReturnAMonad'. FlatMap has the following form, notice the 'next' function's return type is the same as map's return type.
+          - `next: (B) -> M<C>` is known as the 'next' functor which itself must return a new monad instance. 
+          - Explanation: 
+            - Flatmap accepts a 'monad-returning' function that transforms `<B>` to `<C>` only IF our receiver monad's wrapped value is a success: 
+            - If the receiver monad's wrapped value is a success, flatmap applies the 'next' computation and returns (relays) `next's` response, which is a monad of the same type `M` (i.e. function chaining); 
+            - If the receiver monad's wrapped value is an error, flatmap short-circuits and returns the subject-monad and its existing wrapped error value. 
+            - Note that this passed-in 'next' function must itself return the wrapped `<C>` value within a new monad result i.e. `M<C>` to indicate the success or failure of the applied function. 
+            - The return value is directly (i.e. 'flatly') returned by flatMap, so I think a more accurate name for flatMap is 'mapAndFlatReturnAMonad'. 
 
      - 3) The 'map' method has the form: 
         - `M<B>.map(next: (B) -> <C>): M<C>`
           where: 
           - `M<B>` is the receiver/subject monad and wraps type `B`.
           - `M<C>` is the next monad result in the call chain and wraps a different type `C`. 
-          - `next: (B) -> <C>` is a plain/vanilla function, it returns a 'plain' type, not a monad. 
-          - Explanation: Map accepts a 'plain/vanilla' function that transforms `<B>` to `<C>`. Map then always returns a new success monad that wraps the result of that transformation and has the same type as the receiver monad `M`.  This passed-in 'next' function must return the plain type `<C>`, not a monad as in flatMap, so before map returns its new monad value **it wraps the plain return value within a newly created success (Right) monad instance.** This means map's return type is consistent with flatMap i.e. `M<C>` (I think a more accurate name for map is 'mapWrapAndReturnAMonad').
+          - `next: (B) -> <C>` is a plain/vanilla function - it returns a 'plain' type, not a monad. 
+          - Explanation: 
+            - Map accepts a plain/vanilla function that transforms `<B>` to `<C>`. 
+            - Map then always returns a new success monad that wraps the result of that transformation and has the same type as the receiver monad `M`.  
+            - This passed-in 'next' function must return the plain type `<C>`, not a monad as in flatMap, so before map returns its new monad value **it always wraps the plain return value within a newly created success (Right) monad instance.** 
+            - This means map's return type is consistent with flatMap i.e. `M<C>` so I think a more accurate name for map is 'mapWrapAndReturnAMonad'.
 
 > [!TIP]
-`map(b -> c)` is for transformations only and is 'Right bias' - i.e. it always stays in a "Right" and is designed specifically for applying plain functions for value transformations that cannot fail (map always wraps the plain function's result in a 'Right'). If your transformation *can* fail, you must apply extra logic within flatMap to 'lift' the error into a Right or Left monad to maintain the integrity of your error handling as shown in the example below: 
+`map(b -> c)` is for transformations only and is 'Right bias' - i.e. the result is always a "Right" and is designed specifically for applying plain functions for value transformations that cannot fail. If your transformation *can* fail, you must use extra logic within flatMap to 'lift' the error into a Right or Left monad to maintain the integrity of your error handling as shown in the example below: 
 
 ```kotlin
     val endResult = validateIngredients(ingredients) // returns Either<BakingServiceError, OkVal>
@@ -2929,13 +2939,13 @@ fun someBusinessFunction(): Either<OkVal, Throwable> {
 }
 ```
 
-##### Other Error Monads such as Validation and Ior 
+##### Other Error Monads such as Validation and IoR 
 
-Monads exist for several standard patterns of computation. For example, we've already seen the `Either` monad for describing a success or failure result (see above), but others exist: 
+Monads exist for several standard patterns of computation. For example, we've already seen the `Either` monad for describing a success or failure result, but others exist: 
 
 - Validation Monad: Unlike the Either monad, a Validated monad does not short-circuit on the first encountered error. Instead, the purpose is to capture all the possible errors encountered in the entire call chain. The error type is thus typically a non empty list. A validated monad can only be used if the computations are independent where input to the next computation does not depend on the successful output of the previous. A simple example is capturing all the errors on a form. In fancy functional speak, the Validator is an _applicative functor_. 
 
-- Ior Monad: Provides both a successful result and additional list of context messages collected along the way. An example would be a successful code compilation that has several deprecation warnings. Overall the routine was successful, but you also want to collect the additional context.  
+- IoR Monad: Provides both a successful result and additional list of context messages collected along the way. An example would be a successful code compilation that has several deprecation warnings. Overall the routine was successful, but you also want to collect the additional context.  
 
 ##### Inlining within a Computation Block to Avoid Nesting 
 
@@ -3092,7 +3102,6 @@ Here are some corresponding tests that show Account usage:
         assert(result == Right(Pair(buildAccountViaReflectionForTestsOnly(50.toBigDecimal()), buildAccountViaReflectionForTestsOnly(150.toBigDecimal())) ))
     }
 ```
-A bento-box is better analogy for describing higher kinded types - why? coming soon (TODO).  
 
 [top](#Table-Of-Contents)
 

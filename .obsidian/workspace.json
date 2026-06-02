@@ -25,12 +25,17 @@
             "id": "f715089eacf7d7a3",
             "type": "leaf",
             "state": {
-              "type": "release-notes",
+              "type": "canvas",
               "state": {
-                "currentVersion": "1.11.4"
+                "file": "canvas/images.canvas",
+                "viewState": {
+                  "x": -23,
+                  "y": 156,
+                  "zoom": -0.11466354739182374
+                }
               },
-              "icon": "lucide-book-up",
-              "title": "Release Notes 1.11.4"
+              "icon": "lucide-layout-dashboard",
+              "title": "images"
             }
           },
           {
