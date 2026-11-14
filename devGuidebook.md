@@ -759,17 +759,18 @@ Some languages allow you to externally implement generic interfaces 'outside of 
 
 
 > [!TIP]
-A type class is an abstract, parameterized type that lets you add new behaviour (not state) to any closed / existing data type without using sub-typing.
+A type class is an abstract parameterised type that lets you add new behaviour (not state) to any closed / existing data type without using sub-typing or interface implementation on the existing type.
 
 Why? Ad-hoc polymorphism is very convenient and powerful for easily creating '*blanket implementations*' for defining a new type for a whole group of types at once, even when you don't have access to the src code of those types. This can't be done with interfaces that are defined directly on types. Brian Goetz describes the limitations of traditional interfaces where you implement the interface directly on the type as follows: "Interfaces have limitations: they abstract over behaviours of instances, not behaviour of types which means you need to already have an instance of a type to use them. This is known as the expression problem." This basically means you need the src of a type in order to directly implement an interface to extend the type with new behaviour. To address this limitation, the Java architects are exploring the use of type classes, the current proposal is to move additional behaviour to a third-party 'witness' object and publish a witness to the existing/external type [as explained here](https://www.youtube.com/watch?v=Gz7Or9C0TpM). 
 
-There are subtly different approaches used to 'associate' or 'scope' the externally implemented interfaces to existing types, as explored below. Languages typically lexically split their core data types from the implementation of the external interface, and some languages use parametersied generics on the external interfaces to provide an  implementation for the (existing) type.  
+There are subtly different approaches used to 'associate' or 'scope' the externally implemented interfaces to existing types, as explored below. Languages typically lexically split their core data types from the implementation of the external interface, and some languages use parameterised generics on the external interfaces to provide an  implementation for the (existing) type.  
 
 
 > [!TIP]
 Lexically splitting a type from a new type that defines new behaviour defined in an externally implemented interface (a type class) and then associating the two together is different from _directly implementing the interface on the original type declaration itself_ (eg implementing an interface directly on a class). The main advantages is that you don't need to modify an existing type which enables new blanket implementations. Recognise that there are at least 3 code fragments required to do this: 1) an existing type which can be a 3rd party type where you don't have access to the src, 2) an externally implemented interface/trait/type-class, and 3) code that 'associates' or 'scopes' them together.  If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
 
 The following Rust example provides a simple example. Note that in this example, Rust uses static dispatch or 'monomorphization' for performance reasons and not dynamic-dispatch (which allows you to create multiple implementations for the same type at small performance costs). 
+
 ```Rust
 // Rust
 use externalcrate::SomeStruct;    // here is our existing type
@@ -812,7 +813,10 @@ interface Farewell<D> {
   fun D.sayBye(): String
 }
 
-// Externally implemented interfaces provide implementations (aka Scope objects)  
+// Externally implemented interfaces provide implementations aka Scope objects - 
+// TweetSummaryScope & AnyFarwellScope are our type classes that implement new 
+// behavour that can be attached to existing types. 
+
 object TweetSummaryScope : Summary<Tweet> {
   override fun Tweet.summarise(): String = "Tweet: $tweet Retweet: $retweet"
 }
@@ -851,7 +855,7 @@ fun <T, D> globalFuncWithMultipleContexts(toSummarise: T, toSayGoodbye: D) =
     }
 ```
 
-Pros of the Kotllin 'scope' (dynamic dispatch) approach:
+Pros of the Kotlin 'scope' (dynamic dispatch) approach:
 - Polymorphism 
     - You can dynamically / conditionally bring into scope multiple type-class implementations when needed using the `with(scopeOb)`scope function (see the `@test` for an example).  
     - You can implement the same interface multiple times for a single parameterised type class ([not doable with Rust static dispatch](https://stackoverflow.com/questions/46167642/can-i-implement-the-same-trait-multiple-times-in-different-ways-for-a-single-str)). Multiple scope object implementations can then be combined as needed to supply the required implementations. 
