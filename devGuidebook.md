@@ -4,6 +4,9 @@ Hi there. This is my attempt at writing a developer guidebook 📖. I originally
 
 Last Updated 19/12/25.  Enjoy.
 
+![](/Written-By-a-Human-Not-By-AI-Badge-white.png)
+
+
 ## Table Of Contents
 
 ```dataviewjs
