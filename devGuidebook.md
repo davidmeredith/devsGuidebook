@@ -70,7 +70,7 @@ dv.view('toc')
         3. [Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Represent New Types](#Avoid-Paying-too-much-Inheritance-Tax---Use-Parametric-Polymorphism-to-Represent-New-Types)
         4. [Ad-Hoc Polymorphism via Type-Classes aka Externally Implemented Interfaces](#Ad-Hoc-Polymorphism-via-Type-Classes-aka-Externally-Implemented-Interfaces)
         5. [Simpler Extensions - Avoid Polluting Core Abstractions With Small Behaviour Customisations](#Simpler-Extensions---Avoid-Polluting-Core-Abstractions-With-Small-Behaviour-Customisations)
-        6. [Structural Polymorphism and Duck Typing](#Structural-Polymorphism-and-Duck-Typing)
+        6. [Structural Polymorphism and Duck Typing at Runtime](#Structural-Polymorphism-and-Duck-Typing-at-Runtime)
         7. [Sealing](#Sealing)
         8. [Composition / Delegation](#Composition-/-Delegation)
         9. [Parametric Polymorphism Language Comparison](#Parametric-Polymorphism-Language-Comparison)
@@ -730,49 +730,49 @@ By default, in some languages you can extend a class by default (the wrong defau
 #### Avoid Paying too much Inheritance Tax - Use Parametric Polymorphism to Represent New Types 
 
 > [!TIP]
-By design, inheritance is an intentionally strong 'Is A' relationship; For a sub-type to act as its parent type (the Liskov substitution principle), then it needs to maintain the same behaviour, AND the same invariants AND post-conditions. A common mistake is to focus just on behaviour, inheritance is a much stronger relationship than that.
+By design, inheritance is an intentionally strong 'Is A' relationship; For a sub-type to act as its parent type (the Liskov substitution principle), the sub-type needs to maintain the same behaviour, including the same INVARIANTS and POST-CONDITIONS. A common mistake is to focus just on behaviour, inheritance is a much stronger relationship than that.
 
 > [!TIP]
-I say "don't pay too much inheritance tax" intentionally because inheritance is great in certain scenarios such as in building frameworks, libraries, and for strong/natural "Is A" relationships e.g. "type A is a type of B." A great example is the 'Either' monad - the Left/error and Right/success objects inherit from the Either base class, so an Either can be Left or Right, but never both. Another good example is in ORMs (object relational mapping frameworks) where it is common to extend a base 'Entity' class that provides the primary key for the entity/relation and any the invariants associated with the PK.  
+I say "don't pay _too_ much inheritance tax" intentionally because inheritance is great in certain scenarios such as in building frameworks, libraries, and for strong/natural "Is A" relationships e.g. "type A is a type of B." A great example is the 'Either' monad - the Left/error and Right/success objects inherit from the Either base class, so an Either can be Left or Right, but never both. Another good example is in ORMs (object relational mapping frameworks) where it is common to extend a base 'Entity' class that provides the primary key for the entity/relation (state) and any the invariants associated with the PK.  
 
-However, deeply nested inheritance hierarchies where sub-classes extend super-classes can become very brittle. This is because you are structurally tied to the classes in the parent hierarchy: 
+However, deeply nested inheritance hierarchies where sub-classes extend super-classes can become very brittle ⚠️. This is because you are structurally tied to the classes in the parent hierarchy: 
   - If you don't need all of the characteristics provided through inheritance, it can be difficult to 'split-out' what is not wanted without widespread refactoring. 
   - Some languages (eg Java) do not allow multiple inheritance which could encourage deeper inheritance hierarchies. 
-  - If you don't have access to the src of the inheritance hierarchy, you may be forced to implement abstract methods you don't need, typically by throwing unsupported exceptions/errors. 
+  - If you don't have access to the src of the inheritance hierarchy, you may be forced to implement abstract methods you don't need, typically by throwing unsupported exceptions/errors 🤮.
 
 If you have access to the src of the inheritance hierarchy, you may need to extract the required methods into a new level and inherit from that level to facilitate better segregation of concerns e.g., from the direct parent if you want all methods, or from a higher-level ancestor if you do not need every method. This can be an expensive refactor meaning deep inheritance is often considered an anti-pattern these days, especially when building applications rather than frameworks and libraries. A number of modern languages don't even support inheritance. Having said that, inheritance arguably does have its place when developing libraries and frameworks, and especially for relationships that have a strong and natural "Is A" type of relationship e.g., 'typeA is a genuine / real sub-type of typeB.'
 
 > [!TIP]
-Attach Interfaces/Traits to your types for new behaviour: Rather than pay too much inheritance tax, consider using 'Parametric Polymorphism' where a 'behaviour type' such as an interface or trait attaches a new contract to your types which allows a type to be represented as another type. This shared behaviour type augments your type-system for use in function parameters, return values, and attribute declarations, and is often used in conjunction with generics ('<holder_types>'). The canonical name is "parametric polymorphism" or "generic programming".  It is typically implemented with dynamic-dispatch and is often used in conjunction with Composition under the hood where an object uses the functionality of another object to implement its behaviour.  
+Attach Interfaces/Traits to your types for new behaviour: Rather than pay too much inheritance tax, consider using 'Parametric Polymorphism' where a 'behaviour type' such as a default interface or trait attaches a new contract to your types which allows a type to be represented as another type. This shared behaviour type augments your type-system for use in function parameters, return values, and attribute declarations, and is often used in conjunction with generics ('<holder_types>'). The canonical name is "parametric polymorphism" with "generics".  It is typically implemented with dynamic-dispatch and is often used in conjunction with composition under the hood where an object uses the functionality of another object to implement its behaviour.  
 
-Several modern languages don’t even support inheritance (Rust, Zig, Go), relying instead on parametric polymorphism. Despite the subtle differences across languages, they generally follow the pattern of externally implemented interfaces that you use to 'attach or graft' behaviour onto types:  Interfaces (eg Java, Kotlin), Traits (eg Rust), Mixins (eg Python), Type-Classes and externally implemented interfaces (Scala, Kotlin). 
+Several modern languages don’t even support inheritance (Rust, Zig, Go), relying instead on parametric polymorphism. Despite the subtle differences across languages, they generally follow the pattern of externally implemented interfaces that can be 'attached or grafted' onto types:  Default Interfaces (eg Java, Kotlin), Traits (eg Rust), Mixins (eg Python), Type-Classes and externally implemented interfaces (Scala, Kotlin). 
 
 | Parametric Polymorphism Pro                                                            | Inheritance Con                                                                                                     |
 | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Interface segregation is finer grained - you choose what to implement                  | You may need to inherit everything from all ancestors (note, this might be the intention as per Liskov substituion) |
-| More loosely coupled, changes to an implemented interface does not affect other types. | Tightly coupled - changes in the parent hierarchy can vertically affect all sub-types                               |
-| More flexible - implement multiple interfaces                                          | Single inheritance in some languages is more restrictive                                                            |
+| Interface segregation is finer grained - you choose what to implement.                  | You may need to inherit everything from all ancestors (note, this might be the intention as per Liskov substituion). |
+| More loosely coupled - changes to an implemented interface does not affect other types. | Tightly coupled/brittle - changes in the parent hierarchy can vertically affect all sub-types.                               |
+| More flexible - implement multiple interfaces.                                          | Single inheritance in some languages is more restrictive.                                                            |
 | Polymorphism - multiple implementations for a generic interface/trait.                 |                                                                                                                     |
 
 ![](Pasted%20image%2020241220110926.png)
 
 #### Ad-Hoc Polymorphism via Type-Classes aka Externally Implemented Interfaces 
 
-Some languages allow you to externally implement generic interfaces 'outside of a type' and associate implementations of these interfaces to other existing types without having to modify those original types. This is known as 'ad-hoc polymorphism' and comes from functional programming. Approaches differ across languages, and includes Traits in Rust and Type-Classes in Scala/Haskell/Kotlin, Protocols (Clojure/Swift), Implicits (Scala), Shapes and Extensions (C#). 
+Some languages allow you to externally implement generic interfaces 'outside of a type' and associate implementations of these interfaces to other existing types without having to modify those existing types. This is known as 'ad-hoc polymorphism' and comes from functional programming. Approaches differ across languages, and includes Traits in Rust, Type-Classes in Scala/Haskell, Scope objects in Kotlin, Protocols in Clojure/Swift, Implicits in Scala, Shapes and Extensions (C#), Template classes in C++ and in Go. 
 
 
 > [!TIP]
-A type class is an abstract parameterised type that lets you add new behaviour (not state) to any closed / existing data type without using sub-typing or interface implementation on the existing type.
+A type class is an abstract parameterised type that lets you add new behaviour (not state) to any closed or existing data type without using sub-typing or interface implementation on the existing type.
 
-Why? Ad-hoc polymorphism is very convenient and powerful for easily creating '*blanket implementations*' for defining a new type for a whole group of types at once, even when you don't have access to the src code of those types. This can't be done with interfaces that are defined directly on types. Brian Goetz describes the limitations of traditional interfaces where you implement the interface directly on the type as follows: "Interfaces have limitations: they abstract over behaviours of instances, not behaviour of types which means you need to already have an instance of a type to use them. This is known as the expression problem." This basically means you need the src of a type in order to directly implement an interface to extend the type with new behaviour. To address this limitation, the Java architects are exploring the use of type classes, the current proposal is to move additional behaviour to a third-party 'witness' object and publish a witness to the existing/external type [as explained here](https://www.youtube.com/watch?v=Gz7Or9C0TpM). 
+Why? Ad-hoc polymorphism is very convenient and powerful for easily creating '*blanket implementations*' for defining a new type for a whole group of types at once, even when you don't have access to the src code of those types. This can't be done with interfaces that are defined directly on types. Brian Goetz describes the limitations of traditional interfaces where you implement the interface directly on the type as follows: "_Interfaces have limitations: they abstract over behaviours of instances, not behaviour of types which means you need to already have an instance of a type to use them. This is known as the expression problem._" This basically draws a distinction between a ubiquitous type system from your custom instances where you need the src to directly implement an interface to extend the type with new behaviour. To address this limitation, the Java architects are exploring the use of type classes, the current proposal is to move additional behaviour to an external 'witness' object and publish (associate) a witness to the existing/external type [as explained here](https://www.youtube.com/watch?v=Gz7Or9C0TpM). 
 
-There are subtly different approaches used to 'associate' or 'scope' the externally implemented interfaces to existing types, as explored below. Languages typically lexically split their core data types from the implementation of the external interface, and some languages use parameterised generics on the external interfaces to provide an  implementation for the (existing) type.  
+There are subtly different approaches used to 'associate' or 'scope' the externally implemented interfaces to existing types, as explored below. Languages typically lexically split their core data types from the implementation of the external interface, and some languages use parameterised generics on the external interfaces to provide an implementation of the (existing) type.  
 
 
 > [!TIP]
-Lexically splitting a type from a new type that defines new behaviour defined in an externally implemented interface (a type class) and then associating the two together is different from _directly implementing the interface on the original type declaration itself_ (eg implementing an interface directly on a class). The main advantages is that you don't need to modify an existing type which enables new blanket implementations. Recognise that there are at least 3 code fragments required to do this: 1) an existing type which can be a 3rd party type where you don't have access to the src, 2) an externally implemented interface/trait/type-class, and 3) code that 'associates' or 'scopes' them together.  If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
+Lexically splitting a type from a new type that defines new behaviour defined in an externally implemented interface (a type class) and then associating the two together is different from _directly implementing the interface on the original type declaration itself_ (eg implementing an interface directly on a class). The main advantages is that you don't need to modify an existing type which enables new blanket implementations. Recognise that there are at least 3 code code fragments required to do this: 1) an existing type which can be a 3rd party type where you don't have access to the src, 2) an externally implemented interface/trait/type-class, and 3) code that 'associates' or 'scopes' them together.  If that extra layer of indirection feels a touch unnatural or overkill, you can easily co-locate these individual component parts near to each other in the same file to achieve that familiar class feel.
 
-The following Rust example provides a simple example. Note that in this example, Rust uses static dispatch or 'monomorphization' for performance reasons and not dynamic-dispatch (which allows you to create multiple implementations for the same type at small performance costs). 
+The following Rust example provides a simple example. Note that in this example, Rust uses static dispatch or 'monomorphization' for performance reasons and not dynamic-dispatch, the latter allowing you to create multiple implementations for the same type at small performance costs. 
 
 ```Rust
 // Rust
@@ -798,11 +798,11 @@ Advantages of Ad-hoc Polymorphism:
 Disadvantages of Ad-hoc Polymorphism: 
 - Increased code complexity.
 - If dynamic dispatch is used, it has a small performance penalty (usually it is not a problem for the majority of code-bases). 
-- Externally implemented interfaces don't carry state (member variables). For example, as cited by the Rust book: "trait objects differ from traditional objects in that we can’t add data to a trait object. Trait objects aren’t as generally useful as objects in other languages: their specific purpose is to allow abstraction across common behaviour."  Note that some languages allow variables to be declared on interfaces but with caveats e.g., Kotlin allows abstract properties or accessor methods with no backing fields (see Kotlin docs) to define what properties (and methods) a class must implement.   
+- Stateless: Externally implemented interfaces don't carry state (member variables). For example, as cited by the Rust book: "_trait objects differ from traditional objects in that we can’t add data to a trait object. Trait objects aren’t as generally useful as objects in other languages: their specific purpose is to allow abstraction across common behaviour._"  Note that some languages allow variables to be declared on interfaces but with caveats e.g., Kotlin allows abstract properties or accessor methods with no backing fields (see Kotlin docs) to define what properties (and methods) a class must implement.   
 
 The following Kotlin example provides another example. You will notice that the approach is different:
 - Rust: A trait implementation is linked to an existing type using a code fragment that references the trait implementation and type/struct:  `impl <someTrait> for <someStruct>`. 
-- Kotlin: Separate objects are used to create implementations of our external interface, and these instances are then indirectly attached ('scoped' in kotlin terminology) to our existing type at the call-site using: `with(someScopeObj)` 'scope' function. This process uses dynamic dispatch to supply the correct implementation, not static dispatch. In this model, recognise that there are 4 separate fragments of code: 1) the existing type, 2) the interface, 3) different implementations of the interface, 4) a scope function (`with()`) at the call-site to supply the required implementation (scope object). 
+- Kotlin: Separate objects are used to create implementations of our external interface, and these instances are then indirectly attached ('scoped' in Kotlin terminology) to our existing type at the call-site using: `with(someScopeObj)` 'scope' function. This process uses dynamic dispatch to supply the correct implementation, not static dispatch. In this model, recognise that there are 4 separate fragments of code: 1) the existing type, 2) generic extension interface (the generic is used to supply the existing type), 3) different implementations of the generic extension interface - these are the actual type classes, 4) a scope function (`with()`) at the call-site to supply the required type class implementation (scope object). 
 
 ```Kotlin
 data class Tweet(val tweet: String, val retweet: String) // Existing type (assume Tweet is 3rd party)
@@ -816,9 +816,9 @@ interface Farewell<D> {
   fun D.sayBye(): String
 }
 
-// Externally implemented interfaces provide implementations aka Scope objects - 
-// TweetSummaryScope & AnyFarwellScope are our type classes that implement new 
-// behavour that can be attached to existing types. 
+// Externally implemented interfaces used to provide type class implementations 
+// aka 'Scope objects' in Kotlin parlance - TweetSummaryScope & AnyFarwellScope 
+// are our type classes - they implement new behavour that can be attached to existing types. 
 
 object TweetSummaryScope : Summary<Tweet> {
   override fun Tweet.summarise(): String = "Tweet: $tweet Retweet: $retweet"
@@ -904,9 +904,9 @@ fun <E> consumer(mutableList: MutableList<E>, index1: Int, index2: Int) {
 ```
 [top](#Table-Of-Contents)
 
-#### Structural Polymorphism and Duck Typing
+#### Structural Polymorphism and Duck Typing at Runtime
 
-Some languages have have ‘Duck Typing’ (e.g. Go, Py) where interfaces are used as function parameters or return values, or to parameterise other types such as lists, but importantly, *you do not need to explicitly define an interface on a type itself for that type to conform to the contract.*  For example, you wouldn't declare: `class A implements interfaceB` (Java) or `impl traitB for typeA` (Rust). Instead, a particular type implicitly implements an interface if has the corresponding methods available: “if it walks and swims like a duck, it’s probably a duck.” If the type checking occurs at compile time, it is often called ‘Structural Typing/Polymorphism’ eg `Template` classes in C++ and in Go. If type checking occurs at runtime and produces runtime errors, it is called "Duck typing" which is more common in dynamic languages.  
+Some languages have have ‘Duck Typing’ (e.g. Go, Py) where interfaces are used as function parameters or return values, or to parameterise other types such as lists, but importantly, *you do not need to explicitly define an interface on a type itself for that type to conform to the contract.*  For example, you wouldn't declare: `class A implements interfaceB` (Java) or `impl traitB for typeA` (Rust). Instead, a particular type implicitly implements an interface if has the corresponding methods available: “if it walks and swims like a duck, it’s probably a duck.” If the type checking occurs at compile time, it is often called ‘Structural Typing/Ad-Hoc Polymorphism’. If type checking occurs at runtime and produces runtime errors, it is called "Duck typing" which is more common in dynamic languages.  
 
 >[!TIP]
 The ease and speed of development that duck typing brings is great for scripting and smaller code bases, but as the size and complexity of the code increases, I would advise using scaffolding code for stronger compile time type checking (for Pythonistas, you can always introduce static typing such as Python’s optional type hints, and for Go, see the code in the 'Go Example' above for a tip to check a type implements an interface). 
